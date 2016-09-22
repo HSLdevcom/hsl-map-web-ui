@@ -4,9 +4,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
 import styles from "./mapLeaflet.css";
-
-import iconStart1 from "../icons/icon-suunta1.svg";
-import iconTime1 from "../icons/icon-time1.svg";
 import { routeIcon, stopIcon } from "../utils/mapIcon";
 
 class MapLeaflet extends React.Component {
@@ -44,7 +41,7 @@ class MapLeaflet extends React.Component {
                     const direction = shapeId.substr(shapeId.indexOf("_") + 1);
                     switch (direction) {
                     case "1": return { color: "blue" };
-                    case "2": return { color: "red" };
+                    case "2": return { color: "black" };
                     default: return { color: "blue" };
                     }
                 },
@@ -52,16 +49,18 @@ class MapLeaflet extends React.Component {
         }
         if (this.props.stops) {
             const stops = JSON.parse(this.props.stops);
-
-            // TODO: add different icon (icon-suunta2 etc) to second direcion
             L.geoJson(stops, {
                 pointToLayer: (feature, latlng) => {
+                    /** Gets the correct icon based on direction (1 or 2),
+                    and what type of stop (regular, first stop or timing stop) **/
+                    const directionStyle = feature.properties.route.endsWith("2") ? styles.direction2 : styles.direction1;
+                    const direction = feature.properties.route.endsWith("2") ? "2" : "1";
                     if (feature.properties.first === "true") {
-                        return L.marker(latlng, { icon: routeIcon(iconStart1) });
+                        return L.marker(latlng, { icon: routeIcon("icons/icon-suunta", direction) });
                     } else if (feature.properties.timepoint === "true") {
-                        return L.marker(latlng, { icon: routeIcon(iconTime1) });
+                        return L.marker(latlng, { icon: routeIcon("icons/icon-time", direction) });
                     }
-                    return L.marker(latlng, { icon: stopIcon(styles.stopIcon) });
+                    return L.marker(latlng, { icon: stopIcon(styles.stopIcon, directionStyle) });
                 },
             }).addTo(this.map);
         }
