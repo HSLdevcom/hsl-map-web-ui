@@ -18,11 +18,6 @@ class MapLeaflet extends React.Component {
                 position: "topleft",
             },
         });
-    }
-
-    componentDidUpdate() {
-        // Leaflet map is updated once geometry and stop data has been fetched
-        this.map.setView([this.props.lat, this.props.lng], 14);
         L.tileLayer("http://api.digitransit.fi/map/v1/hsl-map/{z}/{x}/{y}{retina}.png", {
             maxZoom: 18,
             tileSize: 512,
@@ -32,6 +27,11 @@ class MapLeaflet extends React.Component {
                 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
             retina: L.retina ? "" : "@2x",
         }).addTo(this.map);
+    }
+
+    componentDidUpdate() {
+        // Leaflet map is updated once geometry and stop data has been fetched
+        this.map.setView([this.props.lat, this.props.lng], 14);
 
         if (this.props.geometry) {
             const routesArray = Object.values(JSON.parse(this.props.geometry));
