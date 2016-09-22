@@ -1,0 +1,23 @@
+@value background, white, busBlue from "styles/common.css";
+
+.root {
+	background-color:white;
+	padding: 20px;
+	margin: 50px;
+	border-radius: 20px;
+}
+
+.map {
+	height: 400px;
+	max-width:1200px;
+	overflow:hidden;
+}
+
+.stopIcon {
+    background-color:white;
+    border: solid 2px busBlue;
+    height:18px;
+    width:18px;
+    border-radius: 18px;
+    opacity:0.5;
+}
