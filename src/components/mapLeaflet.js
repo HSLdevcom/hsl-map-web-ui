@@ -7,6 +7,7 @@ import styles from "./mapLeaflet.css";
 
 import iconStart1 from "../icons/icon-suunta1.svg";
 import iconTime1 from "../icons/icon-time1.svg";
+import { routeIcon, stopIcon } from "../utils/mapIcon";
 
 class MapLeaflet extends React.Component {
 
@@ -56,26 +57,11 @@ class MapLeaflet extends React.Component {
             L.geoJson(stops, {
                 pointToLayer: (feature, latlng) => {
                     if (feature.properties.first === "true") {
-                        const firstIcon = L.icon({
-                            iconSize: [27, 27],
-                            iconAnchor: [13, 27],
-                            popupAnchor: [1, -24],
-                            iconUrl: iconStart1,
-                        });
-                        return L.marker(latlng, { icon: firstIcon });
+                        return L.marker(latlng, { icon: routeIcon(iconStart1) });
                     } else if (feature.properties.timepoint === "true") {
-                        const timeIcon = L.icon({
-                            iconSize: [27, 27],
-                            iconAnchor: [13, 27],
-                            popupAnchor: [1, -24],
-                            iconUrl: iconTime1,
-                        });
-                        return L.marker(latlng, { icon: timeIcon });
+                        return L.marker(latlng, { icon: routeIcon(iconTime1) });
                     }
-                    const stopIcon = L.divIcon({
-                        className: styles.stopIcon,
-                    });
-                    return L.marker(latlng, { icon: stopIcon });
+                    return L.marker(latlng, { icon: stopIcon(styles.stopIcon) });
                 },
             }).addTo(this.map);
         }
