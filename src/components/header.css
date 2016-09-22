@@ -1,0 +1,19 @@
+@value busBlue from "styles/common.css";
+
+.root {
+	min-height: 200px;
+}
+
+.logo {
+	float: left;
+    padding: 48px 0 0;
+}
+
+.sectionTitle {
+	float: left;
+    padding: 90px 0 0 40px;
+    font-size: 48px;
+    color: busBlue;
+    overflow: hidden;
+    margin: 0;
+}
