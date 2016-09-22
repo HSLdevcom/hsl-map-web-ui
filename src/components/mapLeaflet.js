@@ -5,7 +5,8 @@ import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
 import styles from "./mapLeaflet.css";
 
-L.Icon.Default.imagePath = "/src/img";
+import iconStart1 from "../icons/icon-suunta1.svg";
+import iconTime1 from "../icons/icon-time1.svg";
 
 class MapLeaflet extends React.Component {
 
@@ -59,7 +60,7 @@ class MapLeaflet extends React.Component {
                             iconSize: [27, 27],
                             iconAnchor: [13, 27],
                             popupAnchor: [1, -24],
-                            iconUrl: "/src/icons/icon-suunta1.svg",
+                            iconUrl: iconStart1,
                         });
                         return L.marker(latlng, { icon: firstIcon });
                     } else if (feature.properties.timepoint === "true") {
@@ -67,7 +68,7 @@ class MapLeaflet extends React.Component {
                             iconSize: [27, 27],
                             iconAnchor: [13, 27],
                             popupAnchor: [1, -24],
-                            iconUrl: "/src/icons/icon-time1.svg",
+                            iconUrl: iconTime1,
                         });
                         return L.marker(latlng, { icon: timeIcon });
                     }
