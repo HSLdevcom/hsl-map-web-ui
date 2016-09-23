@@ -9,8 +9,8 @@ export function routeIcon(url) {
     });
 }
 
-export function stopIcon(name) {
+export function stopIcon(name, directionStyle) {
     return L.divIcon({
-        className: name,
+        className: name + " " + directionStyle,
     });
 }

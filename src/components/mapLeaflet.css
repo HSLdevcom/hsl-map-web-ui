@@ -15,9 +15,17 @@
 
 .stopIcon {
     background-color:white;
-    border: solid 2px busBlue;
     height:18px;
     width:18px;
     border-radius: 18px;
     opacity:0.5;
+}
+
+.direction1 {
+    border: solid 2px busBlue;
+
+}
+
+.direction2 {
+    border: solid 2px black;
 }
