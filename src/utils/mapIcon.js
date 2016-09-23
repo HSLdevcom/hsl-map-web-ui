@@ -1,11 +1,11 @@
 import L from "leaflet";
 
-export function routeIcon(baseUrl, direction) {
+export function routeIcon(url) {
     return L.icon({
         iconSize: [27, 27],
         iconAnchor: [13, 27],
         popupAnchor: [1, -24],
-        iconUrl: baseUrl + direction + ".svg",
+        iconUrl: url,
     });
 }
 

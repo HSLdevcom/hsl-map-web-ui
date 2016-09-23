@@ -3,7 +3,6 @@ var webpack = require("webpack");
 var autoprefixer = require("autoprefixer");
 var modulesValues = require("postcss-modules-values");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
 
 function getDevtool(env) {
     return (env === "development") ? "cheap-module-eval-source-map" : "cheap-module-source-map";
@@ -40,8 +39,7 @@ function getPlugins(env) {
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.DefinePlugin({"process.env": {NODE_ENV: '"production"'}}),
             new webpack.optimize.UglifyJsPlugin({compressor: {warnings: false}}),
-            new HtmlWebpackPlugin({template: "index.ejs"}),
-            new CopyWebpackPlugin([{ from: path.join(__dirname, "src", "icons"), to: path.join(__dirname, "dist", "icons") }]),
+            new HtmlWebpackPlugin({template: "index.ejs"})
         ];
     }
 }
@@ -96,9 +94,6 @@ module.exports = {
                 query: { mimetype: 'image/png' },
             }
         ]
-    },
-    devServer: {
-      contentBase: path.join(__dirname, 'src')
     },
     postcss: [modulesValues, autoprefixer]
 };
