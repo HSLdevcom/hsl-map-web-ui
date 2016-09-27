@@ -5,7 +5,6 @@ body {
 	margin: 0px;
 }
 body, body * {
-    user-select: none;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     font-family: fontFamily;
