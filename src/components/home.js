@@ -37,11 +37,13 @@ class Home extends React.Component {
     render() {
         return (
             <div className={styles.root}>
-                <RouteList
-                  updateQuery={this.updateQuery}
-                  query={this.state.query}
-                  routes={this.state.routes}
-                />
+                <div className={styles.contentBox}>
+                    <RouteList
+                      updateQuery={this.updateQuery}
+                      query={this.state.query}
+                      routes={this.state.routes}
+                    />
+                </div>
             </div>
         );
     }

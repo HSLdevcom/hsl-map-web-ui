@@ -1,12 +1,15 @@
 @import url(https://cloud.typography.com/6364294/6653152/css/fonts.css);
-@value fontFamily from "styles/common.css";
+@value fontFamily, fontColor from "styles/common.css";
 
-
+body {
+	margin: 0px;
+}
 body, body * {
     user-select: none;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     font-family: fontFamily;
+    color: fontColor;
 }
 
 a:link {

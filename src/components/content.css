@@ -1,31 +1,14 @@
-@value busBlue, gray, backgroundLight from "styles/common.css";
+@value pageMargin, contentBoxPadding, borderRadius, backgroundLight from "styles/common.css";
 
 .root {
 	background-color:backgroundLight;
-	padding: 30px;
+	padding: 30px pageMargin 20px pageMargin;
 }
-
-.elementContainer {
+.contentBox {
 	background-color:white;
-	padding: 20px;
-	margin: 50px;
-	border-radius: 20px;
-}
-
-.infoWrapper {
-	vertical-align: baseline;
-}
-
-.infoWrapper > img, h1, h3 {
-	margin: 0px;
-	display: inline-block;
-}
-
-.shortName {
-	margin-left:8px;
-	color: busBlue;
-}
-.longName {
-	margin-left:12px;
-	color: gray;
+	padding: contentBoxPadding;
+	border-radius: borderRadius;
+	max-width:1200px;
+	margin-left:auto;
+	margin-right:auto;
 }

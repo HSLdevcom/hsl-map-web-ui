@@ -4,7 +4,7 @@ import styles from "./route.css";
 import busIcon from "../icons/icon-bus-station.svg";
 
 const Route = ({ routeId, longName, shortName }) =>
-    (<div className={styles.icon}>
+    (<div>
         <span >
             <img src={busIcon} alt="Bus" height="27"/>
             <Link

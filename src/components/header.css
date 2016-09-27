@@ -1,20 +1,16 @@
-@value busBlue, extraSmall, small, medium from "styles/common.css";
+@value busBlue, extraSmall, pageMargin, small, medium from "styles/common.css";
 
 .root {
 	min-height: 162px;
-}
-
-.logo {
-	float: left;
-	padding: 20px 0 0 0;
+	padding: 0 pageMargin 0 pageMargin;
 }
 
 .logo img {
+	padding: 20px 0 0 0;
     height:78px;
 }
 
 .sectionTitle {
-	float: left;
 	color: busBlue;
     overflow: hidden;
     margin: 0;
@@ -28,7 +24,11 @@
 	}
 
 	.logo {
-	    padding: 21px 0;
+	    float:left;
+	}
+	
+	.log img {
+		padding: 21px 0;
 	}
 
 	.sectionTitle {
@@ -42,12 +42,12 @@
 	.root {
 		min-height: 204px;
 	}
-	.logo {
-		padding: 48px 0;
-	}
+
 	.logo img {
+		padding: 48px 0;
 		height:108px;
 	}
+
     .sectionTitle {
     	padding: 80px 40px;
         font-size: 36px;
