@@ -2,11 +2,17 @@ import React from "react";
 import RouteList from "./routeList";
 import styles from "./content.css";
 
+const parseLineName = (lineId) => {
+    let lineName = lineId.substring(1);
+    lineName = lineName.replace(/^0+/, "");
+    return lineName;
+};
+
 class Home extends React.Component {
     constructor() {
         super();
         this.state = {
-            routes: "",
+            routes: [],
             query: "",
         };
         this.getRoutes = this.getRoutes.bind(this);
@@ -18,13 +24,17 @@ class Home extends React.Component {
     }
 
     getRoutes() {
-        fetch("http://localhost:8000/routes", {
+        fetch("http://localhost:8000/lines", {
             method: "GET",
             mode: "cors",
         })
         .then(response => response.json())
         .then((json) => {
-            this.setState({ routes: JSON.stringify(json) });
+            const routeArray = Object.values(json);
+            routeArray.forEach((value) => {
+                value.lineNumber = parseLineName(value.lineId);
+            });
+            this.setState({ routes: routeArray });
         });
     }
 

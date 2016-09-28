@@ -4,17 +4,17 @@ import RouteSearch from "./routeSearch";
 
 const RouteList = ({ query, routes, updateQuery }) => {
     const renderRoutes = () =>
-        Object.entries(JSON.parse(routes)).filter((value) => {
-            if (value[1].shortName) {
-                return value[1].shortName.startsWith(query);
+        routes.filter((value) => {
+            if (value.lineId) {
+                return value.lineNumber.startsWith(query);
             }
             return false;
-        }).map(route =>
-            (<div>
+        }).map(route => (
+            <div>
                 <Route
-                  routeId={route[0]}
-                  longName={(route[1] ? route[1].longName : "")}
-                  shortName={(route[1] ? route[1].shortName : "")}
+                  routeId={route.lineId}
+                  longName={route.name_fi}
+                  shortName={route.lineNumber}
 
                 />
             </div>)
@@ -32,7 +32,6 @@ const RouteList = ({ query, routes, updateQuery }) => {
 
 RouteList.propTypes = {
     query: React.PropTypes.string,
-    routes: React.PropTypes.string.isRequired,
     updateQuery: React.PropTypes.func,
 };
 
