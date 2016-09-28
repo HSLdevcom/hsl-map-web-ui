@@ -82,7 +82,6 @@ class MapLeaflet extends React.Component {
         // Container div for leaflet map is created
         return (
             <div className={styles.root}>
-                <h1>Reittikartta</h1>
                 <div id="mapid" className={styles.map}/>
             </div>
         );

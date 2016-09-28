@@ -1,15 +1,7 @@
 @value background, white, busBlue from "styles/common.css";
 
-.root {
-	background-color:white;
-	padding: 20px;
-	margin: 50px;
-	border-radius: 20px;
-}
-
 .map {
 	height: 400px;
-	max-width:1200px;
 	overflow:hidden;
 }
 
@@ -23,7 +15,6 @@
 
 .direction1 {
     border: solid 2px busBlue;
-
 }
 
 .direction2 {

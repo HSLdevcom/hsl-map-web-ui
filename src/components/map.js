@@ -1,6 +1,8 @@
 import React from "react";
 import MapLeaflet from "./mapLeaflet";
-import styles from "./content.css";
+import contentStyles from "./content.css";
+import mapStyles from "./map.css";
+import busIcon from "../icons/icon-bus-station.svg";
 
 class Map extends React.Component {
     constructor() {
@@ -52,13 +54,24 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div className={styles.root}>
-                <MapLeaflet
-                  lat={this.state.lat}
-                  lng={this.state.lng}
-                  geometry={this.state.geometry}
-                  stops={this.state.stops}
-                />
+            <div className={contentStyles.root}>
+                <div className={contentStyles.contentBox}>
+                    <div className={mapStyles.titleWrapper}>
+                        <img src={busIcon} alt="Bus" height="27"/>
+                        <h1 className={mapStyles.titleRouteNumber}>
+                            {this.props.location.query.routeNumber}
+                        </h1>
+                        <h3>
+                            {this.props.location.query.routeName}
+                        </h3>
+                    </div>
+                    <MapLeaflet
+                      lat={this.state.lat}
+                      lng={this.state.lng}
+                      geometry={this.state.geometry}
+                      stops={this.state.stops}
+                    />
+                </div>
             </div>);
     }
 }

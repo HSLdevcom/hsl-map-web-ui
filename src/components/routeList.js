@@ -1,7 +1,6 @@
 import React from "react";
 import Route from "./route";
 import RouteSearch from "./routeSearch";
-import styles from "./routeList.css";
 
 const RouteList = ({ query, routes, updateQuery }) => {
     const renderRoutes = () =>
@@ -21,7 +20,7 @@ const RouteList = ({ query, routes, updateQuery }) => {
             </div>)
         );
 
-    return (<div className={styles.root}>
+    return (<div>
         <h1>Reitit</h1>
         <RouteSearch
           query={query}
