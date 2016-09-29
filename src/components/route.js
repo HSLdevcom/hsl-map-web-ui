@@ -7,12 +7,7 @@ const Route = ({ routeId, longName, shortName }) =>
     (<div>
         <span >
             <img src={busIcon} alt="Bus" height="27"/>
-            <Link
-              to={{
-                  pathname: routeId,
-                  query: { routeName: longName, routeNumber: shortName },
-              }}
-            >
+            <Link to={{ pathname: routeId }}>
                 <span className={styles.routeNumber}>{shortName}</span>
                 <span>{longName}</span>
             </Link>

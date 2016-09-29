@@ -3,14 +3,17 @@ import MapLeaflet from "./mapLeaflet";
 import contentStyles from "./content.css";
 import mapStyles from "./map.css";
 import busIcon from "../icons/icon-bus-station.svg";
+import { getLine } from "../utils/api";
+
 
 class Map extends React.Component {
     constructor() {
         super();
         this.state = {
+            lineNumber: "",
+            lineNameFi: "",
             geometry: "",
             stops: "",
-            id: "",
             lat: 0,
             lng: 0,
         };
@@ -19,6 +22,12 @@ class Map extends React.Component {
     }
 
     componentDidMount() {
+        getLine(this.props.params.id).then(fetchedLine => {
+            this.setState({
+                lineNumber: fetchedLine.lineNumber,
+                lineNameFi: fetchedLine.name_fi,
+            });
+        });
         this.getStops(this.props.params.id);
         this.getRoute(this.props.params.id);
     }
@@ -59,10 +68,10 @@ class Map extends React.Component {
                     <div className={mapStyles.titleWrapper}>
                         <img src={busIcon} alt="Bus" height="27"/>
                         <h1 className={mapStyles.titleRouteNumber}>
-                            {this.props.location.query.routeNumber}
+                            {this.state.lineNumber}
                         </h1>
                         <h3>
-                            {this.props.location.query.routeName}
+                            {this.state.lineNameFi}
                         </h3>
                     </div>
                     <MapLeaflet

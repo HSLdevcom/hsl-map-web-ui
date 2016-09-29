@@ -5,7 +5,7 @@ const parseLineNumber = lineId =>
     // Remove all zeros from the beginning
     lineId.substring(1).replace(/^0+/, "");
 
-export const getLines = memoize(() =>
+const fetchLines = memoize(() =>
     fetch("http://localhost:8000/lines", {
         method: "GET",
         mode: "cors",
@@ -21,3 +21,8 @@ export const getLines = memoize(() =>
     })
 );
 
+export const getLines = () =>
+    fetchLines().then(lines => lines);
+
+export const getLine = id =>
+    fetchLines().then(lines => lines.find(line => line.lineId === id));
