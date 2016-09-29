@@ -3,7 +3,7 @@ import MapLeaflet from "./mapLeaflet";
 import contentStyles from "./content.css";
 import mapStyles from "./map.css";
 import busIcon from "../icons/icon-bus-station.svg";
-import { getLine } from "../utils/api";
+import { getLine, getStopGeometries, getRouteGeometries } from "../utils/api";
 
 
 class Map extends React.Component {
@@ -12,53 +12,32 @@ class Map extends React.Component {
         this.state = {
             lineNumber: "",
             lineNameFi: "",
-            geometry: "",
-            stops: "",
+            stopGeometries: "",
+            routeGeometries: "",
             lat: 0,
             lng: 0,
         };
-        this.getRoute = this.getRoute.bind(this);
-        this.getStops = this.getStops.bind(this);
     }
 
     componentDidMount() {
-        getLine(this.props.params.id).then(fetchedLine => {
+        getLine(this.props.params.id).then(fetchedLine =>
             this.setState({
                 lineNumber: fetchedLine.lineNumber,
                 lineNameFi: fetchedLine.name_fi,
-            });
-        });
-        this.getStops(this.props.params.id);
-        this.getRoute(this.props.params.id);
-    }
-
-    getRoute(id) {
-        fetch(`http://localhost:8000/routeGeometries/${id}`, {
-            method: "GET",
-            mode: "cors",
-        })
-        .then(response => response.json())
-        .then((json) => {
+            })
+        );
+        getStopGeometries(this.props.params.id).then(fetchedStops =>
             this.setState({
-                geometry: JSON.stringify(json),
-            });
-        });
-    }
-    getStops(id) {
-        fetch(`http://localhost:8000/routeStops/${id}`, {
-            method: "GET",
-            mode: "cors",
-        })
-        .then(response => response.json())
-        .then((json) => {
-            // Center coordinates for map (lat,lng) currently set to first route's first stop
+                stopGeometries: JSON.stringify(fetchedStops),
+                lat: fetchedStops[0].geometry.coordinates[1],
+                lng: fetchedStops[0].geometry.coordinates[0],
+            })
+        );
+        getRouteGeometries(this.props.params.id).then(fetchedRoutes =>
             this.setState({
-                stops: JSON.stringify(json),
-                lat: json[0].geometry.coordinates[1],
-                lng: json[0].geometry.coordinates[0],
-
-            });
-        });
+                routeGeometries: JSON.stringify(fetchedRoutes),
+            })
+        );
     }
 
     render() {
@@ -77,8 +56,8 @@ class Map extends React.Component {
                     <MapLeaflet
                       lat={this.state.lat}
                       lng={this.state.lng}
-                      geometry={this.state.geometry}
-                      stops={this.state.stops}
+                      geometry={this.state.routeGeometries}
+                      stops={this.state.stopGeometries}
                     />
                 </div>
             </div>);
