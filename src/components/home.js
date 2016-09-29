@@ -1,5 +1,5 @@
 import React from "react";
-import RouteList from "./routeList";
+import LineList from "./lineList";
 import styles from "./content.css";
 import { getLines } from "../utils/api";
 
@@ -28,10 +28,10 @@ class Home extends React.Component {
         return (
             <div className={styles.root}>
                 <div className={styles.contentBox}>
-                    <RouteList
+                    <LineList
                       updateQuery={this.updateQuery}
                       query={this.state.query}
-                      routes={this.state.lines}
+                      lines={this.state.lines}
                     />
                 </div>
             </div>

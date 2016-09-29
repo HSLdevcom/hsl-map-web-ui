@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "./routeSearch.css";
+import styles from "./lineSearch.css";
 
-const RouteSearch = ({ query, onChange }) =>
+const LineSearch = ({ query, onChange }) =>
     (<div className={styles.root}>
-        <form name="routeSearch">
+        <form name="lineSearch">
             <input
               type="text"
               placeholder="Hae reitti"
@@ -13,10 +13,10 @@ const RouteSearch = ({ query, onChange }) =>
         </form>
     </div>);
 
-RouteSearch.propTypes = {
+LineSearch.propTypes = {
     query: React.PropTypes.string,
     onChange: React.PropTypes.func,
 };
 
-export default RouteSearch;
+export default LineSearch;
 

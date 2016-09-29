@@ -1,23 +1,23 @@
 import React from "react";
 import { Link } from "react-router";
-import styles from "./route.css";
+import styles from "./line.css";
 import busIcon from "../icons/icon-bus-station.svg";
 
-const Route = ({ routeId, longName, shortName }) =>
+const Line = ({ lineId, longName, shortName }) =>
     (<div>
         <span >
             <img src={busIcon} alt="Bus" height="27"/>
-            <Link to={{ pathname: routeId }}>
-                <span className={styles.routeNumber}>{shortName}</span>
+            <Link to={{ pathname: lineId }}>
+                <span className={styles.lineNumber}>{shortName}</span>
                 <span>{longName}</span>
             </Link>
         </span>
     </div>);
 
-Route.propTypes = {
-    routeId: React.PropTypes.string.isRequired,
+Line.propTypes = {
+    lineId: React.PropTypes.string.isRequired,
     longName: React.PropTypes.string,
     shortName: React.PropTypes.string,
 };
 
-export default Route;
+export default Line;
