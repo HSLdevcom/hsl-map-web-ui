@@ -1,41 +1,21 @@
 import React from "react";
 import RouteList from "./routeList";
 import styles from "./content.css";
-
-const parseLineName = (lineId) => {
-    let lineName = lineId.substring(1);
-    lineName = lineName.replace(/^0+/, "");
-    return lineName;
-};
+import { getLines } from "../utils/api";
 
 class Home extends React.Component {
     constructor() {
         super();
         this.state = {
-            routes: [],
+            lines: [],
             query: "",
         };
-        this.getRoutes = this.getRoutes.bind(this);
+
         this.updateQuery = this.updateQuery.bind(this);
     }
 
     componentDidMount() {
-        this.getRoutes();
-    }
-
-    getRoutes() {
-        fetch("http://localhost:8000/lines", {
-            method: "GET",
-            mode: "cors",
-        })
-        .then(response => response.json())
-        .then((json) => {
-            const routeArray = Object.values(json);
-            routeArray.forEach((value) => {
-                value.lineNumber = parseLineName(value.lineId);
-            });
-            this.setState({ routes: routeArray });
-        });
+        getLines().then(fetchedLines => this.setState({ lines: fetchedLines }));
     }
 
     updateQuery(input) {
@@ -51,7 +31,7 @@ class Home extends React.Component {
                     <RouteList
                       updateQuery={this.updateQuery}
                       query={this.state.query}
-                      routes={this.state.routes}
+                      routes={this.state.lines}
                     />
                 </div>
             </div>
