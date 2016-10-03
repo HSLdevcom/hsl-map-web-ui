@@ -43,24 +43,19 @@ class Map extends React.Component {
     }
 
     componentDidMount() {
-        getLine(this.props.params.id).then(fetchedLine =>
-            this.setState({
-                lineNumber: fetchedLine.lineNumber,
-                lineNameFi: fetchedLine.name_fi,
-            })
-        );
-        getRouteGeometries(this.props.params.id).then((fetchedGeometries) => {
-            this.setState({
-                routeGeometries: fetchedGeometries,
-            });
-        });
-        // ADD PROMISE ALL
-        getRoutes(this.props.params.id).then((fetchedRoutes) => {
+        const p1 = getLine(this.props.params.id);
+        const p2 = getRouteGeometries(this.props.params.id);
+        const p3 = getRoutes(this.props.params.id);
+
+        Promise.all([p1, p2, p3]).then(([fetchedLine, fetchedGeometries, fetchedRoutes]) => {
             const firstStop = Object.values(fetchedRoutes)[0][0].stops[0];
             const selected = routeArray(fetchedRoutes).map(route =>
                 route.routeId + "_" + route.direction
             );
             this.setState({
+                lineNumber: fetchedLine.lineNumber,
+                lineNameFi: fetchedLine.name_fi,
+                routeGeometries: fetchedGeometries,
                 routeStops: routeArray(fetchedRoutes),
                 selectedRoutes: selected,
                 lat: Number(firstStop.lat),
