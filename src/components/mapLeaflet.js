@@ -21,14 +21,12 @@ const addMarkersToLayer = (stops, direction, map) => {
         startIcon = startIcon2;
         timeIcon = timeIcon2;
     }
-
-    stops.forEach((stop) => {
+    stops.forEach((stop, index) => {
         let setIcon;
-        // Add these attributes to fetched data: isFirst, isTiming
-        // if (stop.isFirst === true) setIcon = routeIcon(startIcon);
+        // Add these attributes to fetched data: isTiming
+        if (index === 0) setIcon = routeIcon(startIcon);
         // else if (stop.isTiming === true) setIcon = routeIcon(timeIcon);
-        // else setIcon = stopIcon(styles.stopIcon, directionStyle);
-        setIcon = stopIcon(styles.stopIcon, directionStyle);
+        else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(
             [stop.lon, stop.lat],
             { icon: setIcon }
