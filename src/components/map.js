@@ -60,7 +60,6 @@ class Map extends React.Component {
             const selected = routeArray(fetchedRoutes).map(route =>
                 route.routeId + "_" + route.direction
             );
-
             this.setState({
                 routeStops: routeArray(fetchedRoutes),
                 selectedRoutes: selected,
@@ -101,19 +100,25 @@ class Map extends React.Component {
                             {this.state.lineNameFi}
                         </h3>
                     </div>
-                    <MapLeaflet
-                      lat={this.state.lat}
-                      lng={this.state.lng}
-                      routeGeometries={this.state.routeGeometries}
-                      routeStops={this.state.routeStops}
-                      selectedRoutes={this.state.selectedRoutes}
+                    <div className={mapStyles.contentWrapper}>
+                      <div className={mapStyles.mapContainer}>
+                        <MapLeaflet
+                          lat={this.state.lat}
+                          lng={this.state.lng}
+                          routeGeometries={this.state.routeGeometries}
+                          routeStops={this.state.routeStops}
+                          selectedRoutes={this.state.selectedRoutes}
+                        />
+                      </div>
+                      <div className={mapStyles.filterContainer}>
+                        <RouteFilter
+                          routeStops={this.state.routeStops}
+                          selectedRoutes={this.state.selectedRoutes}
+                          handleChange={this.filterUpdate}
+                        />
+                      </div>
+                    </div>
 
-                    />
-                    <RouteFilter
-                      routeStops={this.state.routeStops}
-                      selectedRoutes={this.state.selectedRoutes}
-                      handleChange={this.filterUpdate}
-                    />
 
                 </div>
             </div>);

@@ -1,0 +1,9 @@
+@value pageMargin from "styles/common.css";
+
+.root {
+   padding-left:pageMargin;
+}
+
+.root h3 {
+    margin-top:0px;
+}

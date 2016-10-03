@@ -18,3 +18,7 @@ a:link {
 a:visited {
     text-decoration: none;
 }
+
+button:focus {
+	outline:0;
+}

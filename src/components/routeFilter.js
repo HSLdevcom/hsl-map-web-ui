@@ -1,5 +1,7 @@
 import React from "react";
 import RouteFilterItem from "./routeFilterItem";
+import styles from "./routeFilter.css";
+
 
 const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => {
     const getRoutes = () => {
@@ -16,10 +18,12 @@ const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => {
         return null;
     };
 
-    return (<div>
-      ROUTEFILTER
-        {getRoutes()}
-    </div>);
+    return (
+        <div className={styles.root}>
+            <h3>Valitse reitit</h3>
+            <div>{getRoutes()}</div>
+        </div>
+    );
 };
 
 export default RouteFilter;

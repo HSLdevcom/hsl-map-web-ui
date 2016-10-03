@@ -1,4 +1,6 @@
 import React from "react";
+import classNames from "classnames";
+import styles from "./routeFilterItem.css";
 
 const parseRouteNumber = routeId =>
     // Remove 1st number, which represents the city
@@ -7,13 +9,14 @@ const parseRouteNumber = routeId =>
 
 const RouteFilterItem = ({ routeID, routeDirection, isChecked, onChange }) =>
     (<div>
-        <input
-          type="checkbox"
+        <button
+          className={classNames(styles.filterButton, { [styles.selected]: isChecked })}
           value={routeID + "_" + routeDirection}
-          checked={isChecked}
-          onChange={onChange}
-        />
-        <span>{parseRouteNumber(routeID)} {routeDirection === 2 ? "Paluu" : "Meno"}</span>
+          onClick={onChange}
+        >
+            <span> {parseRouteNumber(routeID)} </span>
+            <span> {routeDirection === "2" ? "PALUU" : "MENO"} </span>
+        </button>
     </div>);
 
 RouteFilterItem.propTypes = {
