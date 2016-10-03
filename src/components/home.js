@@ -1,31 +1,21 @@
 import React from "react";
-import RouteList from "./routeList";
+import LineList from "./lineList";
 import styles from "./content.css";
+import { getLines } from "../utils/api";
 
 class Home extends React.Component {
     constructor() {
         super();
         this.state = {
-            routes: "",
+            lines: [],
             query: "",
         };
-        this.getRoutes = this.getRoutes.bind(this);
+
         this.updateQuery = this.updateQuery.bind(this);
     }
 
     componentDidMount() {
-        this.getRoutes();
-    }
-
-    getRoutes() {
-        fetch("http://localhost:8000/routes", {
-            method: "GET",
-            mode: "cors",
-        })
-        .then(response => response.json())
-        .then((json) => {
-            this.setState({ routes: JSON.stringify(json) });
-        });
+        getLines().then(fetchedLines => this.setState({ lines: fetchedLines }));
     }
 
     updateQuery(input) {
@@ -38,10 +28,10 @@ class Home extends React.Component {
         return (
             <div className={styles.root}>
                 <div className={styles.contentBox}>
-                    <RouteList
+                    <LineList
                       updateQuery={this.updateQuery}
                       query={this.state.query}
-                      routes={this.state.routes}
+                      lines={this.state.lines}
                     />
                 </div>
             </div>
