@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import styles from "./routeFilterItem.css";
 
 const parseRouteNumber = routeId =>
@@ -8,15 +7,22 @@ const parseRouteNumber = routeId =>
     routeId.substring(1).replace(/^0+/, "");
 
 const RouteFilterItem = ({ routeID, routeDirection, isChecked, onChange }) =>
-    (<div>
-        <button
-          className={classNames(styles.filterButton, { [styles.selected]: isChecked })}
-          value={routeID + "_" + routeDirection}
-          onClick={onChange}
+    (<div className={styles.root}>
+        <span className={styles.filterName}>{parseRouteNumber(routeID)}</span>
+        <span> {routeDirection === "2" ? "Paluu" : "Meno"}</span>
+        <label
+          className={styles.switch}
+          htmlFor={routeID + "_" + routeDirection}
         >
-            <span> {parseRouteNumber(routeID)} </span>
-            <span> {routeDirection === "2" ? "PALUU" : "MENO"} </span>
-        </button>
+            <input
+              id={routeID + "_" + routeDirection}
+              type="checkbox"
+              value={routeID + "_" + routeDirection}
+              checked={isChecked}
+              onChange={onChange}
+            />
+            <div className={styles.slider}/>
+        </label>
     </div>);
 
 RouteFilterItem.propTypes = {

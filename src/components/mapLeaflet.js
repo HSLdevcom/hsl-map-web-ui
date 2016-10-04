@@ -7,24 +7,24 @@ import styles from "./mapLeaflet.css";
 import { routeIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
 import startIcon2 from "../icons/icon-suunta2.svg";
-import timeIcon1 from "../icons/icon-time1.svg";
-import timeIcon2 from "../icons/icon-time2.svg";
+// import timeIcon1 from "../icons/icon-time1.svg";
+// import timeIcon2 from "../icons/icon-time2.svg";
 
 const addMarkersToLayer = (stops, direction, map) => {
     /** Sets the correct icon based on direction (1 or 2),
     and what type of stop (regular, first stop or timing stop) **/
     let directionStyle = styles.direction1;
     let startIcon = startIcon1;
-    let timeIcon = timeIcon1;
+    // let timeIcon = timeIcon1;
     if (direction === "2") {
         directionStyle = styles.direction2;
         startIcon = startIcon2;
-        timeIcon = timeIcon2;
+        // timeIcon = timeIcon2;
     }
     stops.forEach((stop, index) => {
         let setIcon;
-        // Add these attributes to fetched data: isTiming
         if (index === 0) setIcon = routeIcon(startIcon);
+        // Add these attributes to fetched data: isTiming
         // else if (stop.isTiming === true) setIcon = routeIcon(timeIcon);
         else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(

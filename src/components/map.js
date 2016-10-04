@@ -12,7 +12,7 @@ const parseRouteNumber = routeId =>
     routeId.substring(1).replace(/^0+/, "");
 
 const routeArray = (routes) => {
-    let routeArr = [];
+    const routeArr = [];
     Object.entries(routes).forEach((route) => {
         const routeId = route[0];
         route[1].forEach((direction) => {
@@ -91,30 +91,28 @@ class Map extends React.Component {
                         <h1 className={mapStyles.titleRouteNumber}>
                             {this.state.lineNumber}
                         </h1>
-                        <h3>
+                        <h2>
                             {this.state.lineNameFi}
-                        </h3>
+                        </h2>
                     </div>
                     <div className={mapStyles.contentWrapper}>
-                      <div className={mapStyles.mapContainer}>
-                        <MapLeaflet
-                          lat={this.state.lat}
-                          lng={this.state.lng}
-                          routeGeometries={this.state.routeGeometries}
-                          routeStops={this.state.routeStops}
-                          selectedRoutes={this.state.selectedRoutes}
-                        />
-                      </div>
-                      <div className={mapStyles.filterContainer}>
-                        <RouteFilter
-                          routeStops={this.state.routeStops}
-                          selectedRoutes={this.state.selectedRoutes}
-                          handleChange={this.filterUpdate}
-                        />
-                      </div>
+                        <div className={mapStyles.mapContainer}>
+                            <MapLeaflet
+                              lat={this.state.lat}
+                              lng={this.state.lng}
+                              routeGeometries={this.state.routeGeometries}
+                              routeStops={this.state.routeStops}
+                              selectedRoutes={this.state.selectedRoutes}
+                            />
+                        </div>
+                        <div className={mapStyles.filterContainer}>
+                            <RouteFilter
+                              routeStops={this.state.routeStops}
+                              selectedRoutes={this.state.selectedRoutes}
+                              handleChange={this.filterUpdate}
+                            />
+                        </div>
                     </div>
-
-
                 </div>
             </div>);
     }
