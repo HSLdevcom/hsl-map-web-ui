@@ -3,6 +3,7 @@
 .titleWrapper {
 	vertical-align: baseline;
 	margin-bottom:24px;
+	width:100%;
 }
 
 .titleWrapper > * {
@@ -15,4 +16,17 @@
 	margin-left:8px;
 	margin-right:12px;
 	color: busBlue;
+}
+
+.contentWrapper {
+	width:100%;
+	display:flex;
+}
+
+.mapContainer {
+   flex:3;
+}
+
+.filterContainer {
+	flex:1;
 }

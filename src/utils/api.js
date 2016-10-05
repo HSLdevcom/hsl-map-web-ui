@@ -33,6 +33,10 @@ export const getLines = () =>
 export const getLine = id =>
     fetchLines().then(lines => lines.find(line => line.lineId === id));
 
+export const getRoutes = memoize(lineId =>
+    getRequest("routesByLine/", lineId)
+);
+
 export const getStopGeometries = memoize(routeId =>
     getRequest("stopGeometries/", routeId)
 );
