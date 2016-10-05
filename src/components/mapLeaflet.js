@@ -3,12 +3,13 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
+import { routeIcon, stopIcon } from "utils/mapIcon";
+import startIcon1 from "icons/icon-suunta1.svg";
+import startIcon2 from "icons/icon-suunta2.svg";
+// import timeIcon1 from "icons/icon-time1.svg";
+// import timeIcon2 from "icons/icon-time2.svg";
+
 import styles from "./mapLeaflet.css";
-import { routeIcon, stopIcon } from "../utils/mapIcon";
-import startIcon1 from "../icons/icon-suunta1.svg";
-import startIcon2 from "../icons/icon-suunta2.svg";
-// import timeIcon1 from "../icons/icon-time1.svg";
-// import timeIcon2 from "../icons/icon-time2.svg";
 
 const addMarkersToLayer = (stops, direction, map) => {
     /** Sets the correct icon based on direction (1 or 2),
@@ -24,8 +25,8 @@ const addMarkersToLayer = (stops, direction, map) => {
     stops.forEach((stop, index) => {
         let setIcon;
         if (index === 0) setIcon = routeIcon(startIcon);
-        // Add these attributes to fetched data: isTiming
-        // else if (stop.isTiming === true) setIcon = routeIcon(timeIcon);
+        // TODO: Add these attributes to fetched data: isTiming
+        // TODO: else if (stop.isTiming === true) setIcon = routeIcon(timeIcon);
         else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(
             [stop.lon, stop.lat],

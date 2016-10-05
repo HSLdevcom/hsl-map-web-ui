@@ -1,8 +1,8 @@
 @value white, busBlue,lightGray, gray, pageMargin from "styles/common.css";
 
 .root {
-	position:relative;
-	height:45px;
+    position:relative;
+    height:45px;
 }
 
 .root span {
@@ -16,28 +16,28 @@
 
 }
 .filterButton {
-	height:50px;
-	width:100%;
-	max-width:200px;
-	margin-right:20px;
-	margin-bottom:12px;
-	font-size:14px;
-	font-weight:400;
-	background-color: lightGray;
-	text-align:left;
-	padding-left: 12px;
-	border: 1px solid transparent;
+	  height:50px;
+	  width:100%;
+	  max-width:200px;
+	  margin-right:20px;
+	  margin-bottom:12px;
+	  font-size:14px;
+	  font-weight:400;
+	  background-color: lightGray;
+	  text-align:left;
+	  padding-left: 12px;
+	  border: 1px solid transparent;
     border-radius: 5px;
     box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
 }
 
 .filterButton span {
-	color:gray;
+	  color:gray;
 }
 
 .filterButton span:first-child {
-	font-size:20px;
-	font-weight:600;
+	  font-size:20px;
+	  font-weight:600;
 }
 
 .selected {
@@ -46,54 +46,50 @@
 }
 
 .selected span {
-	color:white;
+	  color:white;
 }
 
 .switch {
-  position: absolute;
-  right:10px;
-  top:-4px;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+    position: absolute;
+    right:10px;
+    top:-4px;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
 .switch input {
-	display:none;
+	  display:none;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: lightGray;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 30px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: lightGray;
+    transition: .4s;
+    border-radius: 30px;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-  border-radius: 50%;
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: busBlue;
+    background-color: busBlue;
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+    transform: translateX(26px);
 }
