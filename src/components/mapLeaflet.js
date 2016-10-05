@@ -79,14 +79,17 @@ class MapLeaflet extends React.Component {
         }).addTo(this.map);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         // All layers exept the base layer are removed when the component is updated
         this.map.eachLayer((layer) => {
             if (!layer.options.baseLayer) this.map.removeLayer(layer);
         });
 
         // Leaflet map is updated once geometry and stop data has been fetched
-        this.map.setView([this.props.lng, this.props.lat], 14);
+        // The view is set only the first time the lat & lon coordinates are updated
+        if (!prevProps.lat || !prevProps.lng) {
+            this.map.setView([this.props.lng, this.props.lat], 14);
+        }
 
         if (this.props.routeStops) {
             const selectedStops = this.props.routeStops.filter(route =>
