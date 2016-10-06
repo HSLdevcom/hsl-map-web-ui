@@ -93,12 +93,12 @@ class MapLeaflet extends React.Component {
 
         if (this.props.routeStops) {
             const selectedStops = this.props.routeStops.filter(route =>
-                this.props.selectedRoutes.includes(route.routeId + "_" + route.direction)
+                this.props.selectedRoutes.includes(route.routeId + "_" + route.direction + "_" + route.dateBegin)
             );
             addStopLayer(selectedStops, this.map);
 
             const selectedGeometries = this.props.routeGeometries.filter(route =>
-                this.props.selectedRoutes.includes(route.properties.shape_id)
+                this.props.selectedRoutes.includes(route.properties.shape_id + "_" + route.properties.dateBegin)
             );
             addGeometryLayer(selectedGeometries, this.map);
         }

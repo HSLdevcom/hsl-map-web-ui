@@ -6,18 +6,19 @@ const parseRouteNumber = routeId =>
     // Remove all zeros from the beginning
     routeId.substring(1).replace(/^0+/, "");
 
-const RouteFilterItem = ({ routeID, routeDirection, isChecked, onChange }) =>
+const RouteFilterItem = ({ itemKey, routeID, routeDirection, routeDateBegin, routeDateEnd, isChecked, onChange }) =>
     (<div className={styles.root}>
         <span className={styles.filterName}>{parseRouteNumber(routeID)}</span>
-        <span> {routeDirection === "2" ? "Paluu" : "Meno"}</span>
+        <span> suunta {routeDirection}</span>
+        <p className={styles.dateText}> {routeDateBegin.substring(0, 10)} - {routeDateEnd.substring(0, 10)}</p>
         <label
           className={styles.switch}
-          htmlFor={routeID + "_" + routeDirection}
+          htmlFor={"filterCheckbox" + routeID + "_" + itemKey}
         >
             <input
-              id={routeID + "_" + routeDirection}
+              id={"filterCheckbox" + routeID + "_" + itemKey}
               type="checkbox"
-              value={routeID + "_" + routeDirection}
+              value={routeID + "_" + routeDirection + "_" + routeDateBegin}
               checked={isChecked}
               onChange={onChange}
             />
