@@ -1,6 +1,6 @@
 import memoize from "lodash.memoize";
 
-const host = "http://localhost:8000/";
+const host = "http://136.243.66.163/";
 
 const parseLineNumber = lineId =>
     // Remove 1st number, which represents the city
