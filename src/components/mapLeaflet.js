@@ -86,9 +86,10 @@ class MapLeaflet extends React.Component {
         });
 
         // Leaflet map is updated once geometry and stop data has been fetched
-        // The view is set only the first time the lat & lon coordinates are updated
-        if (!prevProps.lat || !prevProps.lng) {
-            this.map.setView([this.props.lng, this.props.lat], 14);
+        // The view (bounding box) is set only the first time the route stops are recieved
+        if (!prevProps.routeStops) {
+            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lon, stop.lat]);
+            this.map.fitBounds(arrBounds);
         }
 
         if (this.props.routeStops) {
@@ -113,10 +114,5 @@ class MapLeaflet extends React.Component {
         );
     }
 }
-
-MapLeaflet.propTypes = {
-    lat: React.PropTypes.number.isRequired,
-    lng: React.PropTypes.number.isRequired,
-};
 
 export default MapLeaflet;
