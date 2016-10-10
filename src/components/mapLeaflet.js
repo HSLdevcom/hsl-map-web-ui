@@ -44,9 +44,7 @@ const addGeometryLayer = (geometries, map) => {
     geometries.forEach((route) => {
         L.geoJson(route, {
             style: (feature) => {
-                const shapeId = feature.properties.shape_id;
-                const direction = shapeId.substr(shapeId.indexOf("_") + 1);
-                switch (direction) {
+                switch (feature.properties.direction) {
                 case "1": return { color: "blue" };
                 case "2": return { color: "black" };
                 default: return { color: "blue" };
@@ -99,7 +97,7 @@ class MapLeaflet extends React.Component {
             addStopLayer(selectedStops, this.map);
 
             const selectedGeometries = this.props.routeGeometries.filter(route =>
-                this.props.selectedRoutes.includes(route.properties.shape_id + "_" + route.properties.dateBegin)
+                this.props.selectedRoutes.includes(route.properties.lineId + "_" + route.properties.direction + "_" + route.properties.beginDate)
             );
             addGeometryLayer(selectedGeometries, this.map);
         }
