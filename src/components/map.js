@@ -34,8 +34,6 @@ class Map extends React.Component {
             routeGeometries: "",
             routeStops: "",
             selectedRoutes: [],
-            lat: 0,
-            lng: 0,
         };
         this.filterUpdate = this.filterUpdate.bind(this);
         this.removeSelection = this.removeSelection.bind(this);
@@ -48,9 +46,8 @@ class Map extends React.Component {
         const p3 = getRoutes(this.props.params.id);
 
         Promise.all([p1, p2, p3]).then(([fetchedLine, fetchedGeometries, fetchedRoutes]) => {
-            const firstStop = Object.values(fetchedRoutes)[0][0].stops[0];
             const selected = routeArray(fetchedRoutes).map(route =>
-                route.routeId + "_" + route.direction
+                route.routeId + "_" + route.direction + "_" + route.dateBegin
             );
             this.setState({
                 lineNumber: fetchedLine.lineNumber,
@@ -58,8 +55,6 @@ class Map extends React.Component {
                 routeGeometries: fetchedGeometries,
                 routeStops: routeArray(fetchedRoutes),
                 selectedRoutes: selected,
-                lat: Number(firstStop.lat),
-                lng: Number(firstStop.lon),
             });
         });
     }
@@ -98,8 +93,6 @@ class Map extends React.Component {
                     <div className={mapStyles.contentWrapper}>
                         <div className={mapStyles.mapContainer}>
                             <MapLeaflet
-                              lat={this.state.lat}
-                              lng={this.state.lng}
                               routeGeometries={this.state.routeGeometries}
                               routeStops={this.state.routeStops}
                               selectedRoutes={this.state.selectedRoutes}

@@ -6,11 +6,14 @@ const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
     <div className={styles.root}>
         <h3>Valitse reitit</h3>
         <div>
-            {routeStops && routeStops.map(route => (
+            {routeStops && routeStops.map((route, index) => (
                 <RouteFilterItem
+                  itemKey={index}
                   routeID={route.routeId}
                   routeDirection={route.direction}
-                  isChecked={selectedRoutes.includes(route.routeId + "_" + route.direction)}
+                  routeDateBegin={route.dateBegin}
+                  routeDateEnd={route.dateEnd}
+                  isChecked={selectedRoutes.includes(route.routeId + "_" + route.direction + "_" + route.dateBegin)}
                   onChange={handleChange}
                 />
         ))}

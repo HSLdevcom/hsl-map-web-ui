@@ -6,8 +6,8 @@ import "leaflet.fullscreen/Control.FullScreen.css";
 import { routeIcon, stopIcon } from "utils/mapIcon";
 import startIcon1 from "icons/icon-suunta1.svg";
 import startIcon2 from "icons/icon-suunta2.svg";
-// import timeIcon1 from "icons/icon-time1.svg";
-// import timeIcon2 from "icons/icon-time2.svg";
+import timeIcon1 from "icons/icon-time1.svg";
+import timeIcon2 from "icons/icon-time2.svg";
 
 import styles from "./mapLeaflet.css";
 
@@ -16,17 +16,16 @@ const addMarkersToLayer = (stops, direction, map) => {
     and what type of stop (regular, first stop or timing stop) **/
     let directionStyle = styles.direction1;
     let startIcon = startIcon1;
-    // let timeIcon = timeIcon1;
+    let timeIcon = timeIcon1;
     if (direction === "2") {
         directionStyle = styles.direction2;
         startIcon = startIcon2;
-        // timeIcon = timeIcon2;
+        timeIcon = timeIcon2;
     }
     stops.forEach((stop, index) => {
         let setIcon;
         if (index === 0) setIcon = routeIcon(startIcon);
-        // TODO: Add these attributes to fetched data: isTiming
-        // TODO: else if (stop.isTiming === true) setIcon = routeIcon(timeIcon);
+        else if (stop.isTiming) setIcon = routeIcon(timeIcon);
         else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(
             [stop.lon, stop.lat],
@@ -45,9 +44,7 @@ const addGeometryLayer = (geometries, map) => {
     geometries.forEach((route) => {
         L.geoJson(route, {
             style: (feature) => {
-                const shapeId = feature.properties.shape_id;
-                const direction = shapeId.substr(shapeId.indexOf("_") + 1);
-                switch (direction) {
+                switch (feature.properties.direction) {
                 case "1": return { color: "blue" };
                 case "2": return { color: "black" };
                 default: return { color: "blue" };
@@ -80,23 +77,27 @@ class MapLeaflet extends React.Component {
         }).addTo(this.map);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
         // All layers exept the base layer are removed when the component is updated
         this.map.eachLayer((layer) => {
             if (!layer.options.baseLayer) this.map.removeLayer(layer);
         });
 
         // Leaflet map is updated once geometry and stop data has been fetched
-        this.map.setView([this.props.lng, this.props.lat], 14);
+        // The view (bounding box) is set only the first time the route stops are recieved
+        if (!prevProps.routeStops) {
+            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lon, stop.lat]);
+            this.map.fitBounds(arrBounds);
+        }
 
         if (this.props.routeStops) {
             const selectedStops = this.props.routeStops.filter(route =>
-                this.props.selectedRoutes.includes(route.routeId + "_" + route.direction)
+                this.props.selectedRoutes.includes(route.routeId + "_" + route.direction + "_" + route.dateBegin)
             );
             addStopLayer(selectedStops, this.map);
 
             const selectedGeometries = this.props.routeGeometries.filter(route =>
-                this.props.selectedRoutes.includes(route.properties.shape_id)
+                this.props.selectedRoutes.includes(route.properties.lineId + "_" + route.properties.direction + "_" + route.properties.beginDate)
             );
             addGeometryLayer(selectedGeometries, this.map);
         }
@@ -111,10 +112,5 @@ class MapLeaflet extends React.Component {
         );
     }
 }
-
-MapLeaflet.propTypes = {
-    lat: React.PropTypes.number.isRequired,
-    lng: React.PropTypes.number.isRequired,
-};
 
 export default MapLeaflet;
