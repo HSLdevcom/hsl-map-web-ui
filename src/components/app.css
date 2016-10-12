@@ -1,0 +1,6 @@
+@value backgroundLight from "styles/common.css";
+
+.root {
+	height:100vh;
+	background-color:backgroundLight;
+}

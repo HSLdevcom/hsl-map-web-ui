@@ -1,6 +1,10 @@
 @value busBlue, extraSmall, pageMargin, small, medium from "styles/common.css";
 
 .root {
+	background-color: white;
+}
+
+.root > div:first-child {
 	min-height: 162px;
 	padding: 0 pageMargin 0 pageMargin;
 	max-width: 1200px;
