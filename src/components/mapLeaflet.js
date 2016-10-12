@@ -9,7 +9,8 @@ import startIcon1 from "icons/icon-suunta1.svg";
 import startIcon2 from "icons/icon-suunta2.svg";
 import timeIcon1 from "icons/icon-time1.svg";
 import timeIcon2 from "icons/icon-time2.svg";
-
+import RouteFilter from "./routeFilter";
+import ExpandButton from "./expandButton";
 import styles from "./mapLeaflet.css";
 
 const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
@@ -69,27 +70,35 @@ const addGeometryLayer = (geometries, map) => {
     });
 };
 
+const addRouteFilterLayer = (map) => {
+    const RouteFilterControl = L.Control.extend({
+        options: {
+            position: "bottomright",
+        },
+        onAdd: () => {
+            const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
+            container.appendChild(document.getElementById("route-filter"));
+            return container;
+        },
+    });
+    map.addControl(new RouteFilterControl());
+};
 
 class MapLeaflet extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            showFilter: true,
+            fullScreen: false,
+        };
+        this.initializeMap = this.initializeMap.bind(this);
+        this.addLayersToMap = this.addLayersToMap.bind(this);
+        this.expandFilter = this.expandFilter.bind(this);
+    }
+
 
     componentDidMount() {
-        // Leaflet map is created and initialized
-        this.map = L.map("mapid", {
-            fullscreenControl: true,
-            fullscreenControlOptions: {
-                position: "topleft",
-            },
-        });
-        L.tileLayer("http://api.digitransit.fi/map/v1/hsl-map/{z}/{x}/{y}{retina}.png", {
-            maxZoom: 18,
-            tileSize: 512,
-            zoomOffset: -1,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-            retina: L.retina ? "" : "@2x",
-            baseLayer: true,
-        }).addTo(this.map);
+        this.initializeMap(this.map);
     }
 
     componentDidUpdate(prevProps) {
@@ -105,10 +114,49 @@ class MapLeaflet extends React.Component {
             this.map.fitBounds(arrBounds);
         }
 
+        this.addLayersToMap(this.map);
+    }
+
+    initializeMap() {
+        this.map = L.map("map-leaflet", {
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+                position: "topleft",
+            },
+        });
+        L.tileLayer("http://api.digitransit.fi/map/v1/hsl-map/{z}/{x}/{y}{retina}.png", {
+            maxZoom: 18,
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+                '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+            retina: L.retina ? "" : "@2x",
+            baseLayer: true,
+        }).addTo(this.map);
+
+        this.map.on("enterFullscreen", () => {
+            this.setState({
+                fullScreen: true,
+            });
+            addRouteFilterLayer(this.map);
+        });
+
+        this.map.on("exitFullscreen", () => {
+            this.setState({
+                showFilter: true,
+                fullScreen: false,
+            });
+            document.getElementById("map-container").appendChild(document.getElementById("route-filter"));
+        });
+    }
+
+    addLayersToMap() {
         if (this.props.routeStops) {
             const selectedStops = this.props.routeStops.filter(route =>
                 this.props.selectedRoutes.includes(`${route.routeId}_${route.direction}_${route.dateBegin}`)
             );
+
             addStopLayer(selectedStops, this.map);
 
             let index1 = 0;
@@ -132,12 +180,38 @@ class MapLeaflet extends React.Component {
         }
     }
 
-    render() { // eslint-disable-line class-methods-use-this
-        // Container div for leaflet map is created
+    expandFilter() {
+        this.setState({
+            showFilter: !this.state.showFilter,
+        });
+    }
+
+    render() {
+        // Container div (id="map-container") for leaflet map is created
         return (
-            <div className={styles.root}>
-                <div id="mapid" className={styles.map}/>
+            <div id="map-container" className={styles.root}>
+                <div className={styles.mapContainer}>
+                    <div id="map-leaflet" className={styles.map}/>
+                </div>
+                <div id="route-filter" className={styles.filterContainer}>
+                    {this.state.fullScreen ?
+                        <ExpandButton
+                          onClick={this.expandFilter}
+                          labelText="Valitse reitit"
+                          isExpanded={this.state.showFilter}
+                        />
+                        : <h3>Valitse reitit</h3>
+                    }
+                    <div className={this.state.showFilter ? "" : styles.hidden}>
+                        <RouteFilter
+                          routeStops={this.props.routeStops}
+                          selectedRoutes={this.props.selectedRoutes}
+                          handleChange={this.props.handleChange}
+                        />
+                    </div>
+                </div>
             </div>
+
         );
     }
 }

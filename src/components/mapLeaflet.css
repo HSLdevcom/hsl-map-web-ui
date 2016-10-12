@@ -1,16 +1,37 @@
-@value background, white, busBlue from "styles/common.css";
+@value pageMargin, background, white, busBlue, warningRed from "styles/common.css";
+
+.root {
+	display:flex;
+	width:100%;
+}
+
+.mapContainer {
+    flex:3;
+    display:flex;
+}
+
+.filterContainer {
+    flex:1;
+    background-color: rgba(255, 255, 255, 0.7);
+    width:350px;
+    height:100%;
+}
+
+.filterContainer h3 {
+    margin-top:0px;
+    padding-left:pageMargin;
+}
 
 .map {
-	height: 400px;
-	overflow:hidden;
+    flex:1;
+    min-height:400px;
+    overflow:hidden;
 }
 
 .stopIcon {
     background-color:white;
-    height:18px;
-    width:18px;
-    border-radius: 18px;
-    opacity:0.5;
+    border-radius: 24px;
+    opacity:0.7;
 }
 
 .direction1 {
@@ -18,5 +39,9 @@
 }
 
 .direction2 {
-    border: solid 2px black;
+    border: solid 2px warningRed;
+}
+
+.hidden {
+	display:none;
 }
