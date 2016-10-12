@@ -7,13 +7,10 @@ const parseRouteNumber = routeId =>
     routeId.substring(1).replace(/^0+/, "");
 
 const RouteFilterItem = (
-  { itemKey, routeID, routeDirection, routeDateBegin, routeDateEnd, isChecked, onChange }) =>
+  { itemKey, routeID, routeDirection, routeDateBegin, isChecked, onChange }) =>
     (<div className={styles.root}>
         <span className={styles.filterName}>{parseRouteNumber(routeID)}</span>
         <span> suunta {routeDirection}</span>
-        <p className={styles.dateText}>
-            {routeDateBegin.substring(0, 10)} - {routeDateEnd.substring(0, 10)}
-        </p>
         <label
           className={styles.switch}
           htmlFor={"filterCheckbox" + routeID + "_" + itemKey}
