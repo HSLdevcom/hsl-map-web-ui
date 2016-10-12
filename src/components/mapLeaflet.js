@@ -1,5 +1,6 @@
 import React from "react";
 import L from "leaflet";
+import chroma from "chroma-js";
 import "leaflet/dist/leaflet.css";
 import "leaflet.fullscreen";
 import "leaflet.fullscreen/Control.FullScreen.css";
@@ -10,6 +11,11 @@ import timeIcon1 from "icons/icon-time1.svg";
 import timeIcon2 from "icons/icon-time2.svg";
 
 import styles from "./mapLeaflet.css";
+
+const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
+const redColorScale = chroma.scale(["FFACA1", "DC0451", "660226"]).domain([0, 5]);
+
+const modifiedColor = (colorScale, key) => colorScale(key);
 
 const addMarkersToLayer = (stops, direction, map) => {
     /** Sets the correct icon based on direction (1 or 2),
@@ -42,12 +48,21 @@ const addStopLayer = (routes, map) => {
 
 const addGeometryLayer = (geometries, map) => {
     geometries.forEach((route) => {
-        L.geoJson(route, {
+        L.geoJson(route[0], {
             style: (feature) => {
                 switch (feature.properties.direction) {
-                case "1": return { color: "blue" };
-                case "2": return { color: "black" };
-                default: return { color: "blue" };
+                case "1": return {
+                    color: modifiedColor(blueColorScale, route[1]),
+                    opacity: 1,
+                };
+                case "2": return {
+                    color: modifiedColor(redColorScale, route[1]),
+                    opacity: 1,
+                };
+                default: return {
+                    color: "001F33",
+                    opacity: 1,
+                };
                 }
             },
         }).addTo(map);
@@ -78,7 +93,7 @@ class MapLeaflet extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // All layers exept the base layer are removed when the component is updated
+        // All layers except the base layer are removed when the component is updated
         this.map.eachLayer((layer) => {
             if (!layer.options.baseLayer) this.map.removeLayer(layer);
         });
@@ -96,9 +111,23 @@ class MapLeaflet extends React.Component {
             );
             addStopLayer(selectedStops, this.map);
 
-            const selectedGeometries = this.props.routeGeometries.filter(route =>
-                this.props.selectedRoutes.includes(route.properties.lineId + "_" + route.properties.direction + "_" + route.properties.beginDate)
+            let index1 = 0;
+            let index2 = 0;
+            let colorKey;
+            const selectedGeometries = this.props.routeGeometries.map((route) => {
+                if (route.properties.direction === "1") {
+                    colorKey = index1;
+                    index1 += 1;
+                } else if (route.properties.direction === "2") {
+                    colorKey = index2;
+                    index2 += 1;
+                }
+                return [route, colorKey];
+            })
+            .filter(route =>
+                this.props.selectedRoutes.includes(route[0].properties.lineId + "_" + route[0].properties.direction + "_" + route[0].properties.beginDate)
             );
+
             addGeometryLayer(selectedGeometries, this.map);
         }
     }
