@@ -1,6 +1,5 @@
 import React from "react";
 import MapLeaflet from "./mapLeaflet";
-import RouteFilter from "./routeFilter";
 import contentStyles from "./content.css";
 import mapStyles from "./map.css";
 import busIcon from "../icons/icon-bus-station.svg";
@@ -90,22 +89,12 @@ class Map extends React.Component {
                             {this.state.lineNameFi}
                         </h2>
                     </div>
-                    <div className={mapStyles.contentWrapper}>
-                        <div className={mapStyles.mapContainer}>
-                            <MapLeaflet
-                              routeGeometries={this.state.routeGeometries}
-                              routeStops={this.state.routeStops}
-                              selectedRoutes={this.state.selectedRoutes}
-                            />
-                        </div>
-                        <div className={mapStyles.filterContainer}>
-                            <RouteFilter
-                              routeStops={this.state.routeStops}
-                              selectedRoutes={this.state.selectedRoutes}
-                              handleChange={this.filterUpdate}
-                            />
-                        </div>
-                    </div>
+                    <MapLeaflet
+                      routeGeometries={this.state.routeGeometries}
+                      routeStops={this.state.routeStops}
+                      selectedRoutes={this.state.selectedRoutes}
+                      handleChange={this.filterUpdate}
+                    />
                 </div>
             </div>);
     }
