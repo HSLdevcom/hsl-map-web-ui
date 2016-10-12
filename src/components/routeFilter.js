@@ -10,7 +10,6 @@ const parseDate = (date) => {
 
 const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
     <div className={styles.root}>
-        <h3>Valitse reitit</h3>
         { Object.values(groupBy(routeStops, "dateBegin")).map((routeDate, dateIndex) => (
             <div>
                 <p className={styles.dateLabel}>
