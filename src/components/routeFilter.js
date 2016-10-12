@@ -4,8 +4,8 @@ import RouteFilterItem from "./routeFilterItem";
 import styles from "./routeFilter.css";
 
 const parseDate = (date) => {
-    const options = { year: "numeric", month: "short", day: "numeric" };
-    return new Date(date).toLocaleDateString("en-GB", options);
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(date).toLocaleDateString("fi-FI", options);
 };
 
 const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
