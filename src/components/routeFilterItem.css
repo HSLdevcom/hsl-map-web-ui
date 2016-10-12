@@ -2,7 +2,8 @@
 
 .root {
     position:relative;
-    height:60px;
+    height:45px;
+    padding-left: 12px;
 }
 
 .root span {
@@ -38,12 +39,12 @@
 }
 
 .filterButton span {
-	  color:gray;
+	color:gray;
 }
 
 .filterButton span:first-child {
-	  font-size:20px;
-	  font-weight:600;
+	font-size:20px;
+	font-weight:600;
 }
 
 .selected {
@@ -52,20 +53,20 @@
 }
 
 .selected span {
-	  color:white;
+	color:white;
 }
 
 .switch {
     position: absolute;
     right:10px;
-    top:2px;
+    top:-4px;
     display: inline-block;
-    width: 68px;
-    height: 38px;
+    width: 60px;
+    height: 34px;
 }
 
 .switch input {
-	  display:none;
+	display:none;
 }
 
 .slider {
@@ -83,8 +84,8 @@
 .slider:before {
     position: absolute;
     content: "";
-    height: 30px;
-    width: 30px;
+    height: 26px;
+    width: 26px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -97,5 +98,5 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-    transform: translateX(30px);
+    transform: translateX(26px);
 }
