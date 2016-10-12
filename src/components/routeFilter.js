@@ -22,7 +22,9 @@ const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
                       routeID={route.routeId}
                       routeDirection={route.direction}
                       routeDateBegin={route.dateBegin}
-                      isChecked={selectedRoutes.includes(route.routeId + "_" + route.direction + "_" + route.dateBegin)}
+                      isChecked={selectedRoutes.includes(
+                        `${route.routeId}_${route.direction}_${route.dateBegin}`
+                      )}
                       onChange={handleChange}
                     />
                 ))}

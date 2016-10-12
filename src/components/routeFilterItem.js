@@ -13,12 +13,12 @@ const RouteFilterItem = (
         <span> suunta {routeDirection}</span>
         <label
           className={styles.switch}
-          htmlFor={"filterCheckbox" + routeID + "_" + itemKey}
+          htmlFor={`filterCheckbox_${routeID}_${itemKey}`}
         >
             <input
-              id={"filterCheckbox" + routeID + "_" + itemKey}
+              id={`filterCheckbox_${routeID}_${itemKey}`}
               type="checkbox"
-              value={routeID + "_" + routeDirection + "_" + routeDateBegin}
+              value={`${routeID}_${routeDirection}_${routeDateBegin}`}
               checked={isChecked}
               onChange={onChange}
             />
