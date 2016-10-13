@@ -93,7 +93,7 @@ class MapLeaflet extends React.Component {
         };
         this.initializeMap = this.initializeMap.bind(this);
         this.addLayersToMap = this.addLayersToMap.bind(this);
-        this.expandFilter = this.expandFilter.bind(this);
+        this.toggleFilter = this.toggleFilter.bind(this);
     }
 
 
@@ -182,7 +182,7 @@ class MapLeaflet extends React.Component {
         }
     }
 
-    expandFilter() {
+    toggleFilter() {
         this.setState({
             showFilter: !this.state.showFilter,
         });
@@ -198,7 +198,7 @@ class MapLeaflet extends React.Component {
                 <div id="route-filter" className={styles.filterContainer}>
                     {this.state.fullScreen ?
                         <ExpandButton
-                          onClick={this.expandFilter}
+                          onClick={this.toggleFilter}
                           labelText="Valitse reitit"
                           isExpanded={this.state.showFilter}
                         />
