@@ -9,16 +9,14 @@ const LineList = ({ query, lines, updateQuery }) => {
                 return value.lineNumber.startsWith(query);
             }
             return false;
-        }).map(line => (
-            <div>
-                <Line
-                  lineId={line.lineId}
-                  longName={line.name_fi}
-                  shortName={line.lineNumber}
-
-                />
-            </div>)
-        );
+        }).map((line, index) => (
+            <Line
+              key={`line${index}`}
+              lineId={line.lineId}
+              longName={line.name_fi}
+              shortName={line.lineNumber}
+            />
+        ));
 
     return (<div>
         <h1>Reitit</h1>

@@ -11,13 +11,13 @@ const parseDate = (date) => {
 const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
     <div className={styles.root}>
         { Object.values(groupBy(routeStops, "dateBegin")).map((routeDate, dateIndex) => (
-            <div>
+            <div key={`routeFilterDateGroup${dateIndex}`}>
                 <p className={styles.dateLabel}>
                     {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
                 </p>
                 {routeDate.map((route, routeIndex) => (
                     <RouteFilterItem
-                      itemKey={(dateIndex * routeDate.length) + routeIndex}
+                      key={`routeFilterItem_${(dateIndex * routeDate.length) + routeIndex}`}
                       routeID={route.routeId}
                       routeDirection={route.direction}
                       routeDateBegin={route.dateBegin}

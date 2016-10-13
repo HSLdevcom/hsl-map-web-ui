@@ -170,7 +170,7 @@ class MapLeaflet extends React.Component {
                     colorKey = index2;
                     index2 += 1;
                 }
-                route.properties = { ...route.properties, colorKey }
+                route.properties = { ...route.properties, colorKey };
 
                 return route;
             })
