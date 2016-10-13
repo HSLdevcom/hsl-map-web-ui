@@ -14,7 +14,7 @@ import ExpandButton from "./expandButton";
 import styles from "./mapLeaflet.css";
 
 const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
-const redColorScale = chroma.scale(["FF944d", "B30059", "990000"]).domain([0, 5]);
+const redColorScale = chroma.scale(["FF6699", "800000", "4D0000"]).domain([0, 5]);
 
 const modifiedColor = (colorScale, key) => colorScale(key);
 
