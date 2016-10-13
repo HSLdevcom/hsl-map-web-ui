@@ -50,10 +50,11 @@
     "whatwg-fetch": "^1.0.0"
   },
   "dependencies": {
+    "chroma-js": "^1.2.1",
     "classnames": "^2.2.5",
     "leaflet": "^0.7.7",
     "leaflet.fullscreen": "^1.4.2",
-    "lodash.memoize": "^4.1.2",
+    "lodash": "^4.16.4",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-hot-loader": "^3.0.0-beta.3",

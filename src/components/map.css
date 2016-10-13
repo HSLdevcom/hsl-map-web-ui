@@ -17,16 +17,3 @@
 	margin-right:12px;
 	color: busBlue;
 }
-
-.contentWrapper {
-	width:100%;
-	display:flex;
-}
-
-.mapContainer {
-   flex:3;
-}
-
-.filterContainer {
-	flex:1;
-}

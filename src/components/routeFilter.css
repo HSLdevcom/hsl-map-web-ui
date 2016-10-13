@@ -1,9 +1,13 @@
-@value pageMargin from "styles/common.css";
+@value pageMargin, mediumGray from "styles/common.css";
 
 .root {
-   padding-left:pageMargin;
+    padding-left:pageMargin;
 }
 
-.root h3 {
-    margin-top:0px;
+.dateLabel {
+    color: mediumGray;
+    font-weight:500;
+    font-size: 16px;
+    margin-top:16px;
+    margin-bottom:16px;
 }

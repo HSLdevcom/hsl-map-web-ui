@@ -1,4 +1,4 @@
-import memoize from "lodash.memoize";
+import { memoize } from "lodash";
 
 const host = "http://136.243.66.163/";
 
