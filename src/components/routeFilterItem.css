@@ -1,8 +1,8 @@
-@value white, busBlue,lightGray, gray, pageMargin from "styles/common.css";
+@value white, busBlue, lightGray, gray, pageMargin from "styles/common.css";
 
 .root {
-    position:relative;
-    height:45px;
+    position: relative;
+    height: 45px;
     padding-left: 12px;
 }
 
@@ -10,22 +10,23 @@
     font-size: 16px;
     font-weight: 500;
 }
+
 .root span:first-child {
     font-size: 24px;
     font-weight: 600;
-    color:busBlue;
+    color: busBlue;
 }
 
 .filterButton {
-	height:50px;
-	width:100%;
-	max-width:200px;
-	margin-right:20px;
-	margin-bottom:12px;
-	font-size:14px;
-	font-weight:400;
+	height: 50px;
+	width: 100%;
+	max-width: 200px;
+	margin-right: 20px;
+	margin-bottom: 12px;
+	font-size: 14px;
+	font-weight: 400;
 	background-color: lightGray;
-	text-align:left;
+	text-align: left;
 	padding-left: 12px;
 	border: 1px solid transparent;
     border-radius: 5px;
@@ -33,34 +34,34 @@
 }
 
 .filterButton span {
-	color:gray;
+	color: gray;
 }
 
 .filterButton span:first-child {
-	font-size:20px;
-	font-weight:600;
+	font-size: 20px;
+	font-weight: 600;
 }
 
 .selected {
     background-color: busBlue;
-    color:white;
+    color: white;
 }
 
 .selected span {
-	color:white;
+	color: white;
 }
 
 .switch {
     position: absolute;
-    right:10px;
-    top:-4px;
+    right: 10px;
+    top: -4px;
     display: inline-block;
     width: 60px;
     height: 34px;
 }
 
 .switch input {
-	display:none;
+	display: none;
 }
 
 .slider {

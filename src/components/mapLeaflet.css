@@ -1,37 +1,39 @@
-@value pageMargin, background, white, busBlue, warningRed from "styles/common.css";
+@value small, medium, pageMargin, background, white, busBlue, warningRed from "styles/common.css";
 
 .root {
-	display:flex;
-	width:100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .mapContainer {
-    flex:3;
-    display:flex;
+    margin-bottom: pageMargin;
+    flex: 0 0 100%;
+    display: flex;
 }
 
 .filterContainer {
-    flex:1;
+    flex: 0 0 100%;
     background-color: rgba(255, 255, 255, 0.7);
-    width:350px;
-    height:100%;
+    width: 350px;
+    height: 100%;
 }
 
 .filterContainer h3 {
-    margin-top:0px;
-    padding-left:pageMargin;
+    margin-top: 0px;
+    padding-left: pageMargin;
 }
 
 .map {
-    flex:1;
-    min-height:400px;
-    overflow:hidden;
+    flex: 1;
+    min-height: 400px;
+    overflow: hidden;
 }
 
 .stopIcon {
-    background-color:white;
+    background-color: white;
     border-radius: 24px;
-    opacity:0.7;
+    opacity: 0.7;
 }
 
 .direction1 {
@@ -43,5 +45,27 @@
 }
 
 .hidden {
-	display:none;
+    display: none;
+}
+
+@media small {
+    .root {
+        flex-direction: row;
+    }
+    .mapContainer {
+        margin-bottom: 0px;
+        flex: 3;
+    }
+    .filterContainer {
+        flex: 2;
+    }
+}
+
+@media medium {
+    .mapContainer {
+        flex: 7;
+    }
+    .filterContainer {
+        flex: 3;
+    }
 }
