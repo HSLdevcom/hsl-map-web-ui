@@ -1,39 +1,39 @@
 @value small, medium, pageMargin, background, white, busBlue, warningRed from "styles/common.css";
 
 .root {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    width:100%;
+    width: 100%;
 }
 
 .mapContainer {
-    margin-bottom:pageMargin;
+    margin-bottom: pageMargin;
     flex: 0 0 100%;
-    display:flex;
+    display: flex;
 }
 
 .filterContainer {
     flex: 0 0 100%;
     background-color: rgba(255, 255, 255, 0.7);
-    width:350px;
-    height:100%;
+    width: 350px;
+    height: 100%;
 }
 
 .filterContainer h3 {
-    margin-top:0px;
-    padding-left:pageMargin;
+    margin-top: 0px;
+    padding-left: pageMargin;
 }
 
 .map {
-    flex:1;
-    min-height:400px;
-    overflow:hidden;
+    flex: 1;
+    min-height: 400px;
+    overflow: hidden;
 }
 
 .stopIcon {
-    background-color:white;
+    background-color: white;
     border-radius: 24px;
-    opacity:0.7;
+    opacity: 0.7;
 }
 
 .direction1 {
@@ -45,7 +45,7 @@
 }
 
 .hidden {
-    display:none;
+    display: none;
 }
 
 @media small {
@@ -53,19 +53,19 @@
         flex-direction: row;
     }
     .mapContainer {
-        margin-bottom:0px;
-        flex:3;
+        margin-bottom: 0px;
+        flex: 3;
     }
     .filterContainer {
-        flex:2;
+        flex: 2;
     }
 }
 
 @media medium {
     .mapContainer {
-        flex:7;
+        flex: 7;
     }
     .filterContainer {
-        flex:3;
+        flex: 3;
     }
 }

@@ -8,13 +8,13 @@
 	min-height: 162px;
 	padding: 0 pageMargin 0 pageMargin;
 	max-width: 1200px;
-	margin-left:auto;
-	margin-right:auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .logo img {
 	padding: 20px 0 0 0;
-    height:78px;
+    height: 78px;
 }
 
 .sectionTitle {
@@ -31,7 +31,7 @@
 	}
 
 	.logo {
-	    float:left;
+	    float: left;
 	}
 	
 	.log img {
@@ -52,7 +52,7 @@
 
 	.logo img {
 		padding: 48px 0;
-		height:108px;
+		height: 108px;
 	}
 
     .sectionTitle {

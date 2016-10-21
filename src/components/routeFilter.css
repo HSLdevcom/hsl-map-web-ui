@@ -1,13 +1,13 @@
 @value pageMargin, mediumGray from "styles/common.css";
 
 .root {
-    padding-left:pageMargin;
+    padding-left: pageMargin;
 }
 
 .dateLabel {
     color: mediumGray;
-    font-weight:500;
+    font-weight: 500;
     font-size: 16px;
-    margin-top:16px;
+    margin-top: 16px;
     margin-bottom:16px;
 }
