@@ -1,12 +1,12 @@
 @value busBlue, extraSmall, pageMargin, small, medium from "styles/common.css";
 
 .root {
+	padding: 0 pageMargin 0 pageMargin;
 	background-color: white;
 }
 
 .root > div:first-child {
 	min-height: 162px;
-	padding: 0 pageMargin 0 pageMargin;
 	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
