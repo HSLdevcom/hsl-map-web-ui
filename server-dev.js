@@ -10,7 +10,7 @@ new WebpackDevServer(webpack(config), {
         colors: true,
     },
 })
-.listen(3000, "0.0.0.0", (err) => {
+.listen(3000, "localhost", (err) => {
     if (err) console.log(err);
     console.log("Listening at port 3000");
 });
