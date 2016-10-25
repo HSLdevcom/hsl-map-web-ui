@@ -9,7 +9,7 @@ const App = () => (
     <div className={style.root}>
         <Header/>
         <Router history={browserHistory}>
-            <Route path="/ohjeet">
+            <Route path="/kuljettaja">
                 <IndexRoute component={Home}/>
                 <Route path=":id" component={Map}/>
             </Route>

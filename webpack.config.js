@@ -9,7 +9,7 @@ function getDevtool(env) {
 }
 
 function getPublicPath(env) {
-    return (env === "development") ? "/" : "/ohjeet/";
+    return (env === "development") ? "/" : "/kuljettaja/";
 }
 
 function getEntry(env) {
