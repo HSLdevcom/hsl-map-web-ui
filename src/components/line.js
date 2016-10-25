@@ -7,7 +7,7 @@ const Line = ({ lineId, longName, shortName }) =>
     (<div>
         <span >
             <img src={busIcon} alt="Bus" height="27"/>
-            <Link to={{ pathname: lineId }}>
+            <Link to={{ pathname: `/kuljettaja/${lineId}` }}>
                 <span className={styles.lineNumber}>{shortName}</span>
                 <span>{longName}</span>
             </Link>
