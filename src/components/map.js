@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "./header";
 import MapLeaflet from "./mapLeaflet";
 import contentStyles from "./content.css";
 import mapStyles from "./map.css";
@@ -77,23 +78,26 @@ class Map extends React.Component {
 
     render() {
         return (
-            <div className={contentStyles.root}>
-                <div className={contentStyles.contentBox}>
-                    <div className={mapStyles.titleWrapper}>
-                        <img src={busIcon} alt="Bus" height="27"/>
-                        <h1 className={mapStyles.titleRouteNumber}>
-                            {this.state.lineNumber}
-                        </h1>
-                        <h2>
-                            {this.state.lineNameFi}
-                        </h2>
+            <div>
+                <Header/>
+                <div className={contentStyles.root}>
+                    <div className={contentStyles.contentBox}>
+                        <div className={mapStyles.titleWrapper}>
+                            <img src={busIcon} alt="Bus" height="27"/>
+                            <h1 className={mapStyles.titleRouteNumber}>
+                                {this.state.lineNumber}
+                            </h1>
+                            <h2>
+                                {this.state.lineNameFi}
+                            </h2>
+                        </div>
+                        <MapLeaflet
+                          routeGeometries={this.state.routeGeometries}
+                          routeStops={this.state.routeStops}
+                          selectedRoutes={this.state.selectedRoutes}
+                          handleChange={this.filterUpdate}
+                        />
                     </div>
-                    <MapLeaflet
-                      routeGeometries={this.state.routeGeometries}
-                      routeStops={this.state.routeStops}
-                      selectedRoutes={this.state.selectedRoutes}
-                      handleChange={this.filterUpdate}
-                    />
                 </div>
             </div>);
     }
