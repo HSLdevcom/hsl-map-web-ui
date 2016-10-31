@@ -8,21 +8,23 @@ const parseDate = (date) => {
     return new Date(date).toLocaleDateString("fi-FI", options);
 };
 
-const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
+const RouteFilter = ({ routeGeometries, handleChange, selectedRoutes }) => (
     <div className={styles.root}>
-        { Object.values(groupBy(routeStops, "dateBegin")).map((routeDate, dateIndex) => (
+        { Object.values(groupBy(routeGeometries, "properties.beginDate")).map((routeDate, dateIndex) => (
             <div key={`routeFilterDateGroup${dateIndex}`}>
                 <p className={styles.dateLabel}>
-                    {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
+                    {parseDate(routeDate[0].properties.beginDate)}&nbsp;-&nbsp;
+                    {parseDate(routeDate[0].properties.endDate)}
                 </p>
                 {routeDate.map((route, routeIndex) => (
                     <RouteFilterItem
                       key={`routeFilterItem_${(dateIndex * routeDate.length) + routeIndex}`}
-                      routeID={route.routeId}
-                      routeDirection={route.direction}
-                      routeDateBegin={route.dateBegin}
+                      routeID={route.properties.lineId}
+                      routeDirection={route.properties.direction}
+                      routeDateBegin={route.properties.beginDate}
+                      source={route.properties.source}
                       isChecked={selectedRoutes.includes(
-                        `${route.routeId}_${route.direction}_${route.dateBegin}`
+                        `${route.properties.lineId}_${route.properties.direction}_${route.properties.beginDate}`
                       )}
                       onChange={handleChange}
                     />

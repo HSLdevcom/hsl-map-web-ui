@@ -15,6 +15,7 @@ const LineList = ({ query, lines, updateQuery }) => {
               lineId={line.lineId}
               longName={line.name_fi}
               shortName={line.lineNumber}
+              source={line.source}
             />
         ));
 
