@@ -109,8 +109,9 @@ class MapLeaflet extends React.Component {
 
         // Leaflet map is updated once geometry and stop data has been fetched
         // The view (bounding box) is set only the first time the route stops are recieved
-        if (!prevProps.routeStops) {
-            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lon, stop.lat]);
+        if (!prevProps.routeGeometries) {
+            const arrBounds = this.props.routeGeometries[0].geometry.coordinates.map(
+                stop => [stop[1], stop[0]]);
             this.map.fitBounds(arrBounds);
         }
 
@@ -158,7 +159,8 @@ class MapLeaflet extends React.Component {
             );
 
             addStopLayer(selectedStops, this.map);
-
+        }
+        if (this.props.routeGeometries) {
             let index1 = 0;
             let index2 = 0;
             let colorKey;
@@ -206,7 +208,7 @@ class MapLeaflet extends React.Component {
                     }
                     <div className={this.state.showFilter ? "" : styles.hidden}>
                         <RouteFilter
-                          routeStops={this.props.routeStops}
+                          routeGeometries={this.props.routeGeometries}
                           selectedRoutes={this.props.selectedRoutes}
                           handleChange={this.props.handleChange}
                         />
