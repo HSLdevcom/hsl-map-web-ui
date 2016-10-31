@@ -35,7 +35,7 @@ const addMarkersToLayer = (stops, direction, map) => {
         else if (stop.isTiming) setIcon = routeIcon(timeIcon);
         else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(
-            [stop.lon, stop.lat],
+            [stop.lat, stop.lon],
             { icon: setIcon }
         ).addTo(map);
     });
