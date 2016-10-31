@@ -1,4 +1,4 @@
-@value white, busBlue, lightGray, gray, pageMargin from "styles/common.css";
+@value white, busBlue,  warningRed, lightGray, gray, pageMargin from "styles/common.css";
 
 .root {
     position: relative;
@@ -14,7 +14,14 @@
 .root span:first-child {
     font-size: 24px;
     font-weight: 600;
+}
+
+.original > span:first-child {
     color: busBlue;
+}
+
+.additional > span {
+    color: warningRed;
 }
 
 .filterButton {

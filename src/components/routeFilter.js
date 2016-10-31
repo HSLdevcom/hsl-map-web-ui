@@ -22,6 +22,7 @@ const RouteFilter = ({ routeGeometries, handleChange, selectedRoutes }) => (
                       routeID={route.properties.lineId}
                       routeDirection={route.properties.direction}
                       routeDateBegin={route.properties.beginDate}
+                      source={route.properties.source}
                       isChecked={selectedRoutes.includes(
                         `${route.properties.lineId}_${route.properties.direction}_${route.properties.beginDate}`
                       )}

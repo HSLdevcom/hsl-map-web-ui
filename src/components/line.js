@@ -3,9 +3,9 @@ import { Link } from "react-router";
 import styles from "./line.css";
 import busIcon from "../icons/icon-bus-station.svg";
 
-const Line = ({ lineId, longName, shortName }) =>
+const Line = ({ lineId, longName, shortName, source }) =>
     (<div>
-        <span >
+        <span className={source === "original" ? styles.original : styles.additional}>
             <img src={busIcon} alt="Bus" height="27"/>
             <Link to={{ pathname: `/kuljettaja/${lineId}` }}>
                 <span className={styles.lineNumber}>{shortName}</span>
