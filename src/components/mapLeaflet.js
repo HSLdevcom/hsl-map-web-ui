@@ -30,6 +30,7 @@ const addMarkersToLayer = (stops, direction, map) => {
         timeIcon = timeIcon2;
     }
     stops.forEach((stop, index) => {
+        console.log(stop.timingStopType);
         let setIcon;
         if (index === 0) setIcon = routeIcon(startIcon);
         else if (stop.isTiming) setIcon = routeIcon(timeIcon);
