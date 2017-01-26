@@ -32,7 +32,8 @@ const addMarkersToLayer = (stops, direction, map) => {
     stops.forEach((stop, index) => {
         let setIcon;
         if (index === 0) setIcon = routeIcon(startIcon);
-        else if (stop.isTiming) setIcon = routeIcon(timeIcon);
+        // TODO different icon for different type of timing stop (timingStopType === 1 or 2)
+        else if (stop.timingStopType > 0) setIcon = routeIcon(timeIcon);
         else setIcon = stopIcon(styles.stopIcon, directionStyle);
         L.marker(
             [stop.lat, stop.lon],
@@ -110,7 +111,7 @@ class MapLeaflet extends React.Component {
         // Leaflet map is updated once geometry and stop data has been fetched
         // The view (bounding box) is set only the first time the route stops are recieved
         if (!prevProps.routeStops) {
-            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lon, stop.lat]);
+            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lat, stop.lon]);
             this.map.fitBounds(arrBounds);
         }
 

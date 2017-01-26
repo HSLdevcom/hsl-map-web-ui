@@ -1,20 +1,16 @@
 import { memoize } from "lodash";
 
-const host = "http://136.243.66.163/";
-
 const parseLineNumber = lineId =>
     // Remove 1st number, which represents the city
     // Remove all zeros from the beginning
     lineId.substring(1).replace(/^0+/, "");
 
-const getRequest = (endpoint, id) => {
-    const url = host + endpoint + (id || "");
-    return fetch(url, {
+const getRequest = (endpoint, id) =>
+    fetch(`${process.env.API_URL}/${endpoint}/${id || ""}`, {
         method: "GET",
         mode: "cors",
     })
     .then(response => response.json());
-};
 
 const fetchLines = memoize(() =>
     getRequest("lines").then((json) => {
@@ -34,14 +30,14 @@ export const getLine = id =>
     fetchLines().then(lines => lines.find(line => line.lineId === id));
 
 export const getRoutes = memoize(lineId =>
-    getRequest("routesByLine/", lineId)
+    getRequest("routesByLine", lineId)
 );
 
 export const getStopGeometries = memoize(routeId =>
-    getRequest("stopGeometries/", routeId)
+    getRequest("stopGeometries", routeId)
 );
 
 export const getRouteGeometries = memoize(routeId =>
-    getRequest("routeGeometries/", routeId)
+    getRequest("routeGeometries", routeId)
 );
 

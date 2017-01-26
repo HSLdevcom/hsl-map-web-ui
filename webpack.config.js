@@ -34,14 +34,24 @@ function getEntry(env) {
 function getPlugins(env) {
     if (env === "development") {
         return [
-            new webpack.DefinePlugin({ "process.env": { NODE_ENV: '"development"' } }),
+            new webpack.DefinePlugin({
+                "process.env": {
+                    NODE_ENV: JSON.stringify("development"),
+                    API_URL: JSON.stringify("http://localhost:8000"),
+                },
+            }),
             new webpack.HotModuleReplacementPlugin(),
             new HtmlWebpackPlugin({ template: "index.ejs" }),
         ];
     } else {
         return [
             new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.DefinePlugin({ "process.env": { NODE_ENV: '"production"' } }),
+            new webpack.DefinePlugin({
+                "process.env": {
+                    NODE_ENV: JSON.stringify("production"),
+                    API_URL: JSON.stringify(""),
+                },
+            }),
             new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } }),
             new HtmlWebpackPlugin({ template: "index.ejs" }),
         ];
