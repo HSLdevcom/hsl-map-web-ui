@@ -1,4 +1,5 @@
 import { memoize } from "lodash";
+import urljoin from "url-join";
 
 const parseLineNumber = lineId =>
     // Remove 1st number, which represents the city
@@ -6,7 +7,7 @@ const parseLineNumber = lineId =>
     lineId.substring(1).replace(/^0+/, "");
 
 const getRequest = (endpoint, id) =>
-    fetch(`${process.env.API_URL}/${endpoint}/${id || ""}`, {
+    fetch(urljoin(process.env.API_URL, endpoint, id || ""), {
         method: "GET",
         mode: "cors",
     })
