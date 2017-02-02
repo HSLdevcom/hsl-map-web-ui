@@ -24,6 +24,11 @@
     padding-left: pageMargin;
 }
 
+.filterContainerFullScreen {
+    max-height: calc(100vh - 100px);
+    overflow-y: auto; 
+}
+
 .map {
     flex: 1;
     height: 400px;

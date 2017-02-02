@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 import L from "leaflet";
 import chroma from "chroma-js";
 import "leaflet/dist/leaflet.css";
@@ -196,7 +197,12 @@ class MapLeaflet extends React.Component {
                 <div className={styles.mapContainer}>
                     <div id="map-leaflet" className={styles.map}/>
                 </div>
-                <div id="route-filter" className={styles.filterContainer}>
+                <div
+                  id="route-filter"
+                  className={this.state.fullScreen ?
+                    classNames(styles.filterContainer, styles.filterContainerFullScreen) :
+                    styles.filterContainer}
+                >
                     {this.state.fullScreen ?
                         <ExpandButton
                           onClick={this.toggleFilter}
