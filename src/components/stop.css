@@ -1,0 +1,51 @@
+@value small, large, pageMargin, helpTextSize, fontColor, mediumGray, busBlue from "styles/common.css";
+
+.root {
+    display: flex;
+   	position: relative;
+    margin-bottom: pageMargin;
+}
+
+.root p {
+    margin: 0 0 0 0;
+}
+
+.textTitle {
+    font-weight: 600;
+    width: 68px;
+}
+
+.textPrimary {
+    margin-bottom: 8px !important;
+}
+
+.textAdditional {
+	font-size: helpTextSize;
+	color: mediumGray;
+}
+
+.textDuration {
+	white-space: nowrap;
+    position: absolute;
+    right: 15px;
+    bottom: 0px;
+    font-size: helpTextSize;
+}
+
+@media small {
+    .textDuration {
+        position: static;
+    }
+    .textAdditional {
+        margin-bottom: 8px !important;
+    }
+}
+
+@media large {
+    .textDuration {
+        position: absolute;
+    }
+    .textAdditional {
+        margin-bottom:0px !important;
+    }
+}
