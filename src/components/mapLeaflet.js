@@ -199,7 +199,7 @@ class MapLeaflet extends React.Component {
                 </div>
                 <div
                   id="route-filter"
-                  className={this.state.fullScreen ?
+                  className={this.state.fullScreen && this.state.showFilter ?
                     classNames(styles.filterContainer, styles.filterContainerFullScreen) :
                     styles.filterContainer}
                 >
