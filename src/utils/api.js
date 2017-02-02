@@ -7,7 +7,7 @@ const parseLineNumber = lineId =>
     lineId.substring(1).replace(/^0+/, "");
 
 const getRequest = (endpoint, id) =>
-    fetch(urljoin(process.env.API_URL, endpoint, id || ""), {
+    fetch(urljoin(process.env.API_URL, endpoint, id), {
         method: "GET",
         mode: "cors",
     })
