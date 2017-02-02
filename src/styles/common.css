@@ -5,6 +5,7 @@
 @value borderRadius: 25px;
 @value pageMargin: 20px;
 @value contentBoxPadding: 30px 20px 20px 20px;
+@value mainTextSize: 16px;
 @value helpTextSize: 14px;
 
 @value white: hsl(255, 100%, 100%);

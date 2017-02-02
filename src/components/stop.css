@@ -1,4 +1,4 @@
-@value small, large, pageMargin, helpTextSize, fontColor, mediumGray, busBlue from "styles/common.css";
+@value small, large, pageMargin, mainTextSize, helpTextSize, fontColor, mediumGray, busBlue from "styles/common.css";
 
 .root {
     display: flex;
@@ -11,11 +11,13 @@
 }
 
 .textTitle {
+    font-size: mainTextSize;
     font-weight: 600;
     width: 68px;
 }
 
 .textPrimary {
+    font-size: mainTextSize;
     margin-bottom: 8px !important;
 }
 
