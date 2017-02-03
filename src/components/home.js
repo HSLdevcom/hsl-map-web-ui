@@ -4,6 +4,17 @@ import LineList from "./lineList";
 import styles from "./content.css";
 import { getLines } from "../utils/api";
 
+const sortLines = lines =>
+    lines.sort((a, b) => {
+        if (a.lineId.substring(1, 4) === b.lineId.substring(1, 4)) {
+            if (a.lineId.substring(0, 1) === b.lineId.substring(0, 1)) {
+                return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
+            }
+            return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
+        }
+        return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
+    });
+
 class Home extends React.Component {
     constructor() {
         super();
@@ -16,7 +27,7 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
-        getLines().then(fetchedLines => this.setState({ lines: fetchedLines }));
+        getLines().then(fetchedLines => this.setState({ lines: sortLines(fetchedLines) }));
     }
 
     updateQuery(input) {
