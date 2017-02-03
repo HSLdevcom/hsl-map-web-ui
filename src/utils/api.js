@@ -1,6 +1,9 @@
 import { memoize } from "lodash";
 import urljoin from "url-join";
 
+const removeTrains = lines =>
+    lines.filter(line => line.lineId.substring(0, 1) !== "3");
+
 const parseLineNumber = lineId =>
     // Remove 1st number, which represents the city
     // Remove all zeros from the beginning
@@ -15,8 +18,8 @@ const getRequest = (endpoint, id) =>
 
 const fetchLines = memoize(() =>
     getRequest("lines").then((json) => {
+        const lines = removeTrains(Object.values(json));
         // Add the line number to each object
-        const lines = Object.values(json);
         lines.forEach((line) => {
             line.lineNumber = parseLineNumber(line.lineId);
         });
@@ -41,4 +44,3 @@ export const getStopGeometries = memoize(routeId =>
 export const getRouteGeometries = memoize(routeId =>
     getRequest("routeGeometries", routeId)
 );
-
