@@ -4,6 +4,16 @@ import urljoin from "url-join";
 const removeTrains = lines =>
     lines.filter(line => line.lineId.substring(0, 1) !== "3");
 
+const setTransportType = lines =>
+    lines.map((line) => {
+        if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
+            line.transportType = "tram";
+        } else {
+            line.transportType = "bus";
+        }
+        return line;
+    });
+
 const parseLineNumber = lineId =>
     // Remove 1st number, which represents the city
     // Remove all zeros from the beginning
@@ -18,7 +28,7 @@ const getRequest = (endpoint, id) =>
 
 const fetchLines = memoize(() =>
     getRequest("lines").then((json) => {
-        const lines = removeTrains(Object.values(json));
+        const lines = setTransportType(removeTrains(Object.values(json)));
         // Add the line number to each object
         lines.forEach((line) => {
             line.lineNumber = parseLineNumber(line.lineId);
