@@ -31,7 +31,8 @@
 
 .map {
     flex: 1;
-    height: 400px;
+    min-height: 400px;
+    height: calc(100vh - 400px);
     overflow: hidden;
 }
 
