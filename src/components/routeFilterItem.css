@@ -12,13 +12,6 @@
     font-weight: 500;
 }
 
-.textLine {
-    font-size: 20px;
-    font-weight: 600;
-    color: busBlue;
-    margin-left:6px;
-}
-
 .filterButton {
 	height: 50px;
 	width: 100%;

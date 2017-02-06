@@ -8,7 +8,7 @@ const parseDate = (date) => {
     return new Date(date).toLocaleDateString("fi-FI", options);
 };
 
-const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
+const RouteFilter = ({ routeStops, handleChange, selectedRoutes, transportType }) => (
     <div className={styles.root}>
         { Object.values(groupBy(routeStops, "dateBegin")).map((routeDate, dateIndex) => (
             <div key={`routeFilterDateGroup${dateIndex}`}>
@@ -22,6 +22,7 @@ const RouteFilter = ({ routeStops, handleChange, selectedRoutes }) => (
                       routeDirection={route.direction}
                       routeDateBegin={route.dateBegin}
                       routeStops={route.stops}
+                      transportType={transportType}
                       isChecked={selectedRoutes.includes(
                         `${route.routeId}_${route.direction}_${route.dateBegin}`
                       )}

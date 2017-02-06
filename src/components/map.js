@@ -97,6 +97,7 @@ class Map extends React.Component {
                             </h2>
                         </div>
                         <MapLeaflet
+                          transportType={this.state.transportType}
                           routeGeometries={this.state.routeGeometries}
                           routeStops={this.state.routeStops}
                           selectedRoutes={this.state.selectedRoutes}

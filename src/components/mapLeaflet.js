@@ -213,6 +213,7 @@ class MapLeaflet extends React.Component {
                     }
                     <div className={this.state.showFilter ? "" : styles.hidden}>
                         <RouteFilter
+                          transportType={this.props.transportType}
                           routeStops={this.props.routeStops}
                           selectedRoutes={this.props.selectedRoutes}
                           handleChange={this.props.handleChange}
