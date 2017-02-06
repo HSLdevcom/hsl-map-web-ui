@@ -1,17 +1,17 @@
 import React from "react";
 import { Link } from "react-router";
-import styles from "./line.css";
-import busIcon from "../icons/icon-bus-station.svg";
+import LineIcon from "./lineIcon";
 
-const Line = ({ lineId, longName, shortName }) =>
+const Line = ({ lineId, longName, shortName, transportType }) =>
     (<div>
-        <span >
-            <img src={busIcon} alt="Bus" height="27"/>
-            <Link to={{ pathname: `/kuljettaja/${lineId}` }}>
-                <span className={styles.lineNumber}>{shortName}</span>
-                <span>{longName}</span>
-            </Link>
-        </span>
+        <Link to={{ pathname: `/kuljettaja/${lineId}` }}>
+            <LineIcon
+              transportType={transportType}
+              shortName={shortName}
+              iconSize="27"
+            />
+            <span>{longName}</span>
+        </Link>
     </div>);
 
 Line.propTypes = {

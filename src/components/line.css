@@ -1,9 +1,0 @@
-@value busBlue from "styles/common.css";
-
-.lineNumber {
-	font-size: 24px;
-	font-weight: 600;
-	margin-right: 12px;
-	margin-left: 8px;
-	color: busBlue;
-}
