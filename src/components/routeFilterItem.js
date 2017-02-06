@@ -7,7 +7,6 @@ import styles from "./routeFilterItem.css";
 import openIcon from "../icons/chevron-top.svg";
 import closedIcon from "../icons/chevron-bottom.svg";
 
-
 const parseRouteNumber = routeId =>
     // Remove 1st number, which represents the city
     // Remove all zeros from the beginning
@@ -29,6 +28,8 @@ class RouteFilterItem extends React.Component {
     }
 
     render() {
+        const inputId = `filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`;
+
         return (<div className={styles.root}>
             <button
               className={classNames(commonStyles.noStyle, styles.stopListButton)}
@@ -48,10 +49,10 @@ class RouteFilterItem extends React.Component {
             </button>
             <label
               className={styles.switch}
-              htmlFor={`filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`}
+              htmlFor={inputId}
             >
                 <input
-                  id={`filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`}
+                  id={inputId}
                   type="checkbox"
                   value={`${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`}
                   checked={this.props.isChecked}
@@ -72,5 +73,13 @@ class RouteFilterItem extends React.Component {
         </div>);
     }
 }
+
+RouteFilterItem.propTypes = {
+    routeID: React.PropTypes.string.isRequired,
+    routeDirection: React.PropTypes.string.isRequired,
+    routeDateBegin: React.PropTypes.string.isRequired,
+    transportType: React.PropTypes.string,
+};
+
 
 export default RouteFilterItem;
