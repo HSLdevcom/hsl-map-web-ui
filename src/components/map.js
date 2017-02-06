@@ -1,9 +1,9 @@
 import React from "react";
 import Header from "./header";
 import MapLeaflet from "./mapLeaflet";
+import LineIcon from "./lineIcon";
 import contentStyles from "./content.css";
 import mapStyles from "./map.css";
-import busIcon from "../icons/icon-bus-station.svg";
 import { getLine, getRoutes, getRouteGeometries } from "../utils/api";
 
 const parseRouteNumber = routeId =>
@@ -31,6 +31,7 @@ class Map extends React.Component {
         this.state = {
             lineNumber: "",
             lineNameFi: "",
+            transportType: "",
             routeGeometries: "",
             routeStops: "",
             selectedRoutes: [],
@@ -52,6 +53,7 @@ class Map extends React.Component {
             this.setState({
                 lineNumber: fetchedLine.lineNumber,
                 lineNameFi: fetchedLine.name_fi,
+                transportType: fetchedLine.transportType,
                 routeGeometries: fetchedGeometries,
                 routeStops: routeArray(fetchedRoutes),
                 selectedRoutes: selected,
@@ -84,10 +86,12 @@ class Map extends React.Component {
                 <div className={contentStyles.root}>
                     <div className={contentStyles.contentBox}>
                         <div className={mapStyles.titleWrapper}>
-                            <img src={busIcon} alt="Bus" height="27"/>
-                            <h1 className={mapStyles.titleRouteNumber}>
-                                {this.state.lineNumber}
-                            </h1>
+                            <LineIcon
+                              transportType={this.state.transportType}
+                              shortName={this.state.lineNumber}
+                              iconSize="27"
+                              additionalStyle={{ fontSize: "32px" }}
+                            />
                             <h2>
                                 {this.state.lineNameFi}
                             </h2>
