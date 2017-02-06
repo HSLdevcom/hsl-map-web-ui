@@ -4,9 +4,14 @@ import LineList from "./lineList";
 import styles from "./content.css";
 import { getLines } from "../utils/api";
 
+const transportTypeOrder = ["tram", "bus"];
+
 const sortLines = lines =>
     lines.sort((a, b) => {
-        if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
+        if (a.transportType !== b.transportType) {
+            return transportTypeOrder.indexOf(a.transportType) >
+                transportTypeOrder.indexOf(b.transportType) ? 1 : -1;
+        } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
             return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
         } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
             return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
