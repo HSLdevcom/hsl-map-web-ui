@@ -57,7 +57,12 @@ class RouteFilterItem extends React.Component {
                   checked={this.props.isChecked}
                   onChange={this.props.onChange}
                 />
-                <div className={styles.slider}/>
+                <div
+                  className={classNames(styles.slider,
+                    { [styles.tram]: this.props.transportType === "tram",
+                      [styles.bus]: this.props.transportType !== "tram",
+                    })}
+                />
             </label>
 
             <StopList

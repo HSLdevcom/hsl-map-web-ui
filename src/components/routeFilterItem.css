@@ -1,4 +1,4 @@
-@value white, busBlue, lightGray, pageMargin from "styles/common.css";
+@value white, busBlue, tramGreen, lightGray, pageMargin from "styles/common.css";
 
 .root {
     position: relative;
@@ -65,12 +65,16 @@
     border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+input:checked + .bus {
     background-color: busBlue;
 }
 
-input:checked + .slider:before {
-    transform: translateX(26px);
+input:checked + .tram {
+    background-color: tramGreen;
 }
 
 .stopListButton:hover {
