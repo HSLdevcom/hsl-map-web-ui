@@ -226,6 +226,8 @@ class MapLeaflet extends React.Component {
                   className={classNames(styles.filterContainer,
                     { [styles.filterContainerFullScreen]:
                     (this.state.fullScreen && this.state.showFilter) })}
+                  onMouseEnter={() => { this.map.scrollWheelZoom.disable(); }}
+                  onMouseLeave={() => { this.map.scrollWheelZoom.enable(); }}
 
                 >
                     {this.state.fullScreen ?
