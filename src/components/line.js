@@ -16,8 +16,9 @@ const Line = ({ lineId, longName, shortName, transportType }) =>
 
 Line.propTypes = {
     lineId: React.PropTypes.string.isRequired,
-    longName: React.PropTypes.string,
-    shortName: React.PropTypes.string,
+    longName: React.PropTypes.string.isRequired,
+    shortName: React.PropTypes.string.isRequired,
+    transportType: React.PropTypes.string,
 };
 
 export default Line;

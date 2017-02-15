@@ -60,9 +60,9 @@ class RouteFilterItem extends React.Component {
                 />
                 <div
                   className={classNames(styles.slider,
-                    { [styles.tram]: this.props.transportType === "tram",
-                      [styles.bus]: this.props.transportType !== "tram",
-                    })}
+                      { [styles.tram]: this.props.transportType === "tram",
+                          [styles.bus]: this.props.transportType !== "tram",
+                      })}
                 />
             </label>
 

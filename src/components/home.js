@@ -6,6 +6,15 @@ import { getLines } from "../utils/api";
 
 const transportTypeOrder = ["tram", "bus"];
 
+/**
+ * Sorts the line list in the following way:
+ * 1. By transportation type (e.g. trams before busses)
+ * 2. By line number (e.g. 14 before 18)
+ * 3. By district number (e.g. 18 (1018) in Helsinki before 18 (2018) in Espoo)
+ * 4. By variant (e.g. 102N before 102T)
+ * @param  {Array} lines Unsorted array of lines
+ * @return {Array}       Sorted array of lined
+ */
 const sortLines = lines =>
     lines.sort((a, b) => {
         if (a.transportType !== b.transportType) {

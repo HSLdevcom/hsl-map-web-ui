@@ -12,8 +12,8 @@ const LineIcon = ({ transportType, shortName, iconSize, additionalStyle }) =>
         <span
           style={additionalStyle}
           className={classNames(styles.lineNumber,
-            { [styles.tram]: transportType === "tram",
-            [styles.bus]: transportType !== "tram" }
+              { [styles.tram]: transportType === "tram",
+                  [styles.bus]: transportType !== "tram" }
           )}
         >
             {shortName}
