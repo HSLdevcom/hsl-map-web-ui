@@ -5,6 +5,8 @@
 @value borderRadius: 25px;
 @value pageMargin: 20px;
 @value contentBoxPadding: 30px 20px 20px 20px;
+@value mainTextSize: 16px;
+@value helpTextSize: 14px;
 
 @value white: hsl(255, 100%, 100%);
 @value gray: hsl(220, 2%, 35%);
@@ -22,3 +24,10 @@
 @value small: (min-width: 768px);
 @value medium: (min-width: 992px);
 @value large: (min-width: 1200px);
+
+button.noStyle {
+    border: none;
+    background: none;
+    padding: 0 0 0 0;
+    cursor: pointer;
+}
