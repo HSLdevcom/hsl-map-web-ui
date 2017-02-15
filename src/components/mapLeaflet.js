@@ -228,7 +228,6 @@ class MapLeaflet extends React.Component {
                       (this.state.fullScreen && this.state.showFilter) })}
                   onMouseEnter={() => { this.map.scrollWheelZoom.disable(); }}
                   onMouseLeave={() => { this.map.scrollWheelZoom.enable(); }}
-
                 >
                     {this.state.fullScreen ?
                         <ExpandButton
@@ -240,6 +239,7 @@ class MapLeaflet extends React.Component {
                     }
                     <div className={this.state.showFilter ? "" : styles.hidden}>
                         <RouteFilter
+                          transportType={this.props.transportType}
                           routeStops={this.props.routeStops}
                           selectedRoutes={this.props.selectedRoutes}
                           handleChange={this.props.handleChange}

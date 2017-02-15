@@ -1,12 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import StopList from "./stopList";
+import LineIcon from "./lineIcon";
 import commonStyles from "../styles/common.css";
 import styles from "./routeFilterItem.css";
-import busIcon from "../icons/icon-bus-station.svg";
 import openIcon from "../icons/chevron-top.svg";
 import closedIcon from "../icons/chevron-bottom.svg";
-
 
 const parseRouteNumber = routeId =>
     // Remove 1st number, which represents the city
@@ -40,8 +39,12 @@ class RouteFilterItem extends React.Component {
                   className={styles.icon}
                   src={this.state.stopListOpen ? openIcon : closedIcon} alt="" height="12"
                 />
-                <img src={busIcon} alt="" height="18"/>
-                <span className={styles.textLine} >{parseRouteNumber(this.props.routeID)}</span>
+                <LineIcon
+                  transportType={this.props.transportType}
+                  shortName={parseRouteNumber(this.props.routeID)}
+                  iconSize="18"
+                  additionalStyle={{ fontSize: "20px", marginLeft: "6px", marginRight: "0px" }}
+                />
                 <span className={styles.textDirection}> suunta {this.props.routeDirection}</span>
             </button>
             <label
@@ -55,7 +58,12 @@ class RouteFilterItem extends React.Component {
                   checked={this.props.isChecked}
                   onChange={this.props.onChange}
                 />
-                <div className={styles.slider}/>
+                <div
+                  className={classNames(styles.slider,
+                      { [styles.tram]: this.props.transportType === "tram",
+                          [styles.bus]: this.props.transportType !== "tram",
+                      })}
+                />
             </label>
 
             <StopList
@@ -70,6 +78,7 @@ RouteFilterItem.propTypes = {
     routeID: React.PropTypes.string.isRequired,
     routeDirection: React.PropTypes.string.isRequired,
     routeDateBegin: React.PropTypes.string.isRequired,
+    transportType: React.PropTypes.string,
 };
 
 
