@@ -12,7 +12,7 @@ $ git clone https://github.com/HSLdevcom/hsl-map-web-ui
 ### Install dependencies
 
 ```bash
-$ cd your-project-name && npm install
+$ cd hsl-map-web-ui && npm install
 ```
 
 
