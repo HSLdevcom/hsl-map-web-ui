@@ -8,10 +8,6 @@ function getDevtool(env) {
     return (env === "development") ? "cheap-module-eval-source-map" : "cheap-module-source-map";
 }
 
-function getPublicPath(env) {
-    return (env === "development") ? "/" : "/kuljettaja/";
-}
-
 function getEntry(env) {
     if (env === "development") {
         return [
@@ -38,6 +34,7 @@ function getPlugins(env) {
                 "process.env": {
                     NODE_ENV: JSON.stringify("development"),
                     API_URL: JSON.stringify("http://localhost:8000/"),
+                    ROOT_PATH: JSON.stringify("/"),
                 },
             }),
             new webpack.HotModuleReplacementPlugin(),
@@ -50,6 +47,7 @@ function getPlugins(env) {
                 "process.env": {
                     NODE_ENV: JSON.stringify("production"),
                     API_URL: JSON.stringify(""),
+                    ROOT_PATH: JSON.stringify(process.env.ROOT_PATH) || JSON.stringify("/"),
                 },
             }),
             new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } }),
@@ -67,7 +65,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "dist"),
-        publicPath: getPublicPath(process.env.NODE_ENV),
+        publicPath: "/",
         filename: "bundle.js",
     },
     module: {

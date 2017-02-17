@@ -1,6 +1,7 @@
 FROM node:6
 
 ENV WORK /opt/mapgenerator
+ENV ROOT_PATH /kuljettaja
 
 # Create app directory
 RUN mkdir -p ${WORK}

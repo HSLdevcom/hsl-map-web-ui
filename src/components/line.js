@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
+import path from "path";
 import LineIcon from "./lineIcon";
 
-const Line = ({ lineId, longName, shortName, transportType }) =>
+const Line = ({ lineId, longName, shortName, transportType, rootPath }) =>
     (<div>
-        <Link to={{ pathname: `/kuljettaja/${lineId}` }}>
+        <Link to={{ pathname: path.join(rootPath, lineId) }}>
             <LineIcon
               transportType={transportType}
               shortName={shortName}
