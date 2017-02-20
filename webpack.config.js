@@ -65,7 +65,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "dist"),
-        publicPath: "/",
+        publicPath: process.env.ROOT_PATH || "/",
         filename: "bundle.js",
     },
     module: {
