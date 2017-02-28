@@ -1,9 +1,9 @@
-@value small, large, pageMargin, mainTextSize, helpTextSize, fontColor, mediumGray, busBlue from "styles/common.css";
+@value extraSmall, mainTextSize, helpTextSize, mediumGray from "styles/common.css";
 
 .root {
     display: flex;
    	position: relative;
-    margin-bottom: pageMargin;
+    margin-bottom: 20px;
 }
 
 .root p {
@@ -22,32 +22,33 @@
 }
 
 .textAdditional {
-	font-size: helpTextSize;
-	color: mediumGray;
+    font-size: helpTextSize;
+    color: mediumGray;
+    margin-bottom: 8px !important;
 }
 
 .textDuration {
 	white-space: nowrap;
-    position: absolute;
+    position: static;
     right: 15px;
     bottom: 0px;
     font-size: helpTextSize;
 }
 
-@media small {
-    .textDuration {
-        position: static;
-    }
-    .textAdditional {
-        margin-bottom: 8px !important;
-    }
-}
-
-@media large {
+@media extraSmall {
     .textDuration {
         position: absolute;
     }
+
     .textAdditional {
         margin-bottom:0px !important;
+    }
+    
+    .fullScreen > .textAdditional {
+        margin-bottom: 8px !important;
+    }
+
+    .fullScreen > .textDuration {
+        position: static;
     }
 }
