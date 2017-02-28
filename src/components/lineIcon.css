@@ -2,7 +2,7 @@
 
 .lineIconWrapper:first-child {
 	display: flex;
-	align-items: baseline;
+	align-items: center;
 }
 
 .lineIconWrapper > * {

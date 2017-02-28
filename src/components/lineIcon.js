@@ -6,7 +6,7 @@ import styles from "./lineIcon.css";
 
 const LineIcon = ({ transportType, shortName, lineNameFi, iconSize, additionalStyle }) =>
     (<div style={additionalStyle}>
-        <span className={styles.lineIconWrapper} >
+        <span className={styles.lineIconWrapper}>
             {transportType === "tram" ?
                 <img src={tramIcon} alt="" height={iconSize}/> :
                 <img src={busIcon} alt="" height={iconSize}/>}

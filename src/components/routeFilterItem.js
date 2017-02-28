@@ -43,7 +43,7 @@ class RouteFilterItem extends React.Component {
                         {parseRouteNumber(this.props.routeID)}&nbsp;
                     </span>
                     <span className={styles.textDirection}>
-                      suunta {this.props.routeDirection}
+                        suunta {this.props.routeDirection}
                     </span>
                 </button>
             </div>
