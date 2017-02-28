@@ -1,68 +1,16 @@
-@value busBlue, extraSmall, pageMargin, small, medium from "styles/common.css";
+@value busBlue, contentContainerPadding from "styles/common.css";
 
 .root {
-	padding: 0 pageMargin 0 pageMargin;
-	background-color: white;
-}
-
-.root > div:first-child {
-	min-height: 162px;
-	max-width: 1200px;
-	margin-left: auto;
-	margin-right: auto;
+	height: 150px;
+	padding: contentContainerPadding;
+	background-color: busBlue;
+	color: white;
 }
 
 .logo img {
-	padding: 20px 0 0 0;
-    height: 78px;
+    height: 80px;
 }
 
 .sectionTitle {
-	color: busBlue;
-    overflow: hidden;
-    margin: 0;
-    padding: 15px 0;
-    font-size: 24px;
-}
-
-@media extraSmall {
-	.root {
-		min-height: 120px;
-	}
-
-	.logo {
-	    float: left;
-	}
-	
-	.log img {
-		padding: 21px 0;
-	}
-
-	.sectionTitle {
-	    padding: 45px 20px;
-	    font-size: 24px;
-	}
-}
-
-
-@media small {
-	.root {
-		min-height: 204px;
-	}
-
-	.logo img {
-		padding: 48px 0;
-		height: 108px;
-	}
-
-    .sectionTitle {
-    	padding: 80px 40px;
-        font-size: 36px;
-    }
-}
-@media medium {
-    .sectionTitle {
-    	padding: 72px 40px;
-        font-size: 48px;
-    }
+	color: white;
 }
