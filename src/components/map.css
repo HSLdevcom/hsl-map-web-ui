@@ -1,11 +1,12 @@
-.titleWrapper {
-	vertical-align: baseline;
-	margin-bottom: 24px;
-	width: 100%;
+@value small from "styles/common.css";
+
+.root {
+	display: flex;
+	flex-direction: column;
 }
 
-.titleWrapper > * {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	display: inline-block;
+@media small {
+	.root {
+		flex-direction: row;
+	}
 }
