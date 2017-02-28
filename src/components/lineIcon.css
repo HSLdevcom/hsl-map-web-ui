@@ -1,7 +1,13 @@
-@value tramGreen, busBlue from "styles/common.css";
+@value contentWrapperMargin, tramGreen, busBlue from "styles/common.css";
 
-.root > * {
-	display: inline-block;
+.lineIconWrapper:first-child {
+	display: flex;
+	align-items: baseline;
+}
+
+.lineIconWrapper > * {
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .lineNumber {
