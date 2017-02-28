@@ -82,7 +82,7 @@ class Map extends React.Component {
     render() {
         return (
             <div>
-                <Header/>
+                <Header rootPath={this.props.route.rootPath}/>
                 <div className={contentStyles.root}>
                     <div className={contentStyles.contentBox}>
                         <div className={mapStyles.titleWrapper}>

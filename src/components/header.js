@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router";
 import styles from "./header.css";
 
-const Header = () => (
+const Header = ({ rootPath }) => (
     <div className={styles.root}>
-        <Link to={{ pathname: "/kuljettaja" }}>
+        <Link to={{ pathname: rootPath }}>
             <div className={styles.logo}>
                 <img
                   src="https://www.hsl.fi/sites/all/themes/custom/hsl_tyyliopas/logo.png"

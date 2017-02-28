@@ -1,6 +1,9 @@
 FROM node:6
 
+ARG ROOT_PATH 
+
 ENV WORK /opt/mapgenerator
+ENV ROOT_PATH ${ROOT_PATH}
 
 # Create app directory
 RUN mkdir -p ${WORK}

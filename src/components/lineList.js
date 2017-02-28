@@ -2,7 +2,7 @@ import React from "react";
 import Line from "./line";
 import LineSearch from "./lineSearch";
 
-const LineList = ({ query, lines, updateQuery }) => {
+const LineList = ({ query, lines, updateQuery, rootPath }) => {
     const renderLines = () =>
         lines.filter((value) => {
             if (value.lineId) {
@@ -16,6 +16,7 @@ const LineList = ({ query, lines, updateQuery }) => {
               longName={line.name_fi}
               shortName={line.lineNumber}
               transportType={line.transportType}
+              rootPath={rootPath}
             />
         ));
 
