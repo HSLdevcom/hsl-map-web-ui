@@ -10,8 +10,6 @@ import timeIcon1 from "icons/icon-time1.svg";
 import timeIcon2 from "icons/icon-time2.svg";
 import fullScreenEnterIcon from "icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "icons/icon-fullscreen-exit.svg";
-import RouteFilter from "./routeFilter";
-import ExpandButton from "./expandButton";
 import styles from "./mapLeaflet.css";
 
 const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
@@ -100,27 +98,29 @@ const addRouteFilterLayer = (map) => {
             position: "bottomright",
         },
         onAdd: () => {
-            const container = L.DomUtil.create("div", "leaflet-bar leaflet-control");
-            container.appendChild(document.getElementById("route-filter"));
+            const container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-bottomright");
             return container;
         },
     });
     map.addControl(new RouteFilterControl());
 };
 
+const updateFilterLayer = (isFullScreen) => {
+    if (isFullScreen) document.getElementsByClassName("leaflet-control-bottomright")[0].appendChild(document.getElementById("route-filter"));
+    else document.getElementById("map-container").appendChild(document.getElementById("route-filter"));
+};
+
+const updateMapScrollWheelZoom = (map, scrollEnabled) => {
+    if (scrollEnabled) map.scrollWheelZoom.enable();
+    else map.scrollWheelZoom.disable();
+};
+
 class MapLeaflet extends React.Component {
     constructor() {
         super();
-        this.state = {
-            showFilter: true,
-            fullScreen: false,
-        };
         this.initializeMap = this.initializeMap.bind(this);
         this.addLayersToMap = this.addLayersToMap.bind(this);
-        this.toggleFilter = this.toggleFilter.bind(this);
-        this.toggleFullscreen = this.toggleFullscreen.bind(this);
     }
-
 
     componentDidMount() {
         this.initializeMap(this.map);
@@ -134,12 +134,14 @@ class MapLeaflet extends React.Component {
 
         // Leaflet map is updated once geometry and stop data has been fetched
         // The view (bounding box) is set only the first time the route stops are recieved
-        if (!prevProps.routeStops) {
+        if (!prevProps.routeStops && this.props.routeStops[0]) {
             const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lat, stop.lon]);
             this.map.fitBounds(arrBounds);
         }
 
         this.addLayersToMap(this.map);
+        updateFilterLayer(this.props.isFullScreen);
+        updateMapScrollWheelZoom(this.map, this.props.scrollEnabled);
         this.map.invalidateSize();
     }
 
@@ -155,7 +157,8 @@ class MapLeaflet extends React.Component {
             retina: L.retina ? "" : "@2x",
             baseLayer: true,
         }).addTo(this.map);
-        addControlButton(this.map, this.toggleFullscreen);
+        addControlButton(this.map, this.props.toggleFullscreen);
+        addRouteFilterLayer(this.map);
     }
 
     addLayersToMap() {
@@ -189,65 +192,14 @@ class MapLeaflet extends React.Component {
         }
     }
 
-    toggleFilter() {
-        this.setState({
-            showFilter: !this.state.showFilter,
-        });
-    }
-
-    toggleFullscreen() {
-        const prevState = this.state.fullScreen;
-        this.setState({
-            fullScreen: !prevState,
-        }, () => {
-            if (this.state.fullScreen) addRouteFilterLayer(this.map);
-            else {
-                this.setState({
-                    showFilter: true,
-                });
-                document.getElementById("map-container").appendChild(document.getElementById("route-filter"));
-            }
-        });
-        return !prevState;
-    }
-
     render() {
-        // Container div (id="map-container") for leaflet map is created
+        // Container div (id="map-leaflet") for leaflet map is created
         return (
-            <div id="map-container" className={styles.root}>
-                <div
-                  className={classNames(styles.mapContainer,
-                    { [styles.fullScreen]: this.state.fullScreen })}
-                >
-                    <div id="map-leaflet" className={styles.map}/>
-                </div>
-                <div
-                  id="route-filter"
-                  className={classNames(styles.filterContainer,
-                      { [styles.filterContainerFullScreen]:
-                      (this.state.fullScreen && this.state.showFilter) })}
-                  onMouseEnter={() => { this.map.scrollWheelZoom.disable(); }}
-                  onMouseLeave={() => { this.map.scrollWheelZoom.enable(); }}
-                >
-                    {this.state.fullScreen ?
-                        <ExpandButton
-                          onClick={this.toggleFilter}
-                          labelText="Valitse reitit"
-                          isExpanded={this.state.showFilter}
-                        />
-                        : <h3>Valitse reitit</h3>
-                    }
-                    <div className={this.state.showFilter ? "" : styles.hidden}>
-                        <RouteFilter
-                          transportType={this.props.transportType}
-                          routeStops={this.props.routeStops}
-                          selectedRoutes={this.props.selectedRoutes}
-                          handleChange={this.props.handleChange}
-                        />
-                    </div>
-                </div>
-            </div>
-
+            <div
+              id="map-leaflet"
+              className={classNames(styles.root,
+                { [styles.fullScreen]: this.props.isFullScreen })}
+            />
         );
     }
 }

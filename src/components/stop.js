@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./stop.css";
 
-const Stop = ({ shortId, stopNameFi, stopNameSv, duration }) =>
+const Stop = ({ shortId, stopNameFi, stopNameSv, duration, isFullScreen }) =>
     (<div className={styles.root}>
         <p className={styles.textTitle}>{shortId}</p>
-        <div>
+        <div className={isFullScreen ? styles.fullScreen : ""}>
             <p className={styles.textPrimary}>{stopNameFi}</p>
             <p className={styles.textAdditional}>{stopNameSv}</p>
             <p className={styles.textDuration}>{duration} min</p>

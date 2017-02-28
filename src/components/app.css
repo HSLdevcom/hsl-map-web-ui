@@ -1,6 +1,5 @@
-@value backgroundLight from "styles/common.css";
+@value backgroundLightGray from "styles/common.css";
 
 .root {
-	height: 100vh;
-	background-color: backgroundLight;
+	background-color: backgroundLightGray;
 }

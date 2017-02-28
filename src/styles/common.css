@@ -1,30 +1,21 @@
-@value fontFamilyWeb: "Proxima Nova Soft Regular", Arial, Helvetica, "Nimbus Sans L", sans-serif;
 @value fontFamily: "Gotham Rounded SSm A", "Gotham Rounded SSm B", sans-serif;
-@value fontFamilyNarrow: "Gotham XNarrow SSm A", "Gotham XNarrow SSm B", sans-serif;
 
-@value borderRadius: 25px;
-@value pageMargin: 20px;
-@value contentBoxPadding: 30px 20px 20px 20px;
+@value contentContainerPadding: 20px 20px 20px 20px;
+@value contentElementPadding: 10px 10px 10px 10px;
+@value contentWrapperMargin: 0px 0px 15px 0px;
 @value mainTextSize: 16px;
 @value helpTextSize: 14px;
 
-@value white: hsl(255, 100%, 100%);
-@value gray: hsl(220, 2%, 35%);
-@value background: hsl(200, 100%, 40%);
-@value backgroundLight: hsl(202, 83%, 86%);
+@value backgroundLightGray: #eef1f3; 
 @value fontColor: rgb(20, 20, 20);
 @value busBlue: rgb(0, 122, 201);
-@value ferryBlueLight: rgb(190, 228, 248);
-@value ferryBlue: rgb(0, 185, 228);
 @value tramGreen: rgb(0, 152, 95);
 @value lightGray: rgb(221, 222, 220);
 @value mediumGray: rgb(102, 102, 102);
 @value warningRed: rgb(220, 4, 81);
 
-@value extraSmall: (min-width: 600px);
+@value extraSmall: (min-width: 400px);
 @value small: (min-width: 768px);
-@value medium: (min-width: 992px);
-@value large: (min-width: 1200px);
 
 button.noStyle {
     border: none;

@@ -1,9 +1,7 @@
 import React from "react";
-import Header from "./header";
+import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
-import LineIcon from "./lineIcon";
-import contentStyles from "./content.css";
-import mapStyles from "./map.css";
+import styles from "./map.css";
 import { getLine, getRoutes, getRouteGeometries } from "../utils/api";
 
 const parseRouteNumber = routeId =>
@@ -35,10 +33,16 @@ class Map extends React.Component {
             routeGeometries: "",
             routeStops: "",
             selectedRoutes: [],
+            showFilterFullScreen: false,
+            isFullScreen: false,
+            scrollEnabled: true,
         };
-        this.filterUpdate = this.filterUpdate.bind(this);
-        this.removeSelection = this.removeSelection.bind(this);
         this.addSelection = this.addSelection.bind(this);
+        this.removeSelection = this.removeSelection.bind(this);
+        this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
+        this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
+        this.routeFilterScrollWheelUpdate = this.routeFilterScrollWheelUpdate.bind(this);
+        this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
     }
 
     componentDidMount() {
@@ -61,10 +65,10 @@ class Map extends React.Component {
         });
     }
 
-    filterUpdate(e) {
-        if (this.state.selectedRoutes.includes(e.target.value)) {
-            this.removeSelection(e.target.value);
-        } else this.addSelection(e.target.value);
+    addSelection(route) {
+        this.setState({
+            selectedRoutes: this.state.selectedRoutes.concat(route),
+        });
     }
 
     removeSelection(route) {
@@ -73,38 +77,54 @@ class Map extends React.Component {
         });
     }
 
-    addSelection(route) {
+    mapLeafletToggleFullscreen() {
         this.setState({
-            selectedRoutes: this.state.selectedRoutes.concat(route),
+            isFullScreen: !this.state.isFullScreen,
         });
+    }
+
+    routeFilterToggleFilter() {
+        this.setState({
+            showFilterFullScreen: !this.state.showFilterFullScreen,
+        });
+    }
+
+    routeFilterScrollWheelUpdate(isEnabled) {
+        this.setState({
+            scrollEnabled: isEnabled,
+        });
+    }
+
+    routeFilterItemToggleChecked(e) {
+        if (this.state.selectedRoutes.includes(e.target.value)) {
+            this.removeSelection(e.target.value);
+        } else this.addSelection(e.target.value);
     }
 
     render() {
         return (
-            <div>
-                <Header rootPath={this.props.route.rootPath}/>
-                <div className={contentStyles.root}>
-                    <div className={contentStyles.contentBox}>
-                        <div className={mapStyles.titleWrapper}>
-                            <LineIcon
-                              transportType={this.state.transportType}
-                              shortName={this.state.lineNumber}
-                              iconSize="27"
-                              additionalStyle={{ fontSize: "32px" }}
-                            />
-                            <h2>
-                                {this.state.lineNameFi}
-                            </h2>
-                        </div>
-                        <MapLeaflet
-                          transportType={this.state.transportType}
-                          routeGeometries={this.state.routeGeometries}
-                          routeStops={this.state.routeStops}
-                          selectedRoutes={this.state.selectedRoutes}
-                          handleChange={this.filterUpdate}
-                        />
-                    </div>
-                </div>
+            <div className={styles.root}>
+                <Sidebar
+                  transportType={this.state.transportType}
+                  lineNumber={this.state.lineNumber}
+                  lineNameFi={this.state.lineNameFi}
+                  routeStops={this.state.routeStops}
+                  selectedRoutes={this.state.selectedRoutes}
+                  showFilter={this.state.showFilterFullScreen}
+                  isFullScreen={this.state.isFullScreen}
+                  toggleChecked={this.routeFilterItemToggleChecked}
+                  toggleFilter={this.routeFilterToggleFilter}
+                  scrollWheelUpdate={this.routeFilterScrollWheelUpdate}
+                  rootPath={this.props.route.rootPath}
+                />
+                <MapLeaflet
+                  routeGeometries={this.state.routeGeometries}
+                  routeStops={this.state.routeStops}
+                  selectedRoutes={this.state.selectedRoutes}
+                  isFullScreen={this.state.isFullScreen}
+                  scrollEnabled={this.state.scrollEnabled}
+                  toggleFullscreen={this.mapLeafletToggleFullscreen}
+                />
             </div>);
     }
 }

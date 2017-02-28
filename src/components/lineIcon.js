@@ -4,20 +4,23 @@ import busIcon from "../icons/icon-bus-station.svg";
 import tramIcon from "../icons/icon-tram.svg";
 import styles from "./lineIcon.css";
 
-const LineIcon = ({ transportType, shortName, iconSize, additionalStyle }) =>
-    (<span className={styles.root}>
-        {transportType === "tram" ?
-            <img src={tramIcon} alt="" height={iconSize}/> :
-            <img src={busIcon} alt="" height={iconSize}/>}
-        <span
-          style={additionalStyle}
-          className={classNames(styles.lineNumber,
-              { [styles.tram]: transportType === "tram",
-                  [styles.bus]: transportType !== "tram" }
-          )}
-        >
-            {shortName}
+const LineIcon = ({ transportType, shortName, lineNameFi, iconSize, additionalStyle }) =>
+    (<div style={additionalStyle}>
+        <span className={styles.lineIconWrapper}>
+            {transportType === "tram" ?
+                <img src={tramIcon} alt="" height={iconSize}/> :
+                <img src={busIcon} alt="" height={iconSize}/>}
+            <span
+              className={classNames(styles.lineNumber,
+                  { [styles.tram]: transportType === "tram",
+                      [styles.bus]: transportType !== "tram" }
+              )}
+            >
+                {shortName}
+            </span>
+            <p>{lineNameFi}</p>
         </span>
-    </span>);
+    </div>
+);
 
 export default LineIcon;

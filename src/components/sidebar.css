@@ -1,0 +1,17 @@
+@value small, contentContainerPadding from "styles/common.css";
+
+.root {
+	width:100%;
+	max-width:100%;
+}
+
+.elementContainer {
+	padding: contentContainerPadding;
+}
+
+@media small {
+	.root {
+		min-width:400px;
+		max-width:400px;
+	}
+}

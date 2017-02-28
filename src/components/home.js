@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./header";
 import LineList from "./lineList";
-import styles from "./content.css";
+import styles from "./home.css";
 import { getLines } from "../utils/api";
 
 const transportTypeOrder = ["tram", "bus"];
@@ -54,14 +54,12 @@ class Home extends React.Component {
             <div>
                 <Header rootPath={this.props.route.rootPath}/>
                 <div className={styles.root}>
-                    <div className={styles.contentBox}>
-                        <LineList
-                          updateQuery={this.updateQuery}
-                          query={this.state.query}
-                          lines={this.state.lines}
-                          rootPath={this.props.route.rootPath}
-                        />
-                    </div>
+                    <LineList
+                      updateQuery={this.updateQuery}
+                      query={this.state.query}
+                      lines={this.state.lines}
+                      rootPath={this.props.route.rootPath}
+                    />
                 </div>
             </div>
         );

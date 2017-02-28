@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import StopList from "./stopList";
-import LineIcon from "./lineIcon";
 import commonStyles from "../styles/common.css";
 import styles from "./routeFilterItem.css";
 import openIcon from "../icons/chevron-top.svg";
@@ -31,22 +30,23 @@ class RouteFilterItem extends React.Component {
         const inputId = `filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`;
 
         return (<div className={styles.root}>
-            <button
-              className={classNames(commonStyles.noStyle, styles.stopListButton)}
-              onClick={this.toggleStopList}
-            >
-                <img
-                  className={styles.icon}
-                  src={this.state.stopListOpen ? openIcon : closedIcon} alt="" height="12"
-                />
-                <LineIcon
-                  transportType={this.props.transportType}
-                  shortName={parseRouteNumber(this.props.routeID)}
-                  iconSize="18"
-                  additionalStyle={{ fontSize: "20px", marginLeft: "6px", marginRight: "0px" }}
-                />
-                <span className={styles.textDirection}> suunta {this.props.routeDirection}</span>
-            </button>
+            <div className={styles.stopListButtonWrapper}>
+                <button
+                  className={classNames(commonStyles.noStyle, styles.stopListButton)}
+                  onClick={this.toggleStopList}
+                >
+                    <img
+                      className={styles.icon}
+                      src={this.state.stopListOpen ? openIcon : closedIcon} alt="" height="12"
+                    />
+                    <span className={styles.textRoute}>
+                        {parseRouteNumber(this.props.routeID)}&nbsp;
+                    </span>
+                    <span className={styles.textDirection}>
+                        suunta {this.props.routeDirection}
+                    </span>
+                </button>
+            </div>
             <label
               className={styles.switch}
               htmlFor={inputId}
@@ -69,6 +69,7 @@ class RouteFilterItem extends React.Component {
             <StopList
               routeStops={this.props.routeStops}
               isOpen={this.state.stopListOpen}
+              isFullScreen={this.props.isFullScreen}
             />
         </div>);
     }
@@ -80,6 +81,5 @@ RouteFilterItem.propTypes = {
     routeDateBegin: React.PropTypes.string.isRequired,
     transportType: React.PropTypes.string,
 };
-
 
 export default RouteFilterItem;
