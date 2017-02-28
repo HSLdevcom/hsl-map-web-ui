@@ -115,6 +115,7 @@ class Map extends React.Component {
                   toggleChecked={this.routeFilterItemToggleChecked}
                   toggleFilter={this.routeFilterToggleFilter}
                   scrollWheelUpdate={this.routeFilterScrollWheelUpdate}
+                  rootPath={this.props.route.rootPath}
                 />
                 <MapLeaflet
                   routeGeometries={this.state.routeGeometries}

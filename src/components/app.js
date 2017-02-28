@@ -4,12 +4,14 @@ import Home from "components/home";
 import Map from "components/map";
 import style from "./app.css";
 
+const rootPath = process.env.ROOT_PATH;
+
 const App = () => (
     <div className={style.root}>
         <Router history={browserHistory}>
-            <Route path="/kuljettaja">
-                <IndexRoute component={Home}/>
-                <Route path=":id" component={Map}/>
+            <Route path={rootPath}>
+                <IndexRoute component={Home} rootPath={rootPath}/>
+                <Route path=":id" component={Map} rootPath={rootPath}/>
             </Route>
         </Router>
     </div>

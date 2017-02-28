@@ -52,12 +52,13 @@ class Home extends React.Component {
     render() {
         return (
             <div>
-                <Header/>
+                <Header rootPath={this.props.route.rootPath}/>
                 <div className={styles.root}>
                     <LineList
                       updateQuery={this.updateQuery}
                       query={this.state.query}
                       lines={this.state.lines}
+                      rootPath={this.props.route.rootPath}
                     />
                 </div>
             </div>
