@@ -20,7 +20,7 @@ const LineList = ({ query, lines, updateQuery }) => {
         ));
 
     return (<div>
-        <h1>Reitit</h1>
+        <h3>Reitit</h3>
         <LineSearch
           query={query}
           onChange={updateQuery}

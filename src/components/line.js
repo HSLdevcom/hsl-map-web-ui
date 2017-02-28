@@ -8,9 +8,9 @@ const Line = ({ lineId, longName, shortName, transportType }) =>
             <LineIcon
               transportType={transportType}
               shortName={shortName}
-              iconSize="27"
+              lineNameFi={longName}
+              iconSize="24"
             />
-            <span>{longName}</span>
         </Link>
     </div>);
 
