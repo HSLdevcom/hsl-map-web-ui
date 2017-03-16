@@ -28,7 +28,7 @@ const RouteFilter = props => (
             : null
         }
         <div className={(props.isFullScreen && !props.showFilter) ? styles.hidden : ""}>
-            { Object.values(groupBy(props.routeStops, "dateBegin")).map((routeDate, dateIndex) => (
+            { Object.values(groupBy(props.routes, "dateBegin")).map((routeDate, dateIndex) => (
                 <div key={`routeFilterDateGroup${dateIndex}`}>
                     <p className={styles.dateLabel}>
                         {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
@@ -40,7 +40,7 @@ const RouteFilter = props => (
                               routeID={route.routeId}
                               routeDirection={route.direction}
                               routeDateBegin={route.dateBegin}
-                              routeStops={route.stops}
+                              routeStops={route.routeSegments.nodes.map(node => node.stop)}
                               transportType={props.transportType}
                               isFullScreen={props.isFullScreen}
                               isChecked={props.selectedRoutes.includes(

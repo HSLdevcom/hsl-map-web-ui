@@ -43,7 +43,11 @@ const addMarkersToLayer = (stops, direction, map) => {
 
 const addStopLayer = (routes, map) => {
     routes.forEach((route) => {
-        addMarkersToLayer(route.stops, route.direction, map);
+        addMarkersToLayer(
+          route.routeSegments.nodes.map(node => (
+            { ...node.stop, timingStopType: node.timingStopType, stopNumber: node.stopNumber }
+          )).sort((a, b) => a.stopNumber - b.stopNumber),
+          route.direction, map);
     });
 };
 
@@ -134,8 +138,10 @@ class MapLeaflet extends React.Component {
 
         // Leaflet map is updated once geometry and stop data has been fetched
         // The view (bounding box) is set only the first time the route stops are recieved
-        if (!prevProps.routeStops && this.props.routeStops[0]) {
-            const arrBounds = this.props.routeStops[0].stops.map(stop => [stop.lat, stop.lon]);
+        if (!prevProps.routes && this.props.routes && this.props.routes[0]) {
+            const arrBounds = this.props.routes[0].routeSegments.nodes.map(({ stop }) =>
+              [stop.lat, stop.lon]
+            );
             this.map.fitBounds(arrBounds);
         }
 
@@ -162,8 +168,8 @@ class MapLeaflet extends React.Component {
     }
 
     addLayersToMap() {
-        if (this.props.routeStops) {
-            const selectedStops = this.props.routeStops.filter(route =>
+        if (this.props.routes) {
+            const selectedStops = this.props.routes.filter(route =>
                 this.props.selectedRoutes.includes(`${route.routeId}_${route.direction}_${route.dateBegin}`)
             );
 
@@ -172,20 +178,22 @@ class MapLeaflet extends React.Component {
             let index1 = 0;
             let index2 = 0;
             let colorKey;
-            const selectedGeometries = this.props.routeGeometries.map((route) => {
-                if (route.properties.direction === "1") {
+            const selectedGeometries = this.props.routes.map((route) => {
+                if (route.direction === "1") {
                     colorKey = index1;
                     index1 += 1;
-                } else if (route.properties.direction === "2") {
+                } else if (route.direction === "2") {
                     colorKey = index2;
                     index2 += 1;
                 }
-                route.properties = { ...route.properties, colorKey };
-
-                return route;
+                return {
+                    type: "Feature",
+                    properties: { ...route, colorKey },
+                    geometry: route.geometries.nodes[0].geometry,
+                };
             })
             .filter(route =>
-                this.props.selectedRoutes.includes(`${route.properties.lineId}_${route.properties.direction}_${route.properties.beginDate}`)
+                this.props.selectedRoutes.includes(`${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}`)
             );
 
             addGeometryLayer(selectedGeometries, this.map);

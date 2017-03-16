@@ -5,7 +5,7 @@ const modulesValues = require("postcss-modules-values");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 function getDevtool(env) {
-    return (env === "development") ? "cheap-module-eval-source-map" : "cheap-module-source-map";
+    return (env === "development") ? "eval" : "cheap-module-source-map";
 }
 
 function getEntry(env) {
@@ -18,13 +18,12 @@ function getEntry(env) {
             "whatwg-fetch",
             "./src/index",
         ];
-    } else {
-        return [
-            "babel-polyfill",
-            "whatwg-fetch",
-            "./src/index",
-        ];
     }
+    return [
+        "babel-polyfill",
+        "whatwg-fetch",
+        "./src/index",
+    ];
 }
 
 function getPlugins(env) {
@@ -40,20 +39,19 @@ function getPlugins(env) {
             new webpack.HotModuleReplacementPlugin(),
             new HtmlWebpackPlugin({ template: "index.ejs" }),
         ];
-    } else {
-        return [
-            new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("production"),
-                    API_URL: JSON.stringify(""),
-                    ROOT_PATH: JSON.stringify(process.env.ROOT_PATH) || JSON.stringify("/"),
-                },
-            }),
-            new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } }),
-            new HtmlWebpackPlugin({ template: "index.ejs" }),
-        ];
     }
+    return [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production"),
+                API_URL: JSON.stringify(""),
+                ROOT_PATH: JSON.stringify(process.env.ROOT_PATH) || JSON.stringify("/"),
+            },
+        }),
+        new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } }),
+        new HtmlWebpackPlugin({ template: "index.ejs" }),
+    ];
 }
 
 module.exports = {
