@@ -26,7 +26,7 @@ const lineQuery = gql`
           dateEnd
           routeSegments {
             nodes {
-              stopNumber
+              stopIndex
               timingStopType
               duration
               stop: stopByStopId {

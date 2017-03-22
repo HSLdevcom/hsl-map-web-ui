@@ -45,8 +45,8 @@ const addStopLayer = (routes, map) => {
     routes.forEach((route) => {
         addMarkersToLayer(
           route.routeSegments.nodes.map(node => (
-            { ...node.stop, timingStopType: node.timingStopType, stopNumber: node.stopNumber }
-          )).sort((a, b) => a.stopNumber - b.stopNumber),
+            { ...node.stop, timingStopType: node.timingStopType, stopIndex: node.stopIndex }
+          )).sort((a, b) => a.stopIndex - b.stopIndex),
           route.direction, map);
     });
 };
