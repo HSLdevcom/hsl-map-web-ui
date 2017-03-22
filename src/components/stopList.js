@@ -7,8 +7,8 @@ const renderStops = (routeStops, isFullScreen) =>
         <Stop
           key={`stop${index}`}
           shortId={stop.shortId}
-          stopNameFi={stop.name_fi}
-          stopNameSv={stop.name_se}
+          stopNameFi={stop.nameFi}
+          stopNameSv={stop.nameSe}
           duration={stop.duration}
           isFullScreen={isFullScreen}
         />

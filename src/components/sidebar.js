@@ -18,7 +18,7 @@ const Sidebar = props => (
             <div id="map-container">
                 <RouteFilter
                   transportType={props.transportType}
-                  routeStops={props.routeStops}
+                  routes={props.routes}
                   selectedRoutes={props.selectedRoutes}
                   toggleChecked={props.toggleChecked}
                   isFullScreen={props.isFullScreen}

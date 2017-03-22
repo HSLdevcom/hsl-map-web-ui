@@ -3,9 +3,9 @@ import { Link } from "react-router";
 import path from "path";
 import LineIcon from "./lineIcon";
 
-const Line = ({ lineId, longName, shortName, transportType, rootPath }) =>
+const Line = ({ lineId, longName, shortName, transportType, rootPath, dateBegin, dateEnd }) =>
     (<div>
-        <Link to={{ pathname: path.join(rootPath, lineId) }}>
+        <Link to={{ pathname: path.join(rootPath, lineId, dateBegin, dateEnd) }}>
             <LineIcon
               transportType={transportType}
               shortName={shortName}

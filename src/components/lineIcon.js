@@ -1,15 +1,15 @@
 import React from "react";
 import classNames from "classnames";
-import busIcon from "../icons/icon-bus-station.svg";
-import tramIcon from "../icons/icon-tram.svg";
+import BusIcon from "../icons/icon-bus-station.js";
+import TramIcon from "../icons/icon-tram.js";
 import styles from "./lineIcon.css";
 
 const LineIcon = ({ transportType, shortName, lineNameFi, iconSize, additionalStyle }) =>
     (<div style={additionalStyle}>
         <span className={styles.lineIconWrapper}>
             {transportType === "tram" ?
-                <img src={tramIcon} alt="" height={iconSize}/> :
-                <img src={busIcon} alt="" height={iconSize}/>}
+                <TramIcon height={iconSize}/> :
+                <BusIcon height={iconSize}/>}
             <span
               className={classNames(styles.lineNumber,
                   { [styles.tram]: transportType === "tram",
