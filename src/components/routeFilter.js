@@ -40,7 +40,14 @@ const RouteFilter = props => (
                               routeID={route.routeId}
                               routeDirection={route.direction}
                               routeDateBegin={route.dateBegin}
-                              routeStops={route.routeSegments.nodes.map(node => node.stop)}
+                              routeStops={route.routeSegments.nodes
+                                  .map(node => ({
+                                      ...node.stop,
+                                      duration: node.duration,
+                                      stopIndex: node.stopIndex,
+                                  }))
+                                  .sort((a, b) => a.stopIndex - b.stopIndex)
+                              }
                               transportType={props.transportType}
                               isFullScreen={props.isFullScreen}
                               isChecked={props.selectedRoutes.includes(
