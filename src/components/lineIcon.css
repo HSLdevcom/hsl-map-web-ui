@@ -10,6 +10,10 @@
 	margin-bottom: 0px;
 }
 
+.lineIconWrapper > svg {
+	flex: 0 0 24px;
+}
+
 .lineNumber {
 	font-size: 24px;
 	font-weight: 600;
