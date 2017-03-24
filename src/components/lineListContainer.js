@@ -4,6 +4,7 @@ import LineList from "./lineList";
 const transportTypeOrder = ["tram", "bus"];
 
 const removeTrainsFilter = line => line.lineId.substring(0, 1) !== "3";
+const removeFerryFilter = line => line.lineId.substring(0, 4) !== "1019";
 
 const setTransportTypeMapper = (line) => {
     if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
@@ -65,6 +66,7 @@ export default graphql(AllLinesQuery, {
                 lines: allLines.nodes
                     .filter(node => node.routes.totalCount !== 0)
                     .filter(removeTrainsFilter)
+                    .filter(removeFerryFilter)
                     .map(setTransportTypeMapper)
                     .map(lineNumberMapper)
                     .sort(linesSorter),
