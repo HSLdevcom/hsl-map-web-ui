@@ -3,8 +3,14 @@
 .root {
     width: 100%;
     min-height: 400px;
-    height: calc(100vh);
+    height: 100vh;
     overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .root {
+        height: calc(100vh - 100px);
+    }
 }
 
 .stopIcon {
