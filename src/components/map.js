@@ -13,6 +13,7 @@ class Map extends React.Component {
         };
         this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
         this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
+        this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
     }
 
     addSelection(route) {
