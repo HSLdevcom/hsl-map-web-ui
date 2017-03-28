@@ -106,6 +106,7 @@ const addRouteFilterLayer = (map) => {
         },
         onAdd: () => {
             const container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-bottomright");
+            L.DomEvent.disableScrollPropagation(container);
             return container;
         },
     });
