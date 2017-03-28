@@ -11,8 +11,6 @@ class Map extends React.Component {
             showFilterFullScreen: false,
             isFullScreen: false,
         };
-        this.addSelection = this.addSelection.bind(this);
-        this.removeSelection = this.removeSelection.bind(this);
         this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
         this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
     }
