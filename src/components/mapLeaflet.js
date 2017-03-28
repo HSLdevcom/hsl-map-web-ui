@@ -48,7 +48,6 @@ const addStopLayer = (routes, map) => {
               ...node.stop,
               timingStopType: node.timingStopType,
               stopIndex: node.stopIndex,
-              duration: node.duration,
           })).sort((a, b) => a.stopIndex - b.stopIndex),
           route.direction, map);
     });
