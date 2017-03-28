@@ -117,11 +117,6 @@ const updateFilterLayer = (isFullScreen) => {
     else document.getElementById("map-container").appendChild(document.getElementById("route-filter"));
 };
 
-const updateMapScrollWheelZoom = (map, scrollEnabled) => {
-    if (scrollEnabled) map.scrollWheelZoom.enable();
-    else map.scrollWheelZoom.disable();
-};
-
 class MapLeaflet extends React.Component {
     constructor() {
         super();
@@ -150,7 +145,6 @@ class MapLeaflet extends React.Component {
 
         this.addLayersToMap(this.map);
         updateFilterLayer(this.props.isFullScreen);
-        updateMapScrollWheelZoom(this.map, this.props.scrollEnabled);
         this.map.invalidateSize();
     }
 

@@ -24,7 +24,6 @@ const Sidebar = props => (
                   isFullScreen={props.isFullScreen}
                   showFilter={props.showFilter}
                   toggleFilter={props.toggleFilter}
-                  scrollWheelUpdate={props.scrollWheelUpdate}
                 />
             </div>
         </div>
