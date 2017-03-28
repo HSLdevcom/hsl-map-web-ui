@@ -3,7 +3,6 @@
 .root {
 	width:100%;
 	max-width:100%;
-	max-height: 100vh;
 	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 }
@@ -17,5 +16,6 @@
 		overflow-y: auto;
 		min-width:400px;
 		max-width:400px;
+		max-height: 100vh;
 	}
 }
