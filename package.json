@@ -55,7 +55,7 @@
     "chroma-js": "^1.2.1",
     "classnames": "^2.2.5",
     "express": "^4.14.0",
-    "leaflet": "^0.7.7",
+    "leaflet": "^1.0.3",
     "lodash": "^4.16.4",
     "react": "^15.3.1",
     "react-apollo": "^1.0.0-rc.2",

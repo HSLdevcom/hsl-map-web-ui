@@ -16,8 +16,6 @@ const RouteFilter = props => (
       className={classNames(styles.root,
           { [styles.filterContainerFullScreen]: (props.isFullScreen) },
           { [styles.filterContainerHideFilter]: (props.isFullScreen && !props.showFilter) })}
-      onMouseEnter={() => props.scrollWheelUpdate(false)}
-      onMouseLeave={() => props.scrollWheelUpdate(true)}
     >
         {props.isFullScreen ?
             <ExpandButton

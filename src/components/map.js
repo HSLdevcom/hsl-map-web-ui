@@ -10,13 +10,9 @@ class Map extends React.Component {
             selectedRoutes: [],
             showFilterFullScreen: false,
             isFullScreen: false,
-            scrollEnabled: true,
         };
-        this.addSelection = this.addSelection.bind(this);
-        this.removeSelection = this.removeSelection.bind(this);
         this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
         this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
-        this.routeFilterScrollWheelUpdate = this.routeFilterScrollWheelUpdate.bind(this);
         this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
     }
 
@@ -44,12 +40,6 @@ class Map extends React.Component {
         });
     }
 
-    routeFilterScrollWheelUpdate(isEnabled) {
-        this.setState({
-            scrollEnabled: isEnabled,
-        });
-    }
-
     routeFilterItemToggleChecked(e) {
         if (this.state.selectedRoutes.includes(e.target.value)) {
             this.removeSelection(e.target.value);
@@ -69,14 +59,12 @@ class Map extends React.Component {
                   isFullScreen={this.state.isFullScreen}
                   toggleChecked={this.routeFilterItemToggleChecked}
                   toggleFilter={this.routeFilterToggleFilter}
-                  scrollWheelUpdate={this.routeFilterScrollWheelUpdate}
                   rootPath={this.props.route.rootPath}
                 />
                 <MapLeaflet
                   routes={this.props.lineRoutes}
                   selectedRoutes={this.state.selectedRoutes}
                   isFullScreen={this.state.isFullScreen}
-                  scrollEnabled={this.state.scrollEnabled}
                   toggleFullscreen={this.mapLeafletToggleFullscreen}
                 />
             </div>);

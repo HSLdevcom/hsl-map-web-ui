@@ -3,6 +3,8 @@
 .root {
 	width:100%;
 	max-width:100%;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
 }
 
 .elementContainer {
@@ -11,7 +13,9 @@
 
 @media small {
 	.root {
+		overflow-y: auto;
 		min-width:400px;
 		max-width:400px;
+		max-height: 100vh;
 	}
 }

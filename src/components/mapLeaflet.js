@@ -48,7 +48,6 @@ const addStopLayer = (routes, map) => {
               ...node.stop,
               timingStopType: node.timingStopType,
               stopIndex: node.stopIndex,
-              duration: node.duration,
           })).sort((a, b) => a.stopIndex - b.stopIndex),
           route.direction, map);
     });
@@ -106,6 +105,7 @@ const addRouteFilterLayer = (map) => {
         },
         onAdd: () => {
             const container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-bottomright");
+            L.DomEvent.disableScrollPropagation(container);
             return container;
         },
     });
@@ -115,11 +115,6 @@ const addRouteFilterLayer = (map) => {
 const updateFilterLayer = (isFullScreen) => {
     if (isFullScreen) document.getElementsByClassName("leaflet-control-bottomright")[0].appendChild(document.getElementById("route-filter"));
     else document.getElementById("map-container").appendChild(document.getElementById("route-filter"));
-};
-
-const updateMapScrollWheelZoom = (map, scrollEnabled) => {
-    if (scrollEnabled) map.scrollWheelZoom.enable();
-    else map.scrollWheelZoom.disable();
 };
 
 class MapLeaflet extends React.Component {
@@ -150,7 +145,6 @@ class MapLeaflet extends React.Component {
 
         this.addLayersToMap(this.map);
         updateFilterLayer(this.props.isFullScreen);
-        updateMapScrollWheelZoom(this.map, this.props.scrollEnabled);
         this.map.invalidateSize();
     }
 
