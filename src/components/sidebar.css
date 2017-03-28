@@ -4,7 +4,7 @@
 	width:100%;
 	max-width:100%;
 	max-height: 100vh;
-	overflow-y: auto;
+	overflow-y: scroll;
 	-webkit-overflow-scrolling: touch;
 }
 
@@ -14,7 +14,7 @@
 
 @media small {
 	.root {
-		overflow-y: scroll;
+		overflow-y: auto;
 		min-width:400px;
 		max-width:400px;
 	}
