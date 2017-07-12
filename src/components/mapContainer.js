@@ -1,4 +1,5 @@
 import { gql, graphql } from "react-apollo";
+import sortBy from "lodash/sortBy";
 import Map from "./map";
 
 const parseLineNumber = lineId =>
@@ -62,7 +63,7 @@ export default graphql(lineQuery, {
                 nameFi: line.nameFi,
                 transportType: getTransportType(line),
                 lineNumber: parseLineNumber(line.lineId),
-                lineRoutes: line.routes.nodes,
+                lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
             }
     ),
 })(Map);
