@@ -29,15 +29,18 @@ const addMarkersToLayer = (stops, direction, map) => {
         timeIcon = timeIcon2;
     }
     stops.forEach((stop, index) => {
-        let setIcon;
-        if (index === 0) setIcon = routeIcon(startIcon);
-        // TODO different icon for different type of timing stop (timingStopType === 1 or 2)
-        else if (stop.timingStopType > 0) setIcon = routeIcon(timeIcon);
-        else setIcon = stopIcon(styles.stopIcon, directionStyle);
-        L.marker(
-            [stop.lat, stop.lon],
-            { icon: setIcon }
-        ).addTo(map);
+        let icon;
+        if (index === 0) {
+            icon = routeIcon(startIcon);
+        } else if (stop.timingStopType > 0) {
+            icon = routeIcon(timeIcon);
+        } else {
+            icon = stopIcon(styles.stopIcon, directionStyle);
+        }
+
+        const marker = L.marker([stop.lat, stop.lon], { icon });
+        marker.bindTooltip(`${stop.shortId} ${stop.nameFi}`, { direction: "top" });
+        marker.addTo(map);
     });
 };
 
