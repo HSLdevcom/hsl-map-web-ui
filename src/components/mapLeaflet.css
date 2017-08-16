@@ -16,15 +16,14 @@
 .stopIcon {
     background-color: white;
     border-radius: 24px;
-    opacity: 0.7;
 }
 
-.direction1 {
-    border: solid 2px busBlue;
+.stopIcon.direction1 {
+    border: solid 3px busBlue;
 }
 
-.direction2 {
-    border: solid 2px warningRed;
+.stopIcon.direction2 {
+    border: solid 3px warningRed;
 }
 
 .fullScreen {
