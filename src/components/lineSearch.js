@@ -3,14 +3,12 @@ import styles from "./lineSearch.css";
 
 const LineSearch = ({ query, onChange }) =>
     (<div className={styles.root}>
-        <form name="lineSearch">
-            <input
-              type="text"
-              placeholder="Hae reitti"
-              value={query}
-              onChange={onChange}
-            />
-        </form>
+        <input
+          type="text"
+          placeholder="Hae reitti"
+          value={query}
+          onChange={onChange}
+        />
     </div>);
 
 LineSearch.propTypes = {
