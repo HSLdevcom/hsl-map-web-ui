@@ -1,5 +1,6 @@
 import { gql, graphql } from "react-apollo";
 import sortBy from "lodash/sortBy";
+import uniq from "lodash/uniq";
 import Map from "./map";
 
 const parseLineNumber = lineId =>
@@ -49,6 +50,13 @@ const lineQuery = gql`
           }
         }
       }
+      notes {
+        nodes {
+          noteType
+          noteText
+          dateEnd
+        }
+      }
     }
   }
 `;
@@ -64,6 +72,10 @@ export default graphql(lineQuery, {
                 transportType: getTransportType(line),
                 lineNumber: parseLineNumber(line.lineId),
                 lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
+                notes: uniq(line.notes.nodes
+                  .filter(note => note.noteType.includes("N"))
+                  .filter(note => note.dateEnd === null || new Date(note.dateEnd) > new Date())
+                  .map(note => note.noteText)),
             }
     ),
 })(Map);
