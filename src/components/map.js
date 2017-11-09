@@ -60,6 +60,7 @@ class Map extends React.Component {
                   toggleChecked={this.routeFilterItemToggleChecked}
                   toggleFilter={this.routeFilterToggleFilter}
                   rootPath={this.props.route.rootPath}
+                  notes={this.props.notes}
                 />
                 <MapLeaflet
                   routes={this.props.lineRoutes}
