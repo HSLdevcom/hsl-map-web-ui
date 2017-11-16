@@ -146,6 +146,10 @@ class MapLeaflet extends React.Component {
             this.map.fitBounds(arrBounds);
         }
 
+        if (prevProps.center !== this.props.center) {
+            this.map.panTo(this.props.center);
+        }
+
         this.addLayersToMap(this.map);
         updateFilterLayer(this.props.isFullScreen);
         this.map.invalidateSize();

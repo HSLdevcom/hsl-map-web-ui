@@ -4,10 +4,16 @@
     display: flex;
    	position: relative;
     margin-bottom: 20px;
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer; 
 }
 
 .root p {
     margin: 0 0 0 0;
+    text-align: start;
 }
 
 .textTitle {
@@ -43,7 +49,7 @@
     .textAdditional {
         margin-bottom:0px !important;
     }
-    
+
     .fullScreen > .textAdditional {
         margin-bottom: 8px !important;
     }

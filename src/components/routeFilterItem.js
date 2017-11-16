@@ -70,6 +70,7 @@ class RouteFilterItem extends React.Component {
               routeStops={this.props.routeStops}
               isOpen={this.state.stopListOpen}
               isFullScreen={this.props.isFullScreen}
+              setMapCenter={this.props.setMapCenter}
             />
         </div>);
     }

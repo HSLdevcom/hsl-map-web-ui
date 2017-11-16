@@ -10,10 +10,16 @@ class Map extends React.Component {
             selectedRoutes: [],
             showFilterFullScreen: false,
             isFullScreen: false,
+            center: null,
         };
         this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
         this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
         this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
+        this.setMapCenter = this.setMapCenter.bind(this);
+    }
+
+    setMapCenter(center) {
+        this.setState({ center });
     }
 
     addSelection(route) {
@@ -60,8 +66,10 @@ class Map extends React.Component {
                   toggleChecked={this.routeFilterItemToggleChecked}
                   toggleFilter={this.routeFilterToggleFilter}
                   rootPath={this.props.route.rootPath}
+                  setMapCenter={this.setMapCenter}
                 />
                 <MapLeaflet
+                  center={this.state.center}
                   routes={this.props.lineRoutes}
                   selectedRoutes={this.state.selectedRoutes}
                   isFullScreen={this.state.isFullScreen}

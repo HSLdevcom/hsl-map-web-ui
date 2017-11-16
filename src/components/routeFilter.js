@@ -52,6 +52,7 @@ const RouteFilter = props => (
                                 `${route.routeId}_${route.direction}_${route.dateBegin}`
                               )}
                               onChange={props.toggleChecked}
+                              setMapCenter={props.setMapCenter}
                             />
                           ))}
                     </div>
