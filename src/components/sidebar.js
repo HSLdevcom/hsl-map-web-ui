@@ -25,6 +25,7 @@ const Sidebar = props => (
                   isFullScreen={props.isFullScreen}
                   showFilter={props.showFilter}
                   toggleFilter={props.toggleFilter}
+                  setMapCenter={props.setMapCenter}
                 />
             </div>
             <Notes notes={props.notes}/>

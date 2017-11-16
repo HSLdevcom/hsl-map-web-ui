@@ -9,9 +9,9 @@ export function routeIcon(iconUrl) {
     });
 }
 
-export function stopIcon(className, directionClassName) {
+export function stopIcon(className, directionClassName, centeredStop) {
     return L.divIcon({
-        className: `${className} ${directionClassName}`,
+        className: `${className} ${directionClassName} ${centeredStop}`,
         tooltipAnchor: [0, -10],
     });
 }
