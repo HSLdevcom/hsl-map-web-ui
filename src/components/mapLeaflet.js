@@ -35,7 +35,11 @@ const addMarkersToLayer = (stops, direction, map) => {
         } else if (stop.timingStopType > 0) {
             icon = routeIcon(timeIcon);
         } else {
-            icon = stopIcon(styles.stopIcon, directionStyle);
+            icon = stopIcon(
+              styles.stopIcon,
+              directionStyle,
+              stop.isCenteredStop && styles.centeredStop
+            );
         }
 
         const marker = L.marker([stop.lat, stop.lon], { icon });
@@ -44,13 +48,14 @@ const addMarkersToLayer = (stops, direction, map) => {
     });
 };
 
-const addStopLayer = (routes, map) => {
+const addStopLayer = (routes, map, centeredStop) => {
     routes.forEach((route) => {
         addMarkersToLayer(
           route.routeSegments.nodes.map(node => ({
               ...node.stop,
               timingStopType: node.timingStopType,
               stopIndex: node.stopIndex,
+              isCenteredStop: centeredStop && centeredStop.stopId === node.stop.stopId,
           })).sort((a, b) => a.stopIndex - b.stopIndex),
           route.direction, map);
     });
@@ -177,7 +182,7 @@ class MapLeaflet extends React.Component {
                 this.props.selectedRoutes.includes(`${route.routeId}_${route.direction}_${route.dateBegin}`)
             );
 
-            addStopLayer(selectedStops, this.map);
+            addStopLayer(selectedStops, this.map, this.props.center);
 
             let index1 = 0;
             let index2 = 0;
