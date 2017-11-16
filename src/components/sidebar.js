@@ -2,6 +2,7 @@ import React from "react";
 import RouteFilter from "./routeFilter";
 import LineIcon from "./lineIcon";
 import Header from "./header";
+import Notes from "./notes";
 import styles from "./sidebar.css";
 
 const Sidebar = props => (
@@ -27,6 +28,7 @@ const Sidebar = props => (
                   setMapCenter={props.setMapCenter}
                 />
             </div>
+            <Notes notes={props.notes}/>
         </div>
     </div>
 );
