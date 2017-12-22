@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require("path");
 const webpack = require("webpack");
 const autoprefixer = require("autoprefixer");
@@ -30,11 +31,7 @@ function getPlugins(env) {
     if (env === "development") {
         return [
             new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("development"),
-                    API_URL: JSON.stringify("http://localhost:8000/"),
-                    ROOT_PATH: JSON.stringify("/"),
-                },
+                "process.env": { NODE_ENV: JSON.stringify("development") },
             }),
             new webpack.HotModuleReplacementPlugin(),
             new HtmlWebpackPlugin({ template: "index.ejs" }),
@@ -43,11 +40,7 @@ function getPlugins(env) {
     return [
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production"),
-                API_URL: JSON.stringify(""),
-                ROOT_PATH: JSON.stringify(process.env.ROOT_PATH) || JSON.stringify("/"),
-            },
+            "process.env": { NODE_ENV: JSON.stringify("production") },
         }),
         new webpack.optimize.UglifyJsPlugin({ compressor: { warnings: false } }),
         new HtmlWebpackPlugin({ template: "index.ejs" }),
@@ -55,6 +48,7 @@ function getPlugins(env) {
 }
 
 module.exports = {
+    bail: process.env.NODE_ENV !== "development",
     devtool: getDevtool(process.env.NODE_ENV),
     entry: getEntry(process.env.NODE_ENV),
     plugins: getPlugins(process.env.NODE_ENV),
@@ -63,17 +57,10 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, "dist"),
-        publicPath: process.env.ROOT_PATH || "/",
+        publicPath: "",
         filename: "bundle.js",
     },
     module: {
-        preLoaders: [
-            {
-                test: /\.js$/,
-                loader: "eslint-loader",
-                exclude: /node_modules/,
-            },
-        ],
         loaders: [
             {
                 test: /\.js$/,

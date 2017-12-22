@@ -1,18 +1,17 @@
-const express = require("express");
+/* eslint-disable import/no-extraneous-dependencies */
+const webpack = require("webpack");
+const WebpackDevServer = require("webpack-dev-server");
 const config = require("./webpack.config");
 
-const staticPath = config.output.path;
-const app = express();
-
-app
-.use(express.static(staticPath))
-.get("/*", (req, res) => {
-    res.sendFile("index.html", {
-        root: staticPath,
-    });
+new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    hot: true,
+    historyApiFallback: true,
+    stats: {
+        colors: true,
+    },
 })
-.listen(3000, "0.0.0.0", (err) => {
-    if (err) console.log(err);
-    console.log("Listening at port 3000");
+.listen(3000, "localhost", (err) => {
+    if (err) console.log(err); // eslint-disable-line no-console
+    console.log("Listening at port 3000"); // eslint-disable-line no-console
 });
-
