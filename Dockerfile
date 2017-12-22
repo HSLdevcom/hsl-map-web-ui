@@ -1,9 +1,6 @@
-FROM node:6
-
-ARG ROOT_PATH 
+FROM node:8-alpine
 
 ENV WORK /opt/mapgenerator
-ENV ROOT_PATH ${ROOT_PATH}
 
 # Create app directory
 RUN mkdir -p ${WORK}
@@ -16,8 +13,8 @@ RUN yarn
 
 # Bundle app source
 COPY . ${WORK}
-RUN npm run build
+RUN yarn build
 
 EXPOSE 3000
 
-CMD npm run start-prod
+CMD yarn serve

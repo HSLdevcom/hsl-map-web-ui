@@ -11,7 +11,7 @@ const client = new ApolloClient({
     }),
 });
 
-const rootPath = process.env.ROOT_PATH;
+const rootPath = location.pathname;
 
 const App = () => (
     <div className={style.root}>
