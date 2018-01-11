@@ -7,7 +7,7 @@
     "bundle": "rimraf dist && cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build": "yarn lint && yarn bundle",
     "start": "cross-env NODE_ENV=development node server.js",
-    "serve": "serve dist",
+    "serve": "serve --port=3000 dist",
     "lint": "eslint src"
   },
   "repository": {
