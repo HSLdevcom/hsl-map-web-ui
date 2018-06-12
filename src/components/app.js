@@ -7,11 +7,11 @@ import style from "./app.css";
 
 const client = new ApolloClient({
     networkInterface: createNetworkInterface({
-        uri: "http://kartat.hsl.fi/jore/graphql",
+        uri: "https://kartat.hsldev.com/jore/graphql",
     }),
 });
 
-const rootPath = location.pathname;
+const rootPath = "/kuljettaja/";
 
 const App = () => (
     <div className={style.root}>
