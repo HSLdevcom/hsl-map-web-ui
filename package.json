@@ -7,7 +7,7 @@
     "bundle": "rimraf dist && cross-env NODE_ENV=production webpack --config webpack.config.js",
     "build": "yarn lint && yarn bundle",
     "start": "cross-env NODE_ENV=development node server.js",
-    "serve": "serve --port=3000 dist",
+    "serve": "serve --single dist",
     "lint": "eslint src"
   },
   "repository": {
@@ -43,7 +43,7 @@
     "postcss-loader": "^0.13.0",
     "postcss-modules-values": "^1.2.2",
     "rimraf": "^2.5.4",
-    "serve": "^6.4.3",
+    "serve": "^8.1.4",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
