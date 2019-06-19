@@ -1,0 +1,12 @@
+@value small from "styles/common.css";
+
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+@media small {
+  .root {
+    flex-direction: row;
+  }
+}

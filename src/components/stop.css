@@ -1,0 +1,60 @@
+@value extraSmall, mainTextSize, helpTextSize, mediumGray from "styles/common.css";
+
+.root {
+  display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.root p {
+  margin: 0 0 0 0;
+  text-align: start;
+}
+
+.textTitle {
+  font-size: mainTextSize;
+  font-weight: 600;
+  width: 68px;
+}
+
+.textPrimary {
+  font-size: mainTextSize;
+  margin-bottom: 8px !important;
+}
+
+.textAdditional {
+  font-size: helpTextSize;
+  color: mediumGray;
+  margin-bottom: 8px !important;
+}
+
+.textDuration {
+  white-space: nowrap;
+  position: static;
+  right: 15px;
+  bottom: 0px;
+  font-size: helpTextSize;
+}
+
+@media extraSmall {
+  .textDuration {
+    position: absolute;
+  }
+
+  .textAdditional {
+    margin-bottom: 0px !important;
+  }
+
+  .fullScreen > .textAdditional {
+    margin-bottom: 8px !important;
+  }
+
+  .fullScreen > .textDuration {
+    position: static;
+  }
+}

@@ -1,0 +1,25 @@
+@value fontFamily: "Gotham Rounded SSm A", "Gotham Rounded SSm B", sans-serif;
+
+@value contentContainerPadding: 20px 20px 20px 20px;
+@value contentElementPadding: 10px 10px 10px 10px;
+@value contentWrapperMargin: 0px 0px 15px 0px;
+@value mainTextSize: 16px;
+@value helpTextSize: 14px;
+
+@value backgroundLightGray: #eef1f3;
+@value fontColor: rgb(20, 20, 20);
+@value busBlue: rgb(0, 122, 201);
+@value tramGreen: rgb(0, 152, 95);
+@value lightGray: rgb(221, 222, 220);
+@value mediumGray: rgb(102, 102, 102);
+@value warningRed: rgb(220, 4, 81);
+
+@value extraSmall: (min-width: 400px);
+@value small: (min-width: 768px);
+
+button.noStyle {
+  border: none;
+  background: none;
+  padding: 0 0 0 0;
+  cursor: pointer;
+}
