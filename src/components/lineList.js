@@ -7,27 +7,24 @@ import get from "lodash/get";
 
 const transportTypeOrder = ["tram", "bus"];
 
-const removeTrainsFilter = line => line.lineId.substring(0, 1) !== "3";
-const removeFerryFilter = line => line.lineId.substring(0, 4) !== "1019";
+const removeTrainsFilter = (line) => line.lineId.substring(0, 1) !== "3";
+const removeFerryFilter = (line) => line.lineId.substring(0, 4) !== "1019";
 
-const setTransportTypeMapper = line => {
-  if (
-    line.lineId.substring(0, 4) >= 1001 &&
-    line.lineId.substring(0, 4) <= 1010
-  ) {
+const setTransportTypeMapper = (line) => {
+  if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
     return { ...line, transportType: "tram" };
   }
   return { ...line, transportType: "bus" };
 };
 
-const parseLineNumber = lineId =>
+const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
   // Remove all zeros from the beginning
   lineId.substring(1).replace(/^0+/, "");
 
-const lineNumberMapper = line => ({
+const lineNumberMapper = (line) => ({
   ...line,
-  lineNumber: parseLineNumber(line.lineId)
+  lineNumber: parseLineNumber(line.lineId),
 });
 
 const linesSorter = (a, b) => {
@@ -63,7 +60,7 @@ const allLinesQuery = gql`
 const LineList = () => {
   const [query, setQuery] = useState("");
 
-  const updateQuery = useCallback(e => {
+  const updateQuery = useCallback((e) => {
     setQuery(e.target.value);
   }, []);
 
@@ -76,13 +73,13 @@ const LineList = () => {
           const lines = get(data, "allLines.nodes", []);
 
           return lines
-            .filter(node => node.routes.totalCount !== 0)
+            .filter((node) => node.routes.totalCount !== 0)
             .filter(removeTrainsFilter)
             .filter(removeFerryFilter)
             .map(setTransportTypeMapper)
             .map(lineNumberMapper)
             .sort(linesSorter)
-            .filter(value => {
+            .filter((value) => {
               if (value.lineId) {
                 return (
                   value.lineNumber.startsWith(query) ||
@@ -91,7 +88,7 @@ const LineList = () => {
               }
               return false;
             })
-            .map(line => (
+            .map((line) => (
               <Line
                 key={`${line.lineId}_${line.dateBegin}_${line.dateEnd}`}
                 lineId={line.lineId}

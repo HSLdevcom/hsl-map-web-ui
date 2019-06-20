@@ -11,8 +11,7 @@ export default function BusIcon({ height }) {
       y="0px"
       viewBox="0 0 16 16"
       enableBackground="new 0 0 16 16"
-      height={height}
-    >
+      height={height}>
       <path
         fill="#FFFFFF"
         d="M13.663,15.52H2.462c-1.06,0-1.92-0.86-1.92-1.92V2.399c0-1.06,0.86-1.92,1.92-1.92h11.201

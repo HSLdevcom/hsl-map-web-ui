@@ -12,7 +12,7 @@ class Home extends React.Component {
 
   updateQuery(input) {
     this.setState({
-      query: input.target.value
+      query: input.target.value,
     });
   }
 

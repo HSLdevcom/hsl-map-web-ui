@@ -12,12 +12,8 @@ import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import styles from "./mapLeaflet.module.css";
 
-const blueColorScale = chroma
-  .scale(["00B9E4", "004E80", "001F33"])
-  .domain([0, 5]);
-const redColorScale = chroma
-  .scale(["FF6699", "800000", "4D0000"])
-  .domain([0, 5]);
+const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
+const redColorScale = chroma.scale(["FF6699", "800000", "4D0000"]).domain([0, 5]);
 
 const modifiedColor = (colorScale, key) => colorScale(key);
 
@@ -53,15 +49,14 @@ const addMarkersToLayer = (stops, direction, map) => {
 };
 
 const addStopLayer = (routes, map, centeredStop) => {
-  routes.forEach(route => {
+  routes.forEach((route) => {
     addMarkersToLayer(
       route.routeSegments.nodes
-        .map(node => ({
+        .map((node) => ({
           ...node.stop,
           timingStopType: node.timingStopType,
           stopIndex: node.stopIndex,
-          isCenteredStop:
-            centeredStop && centeredStop.stopId === node.stop.stopId
+          isCenteredStop: centeredStop && centeredStop.stopId === node.stop.stopId,
         }))
         .sort((a, b) => a.stopIndex - b.stopIndex),
       route.direction,
@@ -71,27 +66,27 @@ const addStopLayer = (routes, map, centeredStop) => {
 };
 
 const addGeometryLayer = (geometries, map) => {
-  geometries.forEach(route => {
+  geometries.forEach((route) => {
     L.geoJson(route, {
-      style: feature => {
+      style: (feature) => {
         switch (feature.properties.direction) {
           case "1":
             return {
               color: modifiedColor(blueColorScale, route.properties.colorKey),
-              opacity: 1
+              opacity: 1,
             };
           case "2":
             return {
               color: modifiedColor(redColorScale, route.properties.colorKey),
-              opacity: 1
+              opacity: 1,
             };
           default:
             return {
               color: "001F33",
-              opacity: 1
+              opacity: 1,
             };
         }
-      }
+      },
     }).addTo(map);
   });
 };
@@ -99,34 +94,29 @@ const addGeometryLayer = (geometries, map) => {
 const addControlButton = (map, toggleFullscreen) => {
   const FullScreenControl = L.Control.extend({
     options: {
-      position: "topleft"
+      position: "topleft",
     },
     onAdd: () => {
       const icon = L.DomUtil.create("img");
-      const container = L.DomUtil.create(
-        "button",
-        "leaflet-bar leaflet-control"
-      );
+      const container = L.DomUtil.create("button", "leaflet-bar leaflet-control");
       icon.src = fullScreenEnterIcon;
       icon.height = "11";
       icon.width = "11";
       container.className = styles.fullScreenButton;
       container.appendChild(icon);
       container.onclick = () => {
-        icon.src = toggleFullscreen()
-          ? fullScreenExitIcon
-          : fullScreenEnterIcon;
+        icon.src = toggleFullscreen() ? fullScreenExitIcon : fullScreenEnterIcon;
       };
       return container;
-    }
+    },
   });
   map.addControl(new FullScreenControl());
 };
 
-const addRouteFilterLayer = map => {
+const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
     options: {
-      position: "bottomright"
+      position: "bottomright",
     },
     onAdd: () => {
       const container = L.DomUtil.create(
@@ -135,12 +125,12 @@ const addRouteFilterLayer = map => {
       );
       L.DomEvent.disableScrollPropagation(container);
       return container;
-    }
+    },
   });
   map.addControl(new RouteFilterControl());
 };
 
-const updateFilterLayer = isFullScreen => {
+const updateFilterLayer = (isFullScreen) => {
   if (isFullScreen)
     document
       .getElementsByClassName("leaflet-control-bottomright")[0]
@@ -166,16 +156,17 @@ class MapLeaflet extends React.Component {
 
   componentDidUpdate(prevProps) {
     // All layers except the base layer are removed when the component is updated
-    this.map.eachLayer(layer => {
+    this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) this.map.removeLayer(layer);
     });
 
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (!prevProps.routes && this.props.routes && this.props.routes[0]) {
-      const arrBounds = this.props.routes[0].routeSegments.nodes.map(
-        ({ stop }) => [stop.lat, stop.lon]
-      );
+      const arrBounds = this.props.routes[0].routeSegments.nodes.map(({ stop }) => [
+        stop.lat,
+        stop.lon,
+      ]);
       this.map.fitBounds(arrBounds);
     }
 
@@ -202,7 +193,7 @@ class MapLeaflet extends React.Component {
           '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
           'Imagery © <a href="http://mapbox.com">Mapbox</a>',
         retina: L.retina ? "@2x" : "",
-        baseLayer: true
+        baseLayer: true,
       }
     ).addTo(this.map);
 
@@ -212,7 +203,7 @@ class MapLeaflet extends React.Component {
 
   addLayersToMap() {
     if (this.props.routes) {
-      const selectedStops = this.props.routes.filter(route =>
+      const selectedStops = this.props.routes.filter((route) =>
         this.props.selectedRoutes.includes(
           `${route.routeId}_${route.direction}_${route.dateBegin}`
         )
@@ -224,7 +215,7 @@ class MapLeaflet extends React.Component {
       let index2 = 0;
       let colorKey;
       const selectedGeometries = this.props.routes
-        .map(route => {
+        .map((route) => {
           if (route.direction === "1") {
             colorKey = index1;
             index1 += 1;
@@ -235,10 +226,10 @@ class MapLeaflet extends React.Component {
           return {
             type: "Feature",
             properties: { ...route, colorKey },
-            geometry: route.geometries.nodes[0].geometry
+            geometry: route.geometries.nodes[0].geometry,
           };
         })
-        .filter(route =>
+        .filter((route) =>
           this.props.selectedRoutes.includes(
             `${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}`
           )
@@ -254,7 +245,7 @@ class MapLeaflet extends React.Component {
       <div
         id="map-leaflet"
         className={classNames(styles.root, {
-          [styles.fullScreen]: this.props.isFullScreen
+          [styles.fullScreen]: this.props.isFullScreen,
         })}
       />
     );

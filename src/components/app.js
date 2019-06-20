@@ -10,7 +10,7 @@ import style from "./app.module.css";
 
 const client = new ApolloClient({
   link: new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URL }),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 const rootPath = process.env.REACT_APP_ROOT_PATH;

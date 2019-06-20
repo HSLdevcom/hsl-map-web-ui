@@ -5,7 +5,7 @@ import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
 
-const Sidebar = props => (
+const Sidebar = (props) => (
   <div className={styles.root}>
     <Header rootPath={props.rootPath} />
     <div className={styles.elementContainer}>

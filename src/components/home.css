@@ -1,5 +1,5 @@
 @value contentContainerPadding from "styles/common.css";
 
 .root {
-	padding: contentContainerPadding;
+  padding: contentContainerPadding;
 }

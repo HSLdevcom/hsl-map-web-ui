@@ -9,7 +9,7 @@ const LineIcon = ({
   shortName,
   lineNameFi,
   iconSize,
-  additionalStyle
+  additionalStyle,
 }) => (
   <div style={additionalStyle}>
     <span className={styles.lineIconWrapper}>
@@ -21,9 +21,8 @@ const LineIcon = ({
       <span
         className={classNames(styles.lineNumber, {
           [styles.tram]: transportType === "tram",
-          [styles.bus]: transportType !== "tram"
-        })}
-      >
+          [styles.bus]: transportType !== "tram",
+        })}>
         {shortName}
       </span>
       <p>{lineNameFi}</p>

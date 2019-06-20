@@ -3,23 +3,25 @@ import LineList from "./lineList";
 
 const transportTypeOrder = ["tram", "bus"];
 
-const removeTrainsFilter = line => line.lineId.substring(0, 1) !== "3";
-const removeFerryFilter = line => line.lineId.substring(0, 4) !== "1019";
+const removeTrainsFilter = (line) => line.lineId.substring(0, 1) !== "3";
+const removeFerryFilter = (line) => line.lineId.substring(0, 4) !== "1019";
 
 const setTransportTypeMapper = (line) => {
-    if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
-        return { ...line, transportType: "tram" };
-    }
-    return { ...line, transportType: "bus" };
+  if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
+    return { ...line, transportType: "tram" };
+  }
+  return { ...line, transportType: "bus" };
 };
 
-const parseLineNumber = lineId =>
+const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
   // Remove all zeros from the beginning
   lineId.substring(1).replace(/^0+/, "");
 
-const lineNumberMapper = line => ({ ...line, lineNumber: parseLineNumber(line.lineId) });
-
+const lineNumberMapper = (line) => ({
+  ...line,
+  lineNumber: parseLineNumber(line.lineId),
+});
 
 /**
  * Sorts the line list in the following way:
@@ -31,15 +33,17 @@ const lineNumberMapper = line => ({ ...line, lineNumber: parseLineNumber(line.li
  * @return {Array}       Sorted array of lined
  */
 const linesSorter = (a, b) => {
-    if (a.transportType !== b.transportType) {
-        return transportTypeOrder.indexOf(a.transportType) >
-                transportTypeOrder.indexOf(b.transportType) ? 1 : -1;
-    } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
-        return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
-    } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
-        return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
-    }
-    return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
+  if (a.transportType !== b.transportType) {
+    return transportTypeOrder.indexOf(a.transportType) >
+      transportTypeOrder.indexOf(b.transportType)
+      ? 1
+      : -1;
+  } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
+    return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
+  } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
+    return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
+  }
+  return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
 };
 
 const AllLinesQuery = gql`
@@ -59,17 +63,16 @@ const AllLinesQuery = gql`
 `;
 
 export default graphql(AllLinesQuery, {
-    props: ({ data: { loading, allLines } }) => (
-        loading
-            ? null
-            : {
-                lines: allLines.nodes
-                    .filter(node => node.routes.totalCount !== 0)
-                    .filter(removeTrainsFilter)
-                    .filter(removeFerryFilter)
-                    .map(setTransportTypeMapper)
-                    .map(lineNumberMapper)
-                    .sort(linesSorter),
-            }
-    ),
+  props: ({ data: { loading, allLines } }) =>
+    loading
+      ? null
+      : {
+          lines: allLines.nodes
+            .filter((node) => node.routes.totalCount !== 0)
+            .filter(removeTrainsFilter)
+            .filter(removeFerryFilter)
+            .map(setTransportTypeMapper)
+            .map(lineNumberMapper)
+            .sort(linesSorter),
+        },
 })(LineList);

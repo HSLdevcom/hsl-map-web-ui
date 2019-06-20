@@ -7,7 +7,7 @@ import styles from "./routeFilterItem.module.css";
 import openIcon from "../icons/chevron-top.svg";
 import closedIcon from "../icons/chevron-bottom.svg";
 
-const parseRouteNumber = routeId =>
+const parseRouteNumber = (routeId) =>
   // Remove 1st number, which represents the city
   // Remove all zeros from the beginning
   routeId.substring(1).replace(/^0+/, "");
@@ -16,14 +16,14 @@ class RouteFilterItem extends React.Component {
   constructor() {
     super();
     this.state = {
-      stopListOpen: false
+      stopListOpen: false,
     };
     this.toggleStopList = this.toggleStopList.bind(this);
   }
 
   toggleStopList() {
     this.setState({
-      stopListOpen: !this.state.stopListOpen
+      stopListOpen: !this.state.stopListOpen,
     });
   }
 
@@ -35,8 +35,7 @@ class RouteFilterItem extends React.Component {
         <div className={styles.stopListButtonWrapper}>
           <button
             className={classNames(commonStyles.noStyle, styles.stopListButton)}
-            onClick={this.toggleStopList}
-          >
+            onClick={this.toggleStopList}>
             <img
               className={styles.icon}
               src={this.state.stopListOpen ? openIcon : closedIcon}
@@ -62,7 +61,7 @@ class RouteFilterItem extends React.Component {
           <div
             className={classNames(styles.slider, {
               [styles.tram]: this.props.transportType === "tram",
-              [styles.bus]: this.props.transportType !== "tram"
+              [styles.bus]: this.props.transportType !== "tram",
             })}
           />
         </label>
@@ -82,7 +81,7 @@ RouteFilterItem.propTypes = {
   routeID: PropTypes.string.isRequired,
   routeDirection: PropTypes.string.isRequired,
   routeDateBegin: PropTypes.string.isRequired,
-  transportType: PropTypes.string
+  transportType: PropTypes.string,
 };
 
 export default RouteFilterItem;

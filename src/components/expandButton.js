@@ -7,10 +7,9 @@ import styles from "./expandButton.module.css";
 const ExpandButton = ({ onClick, labelText, isExpanded }) => (
   <button
     className={classNames(styles.expandButton, {
-      [styles.expanded]: isExpanded
+      [styles.expanded]: isExpanded,
     })}
-    onClick={onClick}
-  >
+    onClick={onClick}>
     <img src={isExpanded ? iconMenuOpen : iconMenuClosed} alt="" height="18" />
     <p>{labelText}</p>
   </button>

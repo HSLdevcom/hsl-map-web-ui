@@ -10,15 +10,11 @@ class Map extends React.Component {
       selectedRoutes: [],
       showFilterFullScreen: false,
       isFullScreen: false,
-      center: null
+      center: null,
     };
-    this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(
-      this
-    );
+    this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
     this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
-    this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(
-      this
-    );
+    this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
     this.setMapCenter = this.setMapCenter.bind(this);
   }
 
@@ -28,27 +24,25 @@ class Map extends React.Component {
 
   addSelection(route) {
     this.setState({
-      selectedRoutes: this.state.selectedRoutes.concat(route)
+      selectedRoutes: this.state.selectedRoutes.concat(route),
     });
   }
 
   removeSelection(route) {
     this.setState({
-      selectedRoutes: this.state.selectedRoutes.filter(
-        selected => route !== selected
-      )
+      selectedRoutes: this.state.selectedRoutes.filter((selected) => route !== selected),
     });
   }
 
   mapLeafletToggleFullscreen() {
     this.setState({
-      isFullScreen: !this.state.isFullScreen
+      isFullScreen: !this.state.isFullScreen,
     });
   }
 
   routeFilterToggleFilter() {
     this.setState({
-      showFilterFullScreen: !this.state.showFilterFullScreen
+      showFilterFullScreen: !this.state.showFilterFullScreen,
     });
   }
 
