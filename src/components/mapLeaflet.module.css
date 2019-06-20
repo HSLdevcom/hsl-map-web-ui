@@ -1,0 +1,56 @@
+.root {
+  width: 100%;
+  min-height: 400px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .root {
+    height: calc(100vh - 100px);
+  }
+}
+
+.stopIcon {
+  background-color: white;
+  border-radius: 24px;
+}
+
+.stopIcon.direction1.centeredStop,
+.stopIcon.direction2.centeredStop {
+  border-width: 5px;
+}
+
+.stopIcon.direction1 {
+  border: solid 3px var(--busBlue);
+}
+
+.stopIcon.direction2 {
+  border: solid 3px var(--warningRed);
+}
+
+.fullScreen {
+  position: fixed !important;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fullScreenButton {
+  background-color: white;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.fullScreenButton img {
+  padding-top: 4px;
+}
+
+.fullScreenButton:hover {
+  background-color: #f4f4f4 !important;
+}

@@ -1,25 +1,27 @@
-@value fontFamily: "Gotham Rounded SSm A", "Gotham Rounded SSm B", sans-serif;
+:root {
+  --fontFamily: "Gotham Rounded SSm A", "Gotham Rounded SSm B", sans-serif;
 
-@value contentContainerPadding: 20px 20px 20px 20px;
-@value contentElementPadding: 10px 10px 10px 10px;
-@value contentWrapperMargin: 0px 0px 15px 0px;
-@value mainTextSize: 16px;
-@value helpTextSize: 14px;
+  --contentContainerPadding: 20px 20px 20px 20px;
+  --contentElementPadding: 10px 10px 10px 10px;
+  --contentWrapperMargin: 0px 0px 15px 0px;
+  --mainTextSize: 16px;
+  --helpTextSize: 14px;
 
-@value backgroundLightGray: #eef1f3; 
-@value fontColor: rgb(20, 20, 20);
-@value busBlue: rgb(0, 122, 201);
-@value tramGreen: rgb(0, 152, 95);
-@value lightGray: rgb(221, 222, 220);
-@value mediumGray: rgb(102, 102, 102);
-@value warningRed: rgb(220, 4, 81);
+  --backgroundLightGray: #eef1f3;
+  --fontColor: rgb(20, 20, 20);
+  --busBlue: rgb(0, 122, 201);
+  --tramGreen: rgb(0, 152, 95);
+  --lightGray: rgb(221, 222, 220);
+  --mediumGray: rgb(102, 102, 102);
+  --warningRed: rgb(220, 4, 81);
 
-@value extraSmall: (min-width: 400px);
-@value small: (min-width: 768px);
+  --extraSmall: 400px;
+  --small: 768px;
+}
 
 button.noStyle {
-    border: none;
-    background: none;
-    padding: 0 0 0 0;
-    cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0 0 0 0;
+  cursor: pointer;
 }

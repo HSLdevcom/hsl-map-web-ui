@@ -1,0 +1,18 @@
+.root {
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+}
+
+.elementContainer {
+  padding: var(--contentContainerPadding);
+}
+
+@media (min-width: 768px) {
+  .root {
+    overflow-y: auto;
+    min-width: 400px;
+    max-width: 400px;
+    max-height: 100vh;
+  }
+}

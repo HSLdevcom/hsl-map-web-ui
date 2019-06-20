@@ -1,0 +1,58 @@
+.root {
+  display: flex;
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.root p {
+  margin: 0 0 0 0;
+  text-align: start;
+}
+
+.textTitle {
+  font-size: var(--mainTextSize);
+  font-weight: 600;
+  width: 68px;
+}
+
+.textPrimary {
+  font-size: var(--mainTextSize);
+  margin-bottom: 8px !important;
+}
+
+.textAdditional {
+  font-size: var(--helpTextSize);
+  color: var(--mediumGray);
+  margin-bottom: 8px !important;
+}
+
+.textDuration {
+  white-space: nowrap;
+  position: static;
+  right: 15px;
+  bottom: 0;
+  font-size: var(--helpTextSize);
+}
+
+@media (min-width: 400px) {
+  .textDuration {
+    position: absolute;
+  }
+
+  .textAdditional {
+    margin-bottom: 0 !important;
+  }
+
+  .fullScreen > .textAdditional {
+    margin-bottom: 8px !important;
+  }
+
+  .fullScreen > .textDuration {
+    position: static;
+  }
+}

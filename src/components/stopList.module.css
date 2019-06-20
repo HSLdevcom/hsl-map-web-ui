@@ -1,0 +1,7 @@
+.root {
+  padding: var(--contentContainerPadding);
+  margin: 20px 0px;
+  border-radius: 5px;
+  border: 1px solid rgb(180, 180, 180);
+  background-color: white;
+}

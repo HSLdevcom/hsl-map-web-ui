@@ -1,33 +1,29 @@
 import React from "react";
-import { Router, Route, IndexRoute, browserHistory } from "react-router";
-import { ApolloClient, createNetworkInterface, ApolloProvider } from "react-apollo";
-import Home from "components/home";
-import MapContainer from "components/mapContainer";
-import style from "./app.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import Home from "./home";
+import MapContainer from "./mapContainer";
+import style from "./app.module.css";
 
 const client = new ApolloClient({
-    networkInterface: createNetworkInterface({
-        uri: "https://kartat.hsldev.com/jore/graphql",
-    }),
+  link: new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URL }),
+  cache: new InMemoryCache()
 });
 
-const rootPath = "/kuljettaja/";
+const rootPath = process.env.REACT_APP_ROOT_PATH;
 
 const App = () => (
-    <div className={style.root}>
-        <ApolloProvider client={client}>
-            <Router history={browserHistory}>
-                <Route path={rootPath}>
-                    <IndexRoute component={Home} rootPath={rootPath}/>
-                    <Route
-                      path=":id/:dateBegin/:dateEnd"
-                      component={MapContainer}
-                      rootPath={rootPath}
-                    />
-                </Route>
-            </Router>
-        </ApolloProvider>
-    </div>
+  <div className={style.root}>
+    <ApolloProvider client={client}>
+      <Router basename={rootPath}>
+        <Route component={Home} path="/" exact />
+        <Route path="/map/:id/:dateBegin/:dateEnd" component={MapContainer} />
+      </Router>
+    </ApolloProvider>
+  </div>
 );
 
 export default App;

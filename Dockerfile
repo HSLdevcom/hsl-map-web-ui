@@ -1,6 +1,6 @@
-FROM node:8-alpine
+FROM node:12-alpine
 
-ENV WORK /opt/mapgenerator
+ENV WORK /opt/driver-instructions
 
 # Create app directory
 RUN mkdir -p ${WORK}
@@ -13,8 +13,11 @@ RUN yarn
 
 # Bundle app source
 COPY . ${WORK}
+COPY .env.production ${WORK}/.env
+
 RUN yarn build
 
 EXPOSE 3000
 
-CMD yarn serve
+CMD yarn run production
+

@@ -1,0 +1,28 @@
+.lineIconWrapper:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.lineIconWrapper > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.lineIconWrapper > svg {
+  flex: 0 0 24px;
+}
+
+.lineNumber {
+  font-size: 24px;
+  font-weight: 600;
+  margin-right: 12px;
+  margin-left: 8px;
+}
+
+.bus {
+  color: var(--busBlue);
+}
+
+.tram {
+  color: var(--tramGreen);
+}
