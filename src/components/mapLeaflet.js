@@ -189,7 +189,7 @@ class MapLeaflet extends React.Component {
   }
 
   initializeMap() {
-    this.map = L.map("map-leaflet").setView([51.505, -0.09], 13);
+    this.map = L.map("map-leaflet").setView([60.170988, 24.940842], 13);
 
     L.tileLayer(
       "https://digitransit-prod-cdn-origin.azureedge.net/map/v1/hsl-map/{z}/{x}/{y}{retina}.png",
