@@ -1,7 +1,10 @@
-import { gql, graphql } from "react-apollo";
+import React from "react";
+import { Query } from "react-apollo";
 import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
+import gql from "graphql-tag";
+import get from "lodash/get";
 
 const parseLineNumber = lineId =>
   // Remove 1st number, which represents the city
@@ -68,12 +71,17 @@ const lineQuery = gql`
   }
 `;
 
-export default graphql(lineQuery, {
-  options: ({ params }) => ({ variables: params }),
-  props: ({ data: { loading, line } }) =>
-    loading
-      ? null
-      : {
+const MapContainer = ({ match }) => {
+  return (
+    <Query query={lineQuery} variables={match.params}>
+      {({ data, loading }) => {
+        const line = get(data, "line", null);
+
+        if (!line) {
+          return null;
+        }
+
+        const mapProps = {
           lineId: line.lineId,
           nameFi: line.nameFi,
           transportType: getTransportType(line),
@@ -88,5 +96,12 @@ export default graphql(lineQuery, {
               )
               .map(note => note.noteText)
           )
-        }
-})(Map);
+        };
+
+        return <Map {...mapProps} />;
+      }}
+    </Query>
+  );
+};
+
+export default MapContainer;

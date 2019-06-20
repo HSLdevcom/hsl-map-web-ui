@@ -1,5 +1,3 @@
-@value busBlue, warningRed from "styles/common.css";
-
 .root {
   width: 100%;
   min-height: 400px;
@@ -7,7 +5,7 @@
   overflow: hidden;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .root {
     height: calc(100vh - 100px);
   }
@@ -24,11 +22,11 @@
 }
 
 .stopIcon.direction1 {
-  border: solid 3px busBlue;
+  border: solid 3px var(--busBlue);
 }
 
 .stopIcon.direction2 {
-  border: solid 3px warningRed;
+  border: solid 3px var(--warningRed);
 }
 
 .fullScreen {

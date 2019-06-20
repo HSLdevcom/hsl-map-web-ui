@@ -1,15 +1,13 @@
-@value busBlue from "styles/common.css";
-
 .expandButton {
   position: relative;
   display: block;
   width: 100%;
-  padding-left: 0px;
+  padding-left: 0;
   background-color: rgba(255, 255, 255, 0);
   line-height: 36px;
   text-align: left;
   text-decoration: none;
-  border: 0px solid black;
+  border: 0 solid black;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   border-bottom: 1px solid #ccc;
@@ -17,8 +15,8 @@
 }
 
 .expandButton p {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
   font-size: 20px;
   font-weight: 600;
 }
@@ -30,6 +28,6 @@
 
 .expanded {
   height: 100%;
-  border-bottom: 0px solid #ccc;
-  box-shadow: 0 0px 0px white;
+  border-bottom: 0 solid #ccc;
+  box-shadow: 0 0 0 white;
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import classNames from "classnames";
-import iconMenuOpen from "icons/chevron-bottom.svg";
-import iconMenuClosed from "icons/chevron-top.svg";
-import styles from "./expandButton.css";
+import iconMenuOpen from "../icons/chevron-bottom.svg";
+import iconMenuClosed from "../icons/chevron-top.svg";
+import styles from "./expandButton.module.css";
 
 const ExpandButton = ({ onClick, labelText, isExpanded }) => (
   <button

@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import BusIcon from "../icons/icon-bus-station.js";
 import TramIcon from "../icons/icon-tram.js";
-import styles from "./lineIcon.css";
+import styles from "./lineIcon.module.css";
 
 const LineIcon = ({
   transportType,

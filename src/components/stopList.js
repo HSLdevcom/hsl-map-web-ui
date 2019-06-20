@@ -1,6 +1,6 @@
 import React from "react";
 import Stop from "./stop";
-import styles from "./stopList.css";
+import styles from "./stopList.module.css";
 
 const renderStops = (routeStops, isFullScreen, setMapCenter) =>
   routeStops.map((stop, index) => (

@@ -3,14 +3,14 @@ import classNames from "classnames";
 import L from "leaflet";
 import chroma from "chroma-js";
 import "leaflet/dist/leaflet.css";
-import { routeIcon, stopIcon } from "utils/mapIcon";
-import startIcon1 from "icons/icon-suunta1.svg";
-import startIcon2 from "icons/icon-suunta2.svg";
-import timeIcon1 from "icons/icon-time1.svg";
-import timeIcon2 from "icons/icon-time2.svg";
-import fullScreenEnterIcon from "icons/icon-fullscreen-enter.svg";
-import fullScreenExitIcon from "icons/icon-fullscreen-exit.svg";
-import styles from "./mapLeaflet.css";
+import { routeIcon, stopIcon } from "../utils/mapIcon";
+import startIcon1 from "../icons/icon-suunta1.svg";
+import startIcon2 from "../icons/icon-suunta2.svg";
+import timeIcon1 from "../icons/icon-time1.svg";
+import timeIcon2 from "../icons/icon-time2.svg";
+import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
+import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
+import styles from "./mapLeaflet.module.css";
 
 const blueColorScale = chroma
   .scale(["00B9E4", "004E80", "001F33"])
@@ -154,12 +154,14 @@ const updateFilterLayer = isFullScreen => {
 class MapLeaflet extends React.Component {
   constructor() {
     super();
+
+    this.map = null;
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
   }
 
   componentDidMount() {
-    this.initializeMap(this.map);
+    this.initializeMap();
   }
 
   componentDidUpdate(prevProps) {
@@ -187,7 +189,8 @@ class MapLeaflet extends React.Component {
   }
 
   initializeMap() {
-    this.map = L.map("map-leaflet");
+    this.map = L.map("map-leaflet").setView([51.505, -0.09], 13);
+
     L.tileLayer(
       "https://digitransit-prod-cdn-origin.azureedge.net/map/v1/hsl-map/{z}/{x}/{y}{retina}.png",
       {
@@ -198,10 +201,11 @@ class MapLeaflet extends React.Component {
           'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
           '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
           'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        retina: L.retina ? "" : "@2x",
+        retina: L.retina ? "@2x" : "",
         baseLayer: true
       }
     ).addTo(this.map);
+
     addControlButton(this.map, this.props.toggleFullscreen);
     addRouteFilterLayer(this.map);
   }

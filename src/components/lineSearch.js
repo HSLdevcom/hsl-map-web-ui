@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "./lineSearch.css";
+import styles from "./lineSearch.module.css";
+import PropTypes from "prop-types";
 
 const LineSearch = ({ query, onChange }) => (
   <div className={styles.root}>
@@ -13,8 +14,8 @@ const LineSearch = ({ query, onChange }) => (
 );
 
 LineSearch.propTypes = {
-  query: React.PropTypes.string,
-  onChange: React.PropTypes.func
+  query: PropTypes.string,
+  onChange: PropTypes.func
 };
 
 export default LineSearch;

@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
-import styles from "./map.css";
+import styles from "./map.module.css";
 
 class Map extends React.Component {
   constructor() {
@@ -71,7 +71,7 @@ class Map extends React.Component {
           isFullScreen={this.state.isFullScreen}
           toggleChecked={this.routeFilterItemToggleChecked}
           toggleFilter={this.routeFilterToggleFilter}
-          rootPath={this.props.route.rootPath}
+          rootPath={process.env.REACT_APP_ROOT_PATH}
           notes={this.props.notes}
           setMapCenter={this.setMapCenter}
         />

@@ -1,11 +1,9 @@
-@value small from "styles/common.css";
-
 .root {
   display: flex;
   flex-direction: column;
 }
 
-@media small {
+@media (min-width: 768px) {
   .root {
     flex-direction: row;
   }

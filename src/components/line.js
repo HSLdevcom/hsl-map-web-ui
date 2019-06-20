@@ -1,19 +1,19 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import path from "path";
 import LineIcon from "./lineIcon";
+import PropTypes from "prop-types";
 
 const Line = ({
   lineId,
   longName,
   shortName,
   transportType,
-  rootPath,
   dateBegin,
   dateEnd
 }) => (
   <div>
-    <Link to={{ pathname: path.join(rootPath, lineId, dateBegin, dateEnd) }}>
+    <Link to={{ pathname: path.join("/map", lineId, dateBegin, dateEnd) }}>
       <LineIcon
         transportType={transportType}
         shortName={shortName}
@@ -25,10 +25,10 @@ const Line = ({
 );
 
 Line.propTypes = {
-  lineId: React.PropTypes.string.isRequired,
-  longName: React.PropTypes.string.isRequired,
-  shortName: React.PropTypes.string.isRequired,
-  transportType: React.PropTypes.string
+  lineId: PropTypes.string.isRequired,
+  longName: PropTypes.string.isRequired,
+  shortName: PropTypes.string.isRequired,
+  transportType: PropTypes.string
 };
 
 export default Line;

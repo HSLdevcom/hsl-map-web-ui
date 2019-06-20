@@ -1,8 +1,9 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classNames from "classnames";
 import StopList from "./stopList";
 import commonStyles from "../styles/common.css";
-import styles from "./routeFilterItem.css";
+import styles from "./routeFilterItem.module.css";
 import openIcon from "../icons/chevron-top.svg";
 import closedIcon from "../icons/chevron-bottom.svg";
 
@@ -78,10 +79,10 @@ class RouteFilterItem extends React.Component {
 }
 
 RouteFilterItem.propTypes = {
-  routeID: React.PropTypes.string.isRequired,
-  routeDirection: React.PropTypes.string.isRequired,
-  routeDateBegin: React.PropTypes.string.isRequired,
-  transportType: React.PropTypes.string
+  routeID: PropTypes.string.isRequired,
+  routeDirection: PropTypes.string.isRequired,
+  routeDateBegin: PropTypes.string.isRequired,
+  transportType: PropTypes.string
 };
 
 export default RouteFilterItem;

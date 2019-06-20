@@ -3,7 +3,7 @@ import RouteFilter from "./routeFilter";
 import LineIcon from "./lineIcon";
 import Header from "./header";
 import Notes from "./notes";
-import styles from "./sidebar.css";
+import styles from "./sidebar.module.css";
 
 const Sidebar = props => (
   <div className={styles.root}>

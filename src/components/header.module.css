@@ -1,0 +1,14 @@
+.root {
+  height: 150px;
+  padding: var(--contentContainerPadding);
+  background-color: var(--busBlue);
+  color: white;
+}
+
+.logo img {
+  height: 80px;
+}
+
+.sectionTitle {
+  color: white;
+}

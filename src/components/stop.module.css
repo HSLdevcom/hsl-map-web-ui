@@ -1,5 +1,3 @@
-@value extraSmall, mainTextSize, helpTextSize, mediumGray from "styles/common.css";
-
 .root {
   display: flex;
   position: relative;
@@ -17,19 +15,19 @@
 }
 
 .textTitle {
-  font-size: mainTextSize;
+  font-size: var(--mainTextSize);
   font-weight: 600;
   width: 68px;
 }
 
 .textPrimary {
-  font-size: mainTextSize;
+  font-size: var(--mainTextSize);
   margin-bottom: 8px !important;
 }
 
 .textAdditional {
-  font-size: helpTextSize;
-  color: mediumGray;
+  font-size: var(--helpTextSize);
+  color: var(--mediumGray);
   margin-bottom: 8px !important;
 }
 
@@ -37,17 +35,17 @@
   white-space: nowrap;
   position: static;
   right: 15px;
-  bottom: 0px;
-  font-size: helpTextSize;
+  bottom: 0;
+  font-size: var(--helpTextSize);
 }
 
-@media extraSmall {
+@media (min-width: 400px) {
   .textDuration {
     position: absolute;
   }
 
   .textAdditional {
-    margin-bottom: 0px !important;
+    margin-bottom: 0 !important;
   }
 
   .fullScreen > .textAdditional {

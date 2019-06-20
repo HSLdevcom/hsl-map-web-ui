@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "./stop.css";
+import styles from "./stop.module.css";
+import PropTypes from "prop-types";
 
 const Stop = ({
   shortId,
@@ -20,10 +21,10 @@ const Stop = ({
 );
 
 Stop.propTypes = {
-  shortId: React.PropTypes.string.isRequired,
-  stopNameFi: React.PropTypes.string,
-  stopNameSv: React.PropTypes.string,
-  duration: React.PropTypes.number
+  shortId: PropTypes.string.isRequired,
+  stopNameFi: PropTypes.string,
+  stopNameSv: PropTypes.string,
+  duration: PropTypes.number
 };
 
 export default Stop;

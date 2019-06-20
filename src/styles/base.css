@@ -1,5 +1,4 @@
 @import url(https://cloud.typography.com/6364294/6653152/css/fonts.css);
-@value fontFamily, fontColor from "styles/common.css";
 
 body {
   margin: 0px;
@@ -8,8 +7,8 @@ body,
 body * {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: fontFamily;
-  color: fontColor;
+  font-family: var(--fontFamily);
+  color: var(--fontColor);
 }
 
 a:link {
@@ -22,7 +21,7 @@ a:visited {
 
 h3 {
   font-weight: 500;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 button:focus {

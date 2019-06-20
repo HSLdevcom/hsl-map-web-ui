@@ -1,13 +1,11 @@
-@value contentWrapperMargin, tramGreen, busBlue from "styles/common.css";
-
 .lineIconWrapper:first-child {
   display: flex;
   align-items: center;
 }
 
 .lineIconWrapper > * {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .lineIconWrapper > svg {
@@ -22,9 +20,9 @@
 }
 
 .bus {
-  color: busBlue;
+  color: var(--busBlue);
 }
 
 .tram {
-  color: tramGreen;
+  color: var(--tramGreen);
 }

@@ -3,7 +3,7 @@ import { groupBy } from "lodash";
 import classNames from "classnames";
 import RouteFilterItem from "./routeFilterItem";
 import ExpandButton from "./expandButton";
-import styles from "./routeFilter.css";
+import styles from "./routeFilter.module.css";
 
 const parseDate = date => {
   const options = { year: "numeric", month: "numeric", day: "numeric" };
