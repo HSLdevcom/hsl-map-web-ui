@@ -1,0 +1,13 @@
+@value lightGray, contentWrapperMargin from "styles/common.css";
+
+.root input {
+	border-radius: 4px;
+    border: 1px solid lightGray;
+    border-left: 1px solid gray;
+    border-top: 1px solid gray;
+    font-size: 15px;
+    padding: 5px 6px 4px 6px;
+    margin: contentWrapperMargin;
+    width: 100%;
+    max-width: 400px;
+}
