@@ -1,5 +1,6 @@
 FROM node:12-alpine
 
+ARG BUILD_ENV=production
 ENV WORK /opt/driver-instructions
 
 # Create app directory
@@ -13,11 +14,8 @@ RUN yarn
 
 # Bundle app source
 COPY . ${WORK}
-COPY .env.production ${WORK}/.env
+COPY .env.${BUILD_ENV} ${WORK}/.env
 
 RUN yarn build
-
-EXPOSE 3000
-
 CMD yarn run production
 
