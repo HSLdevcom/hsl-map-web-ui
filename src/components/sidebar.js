@@ -7,7 +7,7 @@ import styles from "./sidebar.module.css";
 
 const Sidebar = (props) => (
   <div className={styles.root}>
-    <Header rootPath={props.rootPath} />
+    <Header/>
     <div className={styles.elementContainer}>
       <LineIcon
         transportType={props.transportType}

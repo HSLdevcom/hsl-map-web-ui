@@ -65,7 +65,6 @@ class Map extends React.Component {
           isFullScreen={this.state.isFullScreen}
           toggleChecked={this.routeFilterItemToggleChecked}
           toggleFilter={this.routeFilterToggleFilter}
-          rootPath={process.env.REACT_APP_ROOT_PATH}
           notes={this.props.notes}
           setMapCenter={this.setMapCenter}
         />
