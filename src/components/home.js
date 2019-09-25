@@ -19,7 +19,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Header rootPath={process.env.REACT_APP_ROOT_PATH} />
+        <Header/>
         <div className={styles.root}>
           <LineList />
         </div>
