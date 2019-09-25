@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import styles from "./header.module.css";
 import hslLogo from "../icons/hsl-logo.png";
 
-const Header = ({ rootPath }) => (
+const Header = () => (
   <div className={styles.root}>
-    <Link to={{ pathname: rootPath }}>
+    <Link to={{ pathname: "/"}}>
       <div className={styles.logo}>
         <img src={hslLogo} alt="HSL / HRT" />
       </div>
