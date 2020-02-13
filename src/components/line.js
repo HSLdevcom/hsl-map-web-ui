@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 
 const Line = ({ lineId, longName, shortName, transportType, dateBegin, dateEnd }) => (
   <div>
-    <Link to={{ pathname: path.join("/map", lineId, dateBegin, dateEnd) }}>
+    <Link to={{ pathname: path.join("/", lineId, dateBegin, dateEnd) }}>
       <LineIcon
         transportType={transportType}
         shortName={shortName}
