@@ -1,3 +1,51 @@
 .root {
   padding: var(--contentContainerPadding);
 }
+
+.button {
+  color: #fff;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 0;
+  background-color: var(--busBlue);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  line-height: normal;
+  width: 350px;
+  transition: 0.2s;
+  margin-right: 15px;
+}
+
+.disabled {
+  background-color: #b1b0b0;
+  cursor: default;
+  pointer-events: none;
+  transition: 0.2s;
+}
+
+.button:hover {
+  background-color: rgb(0, 109, 182);
+}
+
+.buttonContainer {
+  display: flex;
+  position: fixed;
+  bottom: 0px;
+  height: 70px;
+  width: 100%;
+  background-color: #eef1f3;
+  padding: 15px;
+  border-top: 1px solid #dedede;
+}
+
+.divider {
+  margin: 10px;
+  border-bottom: 1px solid #dedede;
+}
+
+.selectedLineLabels {
+  transition: 0.5s;
+}

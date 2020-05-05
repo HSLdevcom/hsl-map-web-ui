@@ -1,9 +1,12 @@
 import React, { useState, useCallback } from "react";
+import { inject, observer } from "mobx-react";
 import Line from "./line";
 import LineSearch from "./lineSearch";
+import { Link } from "react-router-dom";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import get from "lodash/get";
+import styles from "./lineList.module.css";
 
 const transportTypeOrder = ["tram", "bus"];
 
@@ -57,52 +60,104 @@ const allLinesQuery = gql`
   }
 `;
 
-const LineList = () => {
-  const [query, setQuery] = useState("");
+const LineList = inject("lineStore")(
+  observer((props) => {
+    const [query, setQuery] = useState("");
+    const [selectedLines, setSelectedLines] = useState([]);
+    const updateQuery = useCallback((e) => {
+      setQuery(e.target.value);
+    }, []);
 
-  const updateQuery = useCallback((e) => {
-    setQuery(e.target.value);
-  }, []);
+    const getLineKey = (line) => `${line.lineId}${line.dateBegin}${line.dateEnd}`;
+    const extractNumbers = (lineId) => lineId.match(/(\d+)/)[0];
 
-  return (
-    <div>
-      <h3>Reitit</h3>
-      <LineSearch query={query} onChange={updateQuery} />
-      <Query query={allLinesQuery}>
-        {({ data }) => {
-          const lines = get(data, "allLines.nodes", []);
+    const sortAndsetSelectedLinestoStore = (lines) => {
+      const lineObjects = lines.map((line) => {
+        const lineNumber = extractNumbers(line.lineNumber);
+        return { line, lineNumber };
+      });
+      const sortedLineObjects = lineObjects.sort((a, b) => a.lineNumber - b.lineNumber);
+      const sortedLines = sortedLineObjects.map((lineObject) => lineObject.line);
 
-          return lines
-            .filter((node) => node.routes.totalCount !== 0)
-            .filter(removeTrainsFilter)
-            .filter(removeFerryFilter)
-            .map(setTransportTypeMapper)
-            .map(lineNumberMapper)
-            .sort(linesSorter)
-            .filter((value) => {
-              if (value.lineId) {
-                return (
-                  value.lineNumber.startsWith(query) ||
-                  value.nameFi.toLowerCase().includes(query.toLowerCase())
-                );
-              }
-              return false;
-            })
-            .map((line) => (
-              <Line
-                key={`${line.lineId}_${line.dateBegin}_${line.dateEnd}`}
-                lineId={line.lineId}
-                longName={line.nameFi}
-                shortName={line.lineNumber}
-                transportType={line.transportType}
-                dateBegin={line.dateBegin}
-                dateEnd={line.dateEnd}
-              />
-            ));
-        }}
-      </Query>
-    </div>
-  );
-};
+      props.lineStore.setSelectedLines(sortedLines);
+    };
+
+    const handleClick = (line) => {
+      if (isSelected(line)) {
+        const lineKey = getLineKey(line);
+        const lines = selectedLines.filter((selectedLine) => {
+          const selectedLineKey = getLineKey(selectedLine);
+          return lineKey !== selectedLineKey;
+        });
+        setSelectedLines(lines);
+        sortAndsetSelectedLinestoStore(lines);
+      } else {
+        const lines = selectedLines.concat(line);
+        setSelectedLines(lines);
+        sortAndsetSelectedLinestoStore(lines);
+      }
+    };
+
+    const isSelected = (line) => {
+      const lineKey = getLineKey(line);
+      let isSelected = false;
+      selectedLines.forEach((selectedLine) => {
+        const selectedLineKey = getLineKey(selectedLine);
+        if (selectedLineKey === lineKey) {
+          isSelected = true;
+        }
+      });
+      return isSelected;
+    };
+
+    return (
+      <div>
+        <h3>Reitit</h3>
+        <LineSearch query={query} onChange={updateQuery} />
+        <Query query={allLinesQuery}>
+          {({ data }) => {
+            const lines = get(data, "allLines.nodes", []);
+
+            return lines
+              .filter((node) => node.routes.totalCount !== 0)
+              .filter(removeTrainsFilter)
+              .filter(removeFerryFilter)
+              .map(setTransportTypeMapper)
+              .map(lineNumberMapper)
+              .sort(linesSorter)
+              .filter((value) => {
+                if (value.lineId) {
+                  return (
+                    value.lineNumber.startsWith(query) ||
+                    value.nameFi.toLowerCase().includes(query.toLowerCase()) ||
+                    isSelected(value)
+                  );
+                }
+                return false;
+              })
+              .map((line, index) => (
+                <div
+                  className={
+                    isSelected(line) ? styles.divContainerSelected : styles.divContainer
+                  }
+                  key={index}
+                  onClick={() => handleClick(line)}>
+                  <Line
+                    key={`${line.lineId}_${line.dateBegin}_${line.dateEnd}`}
+                    lineId={line.lineId}
+                    longName={line.nameFi}
+                    shortName={line.lineNumber}
+                    transportType={line.transportType}
+                    dateBegin={line.dateBegin}
+                    dateEnd={line.dateEnd}
+                  />
+                </div>
+              ));
+          }}
+        </Query>
+      </div>
+    );
+  })
+);
 
 export default LineList;

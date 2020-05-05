@@ -5,32 +5,38 @@ import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
 
-const Sidebar = (props) => (
-  <div className={styles.root}>
-    <Header/>
-    <div className={styles.elementContainer}>
-      <LineIcon
-        transportType={props.transportType}
-        shortName={props.lineNumber}
-        lineNameFi={props.lineNameFi}
-        iconSize="24"
-        additionalStyle={{ marginBottom: "15px" }}
-      />
-      <div id="map-container">
-        <RouteFilter
-          transportType={props.transportType}
-          routes={props.routes}
-          selectedRoutes={props.selectedRoutes}
-          toggleChecked={props.toggleChecked}
-          isFullScreen={props.isFullScreen}
-          showFilter={props.showFilter}
-          toggleFilter={props.toggleFilter}
-          setMapCenter={props.setMapCenter}
-        />
-      </div>
-      <Notes notes={props.notes} />
+const Sidebar = (props) => {
+  return (
+    <div className={styles.root}>
+      <Header />
+      {props.lines.map((line, index) => {
+        return (
+          <div key={index} className={styles.elementContainer}>
+            <LineIcon
+              transportType={line.transportType}
+              shortName={line.lineNumber}
+              lineNameFi={line.lineNameFi}
+              iconSize="24"
+              additionalStyle={{ marginBottom: "15px" }}
+            />
+            <div id="map-container">
+              <RouteFilter
+                transportType={line.transportType}
+                routes={line.routes}
+                selectedRoutes={props.selectedRoutes}
+                toggleChecked={props.toggleChecked}
+                isFullScreen={props.isFullScreen}
+                showFilter={props.showFilter}
+                toggleFilter={props.toggleFilter}
+                setMapCenter={props.setMapCenter}
+              />
+            </div>
+            <Notes notes={props.notes} />
+          </div>
+        );
+      })}
     </div>
-  </div>
-);
+  );
+};
 
 export default Sidebar;
