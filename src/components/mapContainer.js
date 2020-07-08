@@ -67,8 +67,13 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
 
 class MapContainer extends Component {
   async componentDidMount() {
-    const lines = await this.getLines();
-    this.setState({ lines });
+    if (this.props.match.params.id) {
+      const line = await this.queryPromise(this.props.match.params);
+      this.setState({ lines: [line] });
+    } else {
+      const lines = await this.getLines();
+      this.setState({ lines });
+    }
   }
 
   queryPromise = async (params) => {
@@ -95,6 +100,7 @@ class MapContainer extends Component {
   };
 
   render() {
+    console.log(this.props);
     if (!this.state || !this.state.lines) {
       return null;
     }
