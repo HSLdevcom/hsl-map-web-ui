@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createApolloFetch } from "apollo-fetch";
 import { inject, observer } from "mobx-react";
+import qs from "qs";
 import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
@@ -67,13 +68,9 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
 
 class MapContainer extends Component {
   async componentDidMount() {
-    if (this.props.match.params.id) {
-      const line = await this.queryPromise(this.props.match.params);
-      this.setState({ lines: [line] });
-    } else {
-      const lines = await this.getLines();
-      this.setState({ lines });
-    }
+    const params = this.getQueryParamValues(this.props.location.search);
+    const lines = await this.getLines(params);
+    this.setState({ lines });
   }
 
   queryPromise = async (params) => {
@@ -87,20 +84,48 @@ class MapContainer extends Component {
     });
   };
 
-  getLines = async () => {
-    const selectedLines = this.props.lineStore.getSelectedLines;
-    const paramsArray = selectedLines.map((line) => {
+  getLines = async (params) => {
+    const paramsArray = params.map((line) => {
       return { id: line.lineId, dateBegin: line.dateBegin, dateEnd: line.dateEnd };
     });
-
     const lines = await Promise.all(
       paramsArray.map((params) => this.queryPromise(params))
     );
     return lines;
   };
 
+  lineObject = (param, params, index) => {
+    return index
+      ? {
+          lineId: param,
+          dateBegin: params[param].dateBegin[index],
+          dateEnd: params[param].dateEnd[index],
+        }
+      : {
+          lineId: param,
+          dateBegin: params[param].dateBegin,
+          dateEnd: params[param].dateEnd,
+        };
+  };
+
+  getQueryParamValues = (url) => {
+    const params = qs.parse(url, {
+      ignoreQueryPrefix: true,
+    });
+    const lines = [];
+    Object.keys(params).forEach((param) => {
+      if (Array.isArray(params[param].dateBegin)) {
+        for (let i = 0; i < params[param].dateBegin.length; i++) {
+          lines.push(this.lineObject(param, params, i));
+        }
+      } else {
+        lines.push(this.lineObject(param, params));
+      }
+    });
+    return lines;
+  };
+
   render() {
-    console.log(this.props);
     if (!this.state || !this.state.lines) {
       return null;
     }

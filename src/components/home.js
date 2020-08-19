@@ -24,14 +24,33 @@ class Home extends React.Component {
 
   lineNumbers = (selectedLines) => {
     return selectedLines.map((line, index) => {
-      return index === selectedLines.length - 1
-        ? `${line.lineNumber}`
-        : `${line.lineNumber}, `;
+      const type = line.transportType;
+      return (
+        <div key={index} className={styles.row}>
+          <div
+            className={classnames(styles.lineNumber, {
+              [styles.tram]: type === "tram",
+              [styles.bus]: type !== "tram",
+            })}>
+            {line.lineNumber}
+          </div>
+          <div className={styles.comma}>
+            {index === selectedLines.length - 1 ? `` : `,`}
+          </div>
+        </div>
+      );
     });
   };
 
   handleClick = () => {
-    this.props.history.push("/map");
+    const selectedLines = this.props.lineStore.selectedLines;
+    let params = "?";
+    selectedLines.forEach((selectedLine, index) => {
+      const and = index === selectedLines.length - 1 ? "" : "&";
+      const lineId = selectedLine.lineId;
+      params = `${params}${lineId}[dateBegin]=${selectedLine.dateBegin}&${lineId}[dateEnd]=${selectedLine.dateEnd}${and}`;
+    });
+    this.props.history.push(`/map/${params}`);
   };
 
   render() {
@@ -53,7 +72,8 @@ class Home extends React.Component {
           </div>
           {selectedLines.length > 0 && (
             <div className={styles.selectedLineLabels}>
-              Valittuna linjat: {this.lineNumbers(selectedLines)}
+              <div className={styles.linesTitle}>Valittuna linjat:</div>
+              {this.lineNumbers(selectedLines)}
             </div>
           )}
         </div>

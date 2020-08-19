@@ -117,7 +117,7 @@ const LineList = inject("lineStore")(
         <Query query={allLinesQuery}>
           {({ data }) => {
             const lines = get(data, "allLines.nodes", []);
-
+            const queries = query.toLowerCase().split(",");
             return lines
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
@@ -130,7 +130,8 @@ const LineList = inject("lineStore")(
                   return (
                     value.lineNumber.startsWith(query) ||
                     value.nameFi.toLowerCase().includes(query.toLowerCase()) ||
-                    isSelected(value)
+                    isSelected(value) ||
+                    queries.includes(value.lineNumber)
                   );
                 }
                 return false;

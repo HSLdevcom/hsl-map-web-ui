@@ -48,4 +48,32 @@
 
 .selectedLineLabels {
   transition: 0.5s;
+  display: flex;
+}
+
+.lineNumber {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.bus {
+  color: rgb(0, 122, 201);
+}
+
+.tram {
+  color: rgb(0, 152, 95);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+}
+
+.linesTitle {
+  margin-top: 5px;
+  margin-right: 10px;
+}
+
+.comma {
+  font-size: 24px;
 }
