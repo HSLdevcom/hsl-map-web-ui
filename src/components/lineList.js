@@ -2,7 +2,6 @@ import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
 import Line from "./line";
 import LineSearch from "./lineSearch";
-import { Link } from "react-router-dom";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import get from "lodash/get";
