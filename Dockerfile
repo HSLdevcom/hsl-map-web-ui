@@ -15,8 +15,7 @@ RUN yarn
 COPY . ${WORK}
 
 ARG BUILD_ENV=production
-COPY .env.${BUILD_ENV} ${WORK}/.env
+COPY .env.${BUILD_ENV} ${WORK}/.env.production
 
 RUN yarn build
 CMD yarn run production
-

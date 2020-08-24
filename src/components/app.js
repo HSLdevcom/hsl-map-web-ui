@@ -28,7 +28,6 @@ const App = () => (
         <ApolloHooksProvider client={client}>
           <Router basename={rootPath}>
             <Route component={Home} path="/" exact />
-            <Route path="/map/:id/:dateBegin/:dateEnd" component={MapContainer} />
             <Route path={"/map"} component={MapContainer} />
           </Router>
         </ApolloHooksProvider>
