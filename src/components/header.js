@@ -5,7 +5,7 @@ import hslLogo from "../icons/hsl-logo.png";
 
 const Header = () => (
   <div className={styles.root}>
-    <Link to={{ pathname: "/"}}>
+    <Link to={{ pathname: "/" }}>
       <div className={styles.logo}>
         <img src={hslLogo} alt="HSL / HRT" />
       </div>

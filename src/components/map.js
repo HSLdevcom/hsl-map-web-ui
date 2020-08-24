@@ -53,13 +53,24 @@ class Map extends React.Component {
   }
 
   render() {
+    let routes = [];
+    this.props.mapProps.forEach((props) => {
+      routes = routes.concat(props.lineRoutes);
+    });
+
+    const lines = this.props.mapProps.map((props) => {
+      return {
+        transportType: props.transportType,
+        lineNumber: props.lineNumber,
+        lineNameFi: props.lineNameFi,
+        routes: props.lineRoutes,
+      };
+    });
+
     return (
       <div className={styles.root}>
         <Sidebar
-          transportType={this.props.transportType}
-          lineNumber={this.props.lineNumber}
-          lineNameFi={this.props.nameFi}
-          routes={this.props.lineRoutes}
+          lines={lines}
           selectedRoutes={this.state.selectedRoutes}
           showFilter={this.state.showFilterFullScreen}
           isFullScreen={this.state.isFullScreen}
@@ -70,7 +81,7 @@ class Map extends React.Component {
         />
         <MapLeaflet
           center={this.state.center}
-          routes={this.props.lineRoutes}
+          routes={routes}
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}
           toggleFullscreen={this.mapLeafletToggleFullscreen}
