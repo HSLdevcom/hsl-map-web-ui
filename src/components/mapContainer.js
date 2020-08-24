@@ -95,7 +95,7 @@ class MapContainer extends Component {
   };
 
   lineObject = (param, params, index) => {
-    return index
+    return index !== undefined
       ? {
           lineId: param,
           dateBegin: params[param].dateBegin[index],
