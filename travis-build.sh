@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Create image based on branch being pushed (development, stage, master)
+# Create image based on branch being pushed (development, stage, master). If other branch, use travis build number as tag
 # Additionally update latest image to reflect this built image
 # Always build application when creating a new branch, so we can check that build is not broken after additions
 
@@ -10,15 +10,15 @@ ORG=${ORG:-hsldevcom}
 DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-latest}
 
 if [[ $TRAVIS_BRANCH == "development" ]]; then
-  DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-dev}
+  DOCKER_TAG=dev
 fi
 
 if [[ $TRAVIS_BRANCH == "stage" ]]; then
-  DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-stage}
+  DOCKER_TAG=stage
 fi
 
 if [[ $TRAVIS_BRANCH == "master" ]]; then
-  DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-production}
+  DOCKER_TAG=production
 fi
 
 DOCKER_IMAGE=$ORG/hsl-map-web-ui:${DOCKER_TAG}
