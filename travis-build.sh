@@ -1,12 +1,7 @@
 #!/bin/bash
 set -e
 
-# Create image based on branch being pushed (development, stage, master). If other branch, use travis build number as tag
-# Additionally update latest image to reflect this built image
-# Always build application when creating a new branch, so we can check that build is not broken after additions
-
 ORG=${ORG:-hsldevcom}
-
 DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-latest}
 
 if [[ $TRAVIS_BRANCH == "development" ]]; then
