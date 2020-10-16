@@ -10,7 +10,7 @@ ORG=${ORG:-hsldevcom}
 DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-latest}
 
 if [[ $TRAVIS_BRANCH == "development" ]]; then
-  DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-development}
+  DOCKER_TAG=${TRAVIS_BUILD_NUMBER:-dev}
 fi
 
 if [[ $TRAVIS_BRANCH == "stage" ]]; then
