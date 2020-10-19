@@ -24,13 +24,13 @@ echo "Building image with tag -> ${DOCKER_TAG}"
 docker build --tag=$DOCKER_IMAGE .
 
 if [[ $TRAVIS_PULL_REQUEST == "false" ]]; then
-  if [[ " ${BUILD_AND_PUSH_BRANCHES[*]} " == *"$DOCKER_TAG"* ]]; then
+  if [[ " ${BUILD_AND_PUSH_BRANCHES[*]} " == *"$TRAVIS_BRANCH"* ]]; then
     echo "Pushing builded image to registry with tag -> ${DOCKER_TAG}"
 
     docker login -u $DOCKER_USER -p $DOCKER_AUTH
     docker push $DOCKER_IMAGE
   else
-    echo "Pushed branch is not targeted environment branch (development, stage, production). Image is not pushed to registry"
+    echo "Pushed branch is not targeted environment branch (development, stage, master). Image is not pushed to registry"
   fi
 else
   echo "Image is not pushed to registry for pull requests"
