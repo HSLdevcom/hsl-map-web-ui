@@ -57,13 +57,13 @@ class Map extends React.Component {
     this.props.mapProps.forEach((props) => {
       routes = routes.concat(props.lineRoutes);
     });
-
     const lines = this.props.mapProps.map((props) => {
       return {
         transportType: props.transportType,
         lineNumber: props.lineNumber,
         lineNameFi: props.lineNameFi,
         routes: props.lineRoutes,
+        notes: props.notes,
       };
     });
 
@@ -76,7 +76,7 @@ class Map extends React.Component {
           isFullScreen={this.state.isFullScreen}
           toggleChecked={this.routeFilterItemToggleChecked}
           toggleFilter={this.routeFilterToggleFilter}
-          notes={this.props.notes}
+          notes={lines.notes}
           setMapCenter={this.setMapCenter}
         />
         <MapLeaflet
