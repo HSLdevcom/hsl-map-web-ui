@@ -31,7 +31,7 @@ const Sidebar = (props) => {
                 setMapCenter={props.setMapCenter}
               />
             </div>
-            <Notes notes={props.notes} />
+            <Notes notes={line.notes} />
           </div>
         );
       })}
