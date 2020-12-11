@@ -30,6 +30,8 @@ class RouteFilterItem extends React.Component {
   render() {
     const inputId = `filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`;
 
+    const sliderBackgroundColor = this.props.isChecked ? this.props.color : "#d3d3d3";
+
     return (
       <div className={styles.root}>
         <div className={styles.stopListButtonWrapper}>
@@ -59,10 +61,8 @@ class RouteFilterItem extends React.Component {
             onChange={this.props.onChange}
           />
           <div
-            className={classNames(styles.slider, {
-              [styles.tram]: this.props.transportType === "tram",
-              [styles.bus]: this.props.transportType !== "tram",
-            })}
+            style={{ backgroundColor: sliderBackgroundColor }}
+            className={classNames(styles.slider)}
           />
         </label>
 

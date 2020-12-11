@@ -28,6 +28,7 @@ const addMarkersToLayer = (stops, direction, map) => {
     startIcon = startIcon2;
     timeIcon = timeIcon2;
   }
+
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
@@ -35,11 +36,7 @@ const addMarkersToLayer = (stops, direction, map) => {
     } else if (stop.timingStopType > 0) {
       icon = routeIcon(timeIcon);
     } else {
-      icon = stopIcon(
-        styles.stopIcon,
-        directionStyle,
-        stop.isCenteredStop && styles.centeredStop
-      );
+      icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
     }
 
     const marker = L.marker([stop.lat, stop.lon], { icon });
@@ -57,6 +54,7 @@ const addStopLayer = (routes, map, centeredStop) => {
           timingStopType: node.timingStopType,
           stopIndex: node.stopIndex,
           isCenteredStop: centeredStop && centeredStop.stopId === node.stop.stopId,
+          color: route.color,
         }))
         .sort((a, b) => a.stopIndex - b.stopIndex),
       route.direction,
@@ -69,23 +67,10 @@ const addGeometryLayer = (geometries, map) => {
   geometries.forEach((route) => {
     L.geoJson(route, {
       style: (feature) => {
-        switch (feature.properties.direction) {
-          case "1":
-            return {
-              color: modifiedColor(blueColorScale, route.properties.colorKey),
-              opacity: 1,
-            };
-          case "2":
-            return {
-              color: modifiedColor(redColorScale, route.properties.colorKey),
-              opacity: 1,
-            };
-          default:
-            return {
-              color: "001F33",
-              opacity: 1,
-            };
-        }
+        return {
+          color: feature.properties.color,
+          opacity: 1,
+        };
       },
     }).addTo(map);
   });
@@ -215,21 +200,11 @@ class MapLeaflet extends React.Component {
 
       addStopLayer(selectedStops, this.map, this.props.center);
 
-      let index1 = 0;
-      let index2 = 0;
-      let colorKey;
       const selectedGeometries = this.props.routes
         .map((route) => {
-          if (route.direction === "1") {
-            colorKey = index1;
-            index1 += 1;
-          } else if (route.direction === "2") {
-            colorKey = index2;
-            index2 += 1;
-          }
           return {
             type: "Feature",
-            properties: { ...route, colorKey },
+            properties: { ...route },
             geometry: route.geometries.nodes[0].geometry,
           };
         })

@@ -1,13 +1,27 @@
 import React from "react";
+import chroma from "chroma-js";
 import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
 import styles from "./map.module.css";
+
+const COLORS = [
+  "66B2FF",
+  "FF3333",
+  "66FFB2",
+  "666600",
+  "FF007F",
+  "CCCC00",
+  "FF8000",
+  "6600CC",
+  "009900",
+];
 
 class Map extends React.Component {
   constructor() {
     super();
     this.state = {
       selectedRoutes: [],
+      routeColorSchema: {},
       showFilterFullScreen: false,
       isFullScreen: false,
       center: null,
@@ -22,7 +36,22 @@ class Map extends React.Component {
     this.setState({ center });
   }
 
+  addToColorMap(route) {
+    const routeColorSchema = this.state.routeColorSchema;
+
+    if (routeColorSchema[route]) return;
+
+    const scale = chroma.scale(COLORS).domain([0, COLORS.length / 10]);
+    const colorIndex = Object.keys(routeColorSchema).length % (COLORS.length + 1);
+    const routeColor = scale(colorIndex * 0.1).hex();
+
+    routeColorSchema[route] = routeColor;
+    this.setState({ routeColorSchema });
+  }
+
   addSelection(route) {
+    this.addToColorMap(route);
+
     this.setState({
       selectedRoutes: this.state.selectedRoutes.concat(route),
     });
@@ -52,6 +81,15 @@ class Map extends React.Component {
     } else this.addSelection(e.target.value);
   }
 
+  coloredRoutes(routes) {
+    const colorSchema = this.state.routeColorSchema;
+    routes.forEach((route, index) => {
+      const routeId = `${route.routeId}_${route.direction}_${route.dateBegin}`;
+      route.color = colorSchema[routeId];
+    });
+    return routes;
+  }
+
   render() {
     let routes = [];
     this.props.mapProps.forEach((props) => {
@@ -67,6 +105,7 @@ class Map extends React.Component {
       };
     });
 
+    const coloredRoutes = this.coloredRoutes(routes);
     return (
       <div className={styles.root}>
         <Sidebar
@@ -81,7 +120,7 @@ class Map extends React.Component {
         />
         <MapLeaflet
           center={this.state.center}
-          routes={routes}
+          routes={coloredRoutes}
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}
           toggleFullscreen={this.mapLeafletToggleFullscreen}
