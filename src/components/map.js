@@ -41,9 +41,9 @@ class Map extends React.Component {
 
     if (routeColorSchema[route]) return;
 
-    const scale = chroma.scale(COLORS).domain([0, COLORS.length / 10]);
+    const scale = chroma.scale(COLORS).domain([0, COLORS.length]);
     const colorIndex = Object.keys(routeColorSchema).length % (COLORS.length + 1);
-    const routeColor = scale(colorIndex * 0.1).hex();
+    const routeColor = scale(colorIndex).hex();
 
     routeColorSchema[route] = routeColor;
     this.setState({ routeColorSchema });

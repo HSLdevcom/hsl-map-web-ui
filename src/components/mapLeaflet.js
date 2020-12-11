@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import L from "leaflet";
-import chroma from "chroma-js";
 import "leaflet/dist/leaflet.css";
 import { routeIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
@@ -12,19 +11,12 @@ import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import styles from "./mapLeaflet.module.css";
 
-const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
-const redColorScale = chroma.scale(["FF6699", "800000", "4D0000"]).domain([0, 5]);
-
-const modifiedColor = (colorScale, key) => colorScale(key);
-
 const addMarkersToLayer = (stops, direction, map) => {
   /** Sets the correct icon based on direction (1 or 2),
     and what type of stop (regular, first stop or timing stop) **/
-  let directionStyle = styles.direction1;
   let startIcon = startIcon1;
   let timeIcon = timeIcon1;
   if (direction === "2") {
-    directionStyle = styles.direction2;
     startIcon = startIcon2;
     timeIcon = timeIcon2;
   }
