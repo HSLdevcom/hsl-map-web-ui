@@ -8,6 +8,31 @@
   padding: var(--contentContainerPadding);
 }
 
+.headerContainer {
+  display: flex;
+  align-items: baseline;
+}
+
+.removeButtonContainer {
+  font-size: 30px;
+}
+
+.icon {
+  transition: 0.1s;
+  stroke: #868686;
+  cursor: pointer;
+}
+
+.icon:hover {
+  transition: 0.1s;
+  stroke: rgb(0, 109, 182);
+  cursor: pointer;
+}
+
+.iconDisabled {
+  display: none;
+}
+
 @media (min-width: 768px) {
   .root {
     overflow-y: auto;

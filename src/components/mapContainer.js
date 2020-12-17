@@ -26,6 +26,8 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
   ) {
     lineId
     nameFi
+    dateBegin
+    dateEnd
     routes {
       nodes {
         routeId
@@ -125,6 +127,16 @@ class MapContainer extends Component {
     return lines;
   };
 
+  setUrl = (selectedLines) => {
+    let params = "?";
+    selectedLines.forEach((selectedLine, index) => {
+      const and = index === selectedLines.length - 1 ? "" : "&";
+      const lineId = selectedLine.data.line.lineId;
+      params = `${params}${lineId}[dateBegin]=${selectedLine.data.line.dateBegin}&${lineId}[dateEnd]=${selectedLine.data.line.dateEnd}${and}`;
+    });
+    this.props.history.push(`/map/${params}`);
+  };
+
   render() {
     if (!this.state || !this.state.lines) {
       return null;
@@ -147,6 +159,16 @@ class MapContainer extends Component {
         ),
       };
     });
+    mapProps.removeSelectedLine = (line) => {
+      const lineKey = `${line.lineId}${line.lineNameFi}`;
+      const currentLines = this.state.lines;
+      const newLines = currentLines.filter((currentLine) => {
+        const currentLineKey = `${currentLine.data.line.lineId}${currentLine.data.line.nameFi}`;
+        if (currentLineKey !== lineKey) return currentLine;
+      });
+      this.setUrl(newLines);
+      this.setState({ lines: newLines });
+    };
     return <Map mapProps={mapProps} />;
   }
 }

@@ -59,9 +59,10 @@ class Map extends React.Component {
     });
     const lines = this.props.mapProps.map((props) => {
       return {
+        lineId: props.lineId,
         transportType: props.transportType,
         lineNumber: props.lineNumber,
-        lineNameFi: props.lineNameFi,
+        lineNameFi: props.nameFi,
         routes: props.lineRoutes,
         notes: props.notes,
       };
@@ -78,6 +79,7 @@ class Map extends React.Component {
           toggleFilter={this.routeFilterToggleFilter}
           notes={lines.notes}
           setMapCenter={this.setMapCenter}
+          removeSelectedLine={this.props.mapProps.removeSelectedLine}
         />
         <MapLeaflet
           center={this.state.center}
