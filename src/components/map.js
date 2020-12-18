@@ -66,7 +66,6 @@ class Map extends React.Component {
         notes: props.notes,
       };
     });
-
     return (
       <div className={styles.root}>
         <Sidebar
@@ -78,6 +77,7 @@ class Map extends React.Component {
           toggleFilter={this.routeFilterToggleFilter}
           notes={lines.notes}
           setMapCenter={this.setMapCenter}
+          onAddLines={this.props.onAddLines}
         />
         <MapLeaflet
           center={this.state.center}
