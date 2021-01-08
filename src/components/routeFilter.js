@@ -54,6 +54,7 @@ const RouteFilter = (props) => (
                 )}
                 onChange={props.toggleChecked}
                 setMapCenter={props.setMapCenter}
+                color={route.color}
               />
             ))}
           </div>
