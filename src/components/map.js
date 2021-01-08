@@ -8,12 +8,12 @@ const COLORS = [
   "66B2FF",
   "FF3333",
   "66FFB2",
-  "666600",
   "FF007F",
   "CCCC00",
-  "FF8000",
+  "176992",
   "6600CC",
   "009900",
+  "FFE707",
 ];
 
 class Map extends React.Component {
@@ -119,6 +119,7 @@ class Map extends React.Component {
           notes={lines.notes}
           setMapCenter={this.setMapCenter}
           removeSelectedLine={this.props.mapProps.removeSelectedLine}
+          onAddLines={this.props.onAddLines}
         />
         <MapLeaflet
           center={this.state.center}

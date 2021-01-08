@@ -108,10 +108,14 @@ const LineList = inject("lineStore")(
       });
       return isSelected;
     };
-
     return (
       <div>
-        <h3>Reitit</h3>
+        {!props.hideTitle && (
+          <div className={styles.titleContainer}>
+            <h3>Reitit</h3>
+          </div>
+        )}
+
         <LineSearch query={query} onChange={updateQuery} />
         <Query query={allLinesQuery}>
           {({ data }) => {

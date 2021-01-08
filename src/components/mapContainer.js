@@ -136,6 +136,28 @@ class MapContainer extends Component {
     });
     this.props.history.push(`/map/${params}`);
   };
+  addLines = async (newLines) => {
+    const existingParams = this.getQueryParamValues(this.props.location.search);
+    newLines.forEach((newLine) => {
+      existingParams.push({
+        lineId: newLine.lineId,
+        dateBegin: newLine.dateBegin,
+        dateEnd: newLine.dateEnd,
+      });
+    });
+
+    let params = "?";
+    existingParams.forEach((param, index) => {
+      const and = index === existingParams.length - 1 ? "" : "&";
+      const lineId = param.lineId;
+      params = `${params}${lineId}[dateBegin]=${param.dateBegin}&${lineId}[dateEnd]=${param.dateEnd}${and}`;
+    });
+
+    this.props.history.push(`/map/${params}`);
+
+    const lines = await this.getLines(existingParams);
+    this.setState({ lines });
+  };
 
   render() {
     if (!this.state || !this.state.lines) {
@@ -169,7 +191,8 @@ class MapContainer extends Component {
       this.setUrl(newLines);
       this.setState({ lines: newLines });
     };
-    return <Map mapProps={mapProps} />;
+
+    return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }
 export default inject("lineStore")(observer(MapContainer));
