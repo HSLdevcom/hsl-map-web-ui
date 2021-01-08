@@ -98,6 +98,7 @@ class Map extends React.Component {
     const lines = this.props.mapProps.map((props) => {
       return {
         lineId: props.lineId,
+        lineKey: props.lineKey,
         transportType: props.transportType,
         lineNumber: props.lineNumber,
         lineNameFi: props.nameFi,

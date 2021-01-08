@@ -165,9 +165,11 @@ class MapContainer extends Component {
     }
     const mapProps = this.state.lines.map((lineData) => {
       const line = lineData.data.line;
+      const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return {
         lineId: line.lineId,
         nameFi: line.nameFi,
+        lineKey: lineKey,
         transportType: getTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),

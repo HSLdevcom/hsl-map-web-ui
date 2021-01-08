@@ -61,7 +61,9 @@ class Sidebar extends React.Component {
             styles.sideBarLineList,
             this.state.showAddLines ? "" : styles.hidden
           )}>
-          {this.state.showAddLines && <LineList hideTitle resetSelection />}
+          {this.state.showAddLines && (
+            <LineList hideTitle ignoredLines={this.props.lines} />
+          )}
         </div>
         <div
           onClick={() => this.addLines(selectedLines)}

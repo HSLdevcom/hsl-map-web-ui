@@ -108,6 +108,18 @@ const LineList = inject("lineStore")(
       });
       return isSelected;
     };
+
+    const isIgnoredLine = (line) => {
+      if (!props.ignoredLines) {
+        return true;
+      }
+      const ignoredLineKeys = props.ignoredLines.map(
+        (ignoredLine) => ignoredLine.lineKey
+      );
+      const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
+      return !ignoredLineKeys.includes(lineKey);
+    };
+
     return (
       <div>
         {!props.hideTitle && (
@@ -125,6 +137,7 @@ const LineList = inject("lineStore")(
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
+              .filter((line) => isIgnoredLine(line))
               .map(setTransportTypeMapper)
               .map(lineNumberMapper)
               .sort(linesSorter)
