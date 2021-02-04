@@ -1,5 +1,4 @@
 import React from "react";
-import chroma from "chroma-js";
 import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
 import styles from "./map.module.css";
@@ -7,13 +6,13 @@ import styles from "./map.module.css";
 const COLORS = [
   "66B2FF",
   "FF3333",
-  "66FFB2",
-  "FF007F",
-  "CCCC00",
+  "10864B",
+  "FF9F3D",
+  "CDB100",
   "176992",
   "6600CC",
   "009900",
-  "FFE707",
+  "FF6666",
 ];
 
 class Map extends React.Component {
@@ -41,10 +40,7 @@ class Map extends React.Component {
 
     if (routeColorSchema[route]) return;
 
-    const scale = chroma.scale(COLORS).domain([0, COLORS.length]);
-    const colorIndex = Object.keys(routeColorSchema).length % (COLORS.length + 1);
-    const routeColor = scale(colorIndex).hex();
-
+    const routeColor = `#${COLORS[this.state.selectedRoutes.length % COLORS.length]}`;
     routeColorSchema[route] = routeColor;
     this.setState({ routeColorSchema });
   }

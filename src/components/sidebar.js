@@ -38,10 +38,7 @@ class Sidebar extends React.Component {
   render() {
     const selectedLines = this.props.lineStore.getSelectedLines;
     const headerIcon = (
-      <div
-        onClick={() => {
-          this.setState({ showAddLines: !this.state.showAddLines });
-        }}>
+      <div>
         {this.state.showAddLines ? (
           <FiChevronUp className={styles.dropdownButton} />
         ) : (
@@ -49,10 +46,28 @@ class Sidebar extends React.Component {
         )}
       </div>
     );
+    const sortedLines = this.props.lines.sort((a, b) => {
+      const transportTypeOrder = ["tram", "bus"];
+      if (a.transportType !== b.transportType) {
+        return transportTypeOrder.indexOf(a.transportType) >
+          transportTypeOrder.indexOf(b.transportType)
+          ? 1
+          : -1;
+      } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
+        return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
+      } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
+        return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
+      }
+      return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
+    });
     return (
       <div className={styles.root}>
         <Header />
-        <div className={styles.addLineTitleContainer}>
+        <div
+          className={styles.addLineTitleContainer}
+          onClick={() => {
+            this.setState({ showAddLines: !this.state.showAddLines });
+          }}>
           <div className={styles.addLineTitle}>Lisää linjoja</div>
           {headerIcon}
         </div>
@@ -77,7 +92,7 @@ class Sidebar extends React.Component {
             : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
         </div>
         {this.state.showAddLines && <div className={styles.divider} />}
-        {this.props.lines.map((line, index) => {
+        {sortedLines.map((line, index) => {
           return (
             <div key={index} className={styles.elementContainer}>
               <div className={styles.headerContainer}>
