@@ -7,12 +7,11 @@ const COLORS = [
   "66B2FF",
   "FF3333",
   "10864B",
-  "FF9F3D",
   "CDB100",
-  "176992",
+  "1D80B2",
   "6600CC",
-  "009900",
-  "FF6666",
+  "F7922D",
+  "DC00DC",
 ];
 
 class Map extends React.Component {
