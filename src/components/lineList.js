@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
+import CircularProgress from "material-ui/CircularProgress";
 import Line from "./line";
 import LineSearch from "./lineSearch";
 import gql from "graphql-tag";
@@ -131,6 +132,16 @@ const LineList = inject("lineStore")(
         <LineSearch query={query} onChange={updateQuery} />
         <Query query={allLinesQuery}>
           {({ data }) => {
+            if (!data.allLines) {
+              return (
+                <div className={styles.loading}>
+                  <CircularProgress
+                    size={200}
+                    style={{ display: "block", margin: "auto" }}
+                  />
+                </div>
+              );
+            }
             const lines = get(data, "allLines.nodes", []);
             const queries = query.toLowerCase().split(",");
             return lines

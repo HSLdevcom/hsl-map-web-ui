@@ -119,6 +119,7 @@ class Sidebar extends React.Component {
               <div id="map-container">
                 <RouteFilter
                   transportType={line.transportType}
+                  lineName={line.lineNameFi}
                   routes={line.routes}
                   selectedRoutes={this.props.selectedRoutes}
                   toggleChecked={this.props.toggleChecked}

@@ -28,7 +28,7 @@ class RouteFilterItem extends React.Component {
   }
 
   render() {
-    const inputId = `filterCheckbox_${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`;
+    const inputId = `filterCheckbox_${this.props.id}`;
 
     const sliderBackgroundColor = this.props.isChecked ? this.props.color : "#d3d3d3";
 
@@ -56,7 +56,7 @@ class RouteFilterItem extends React.Component {
           <input
             id={inputId}
             type="checkbox"
-            value={`${this.props.routeID}_${this.props.routeDirection}_${this.props.routeDateBegin}`}
+            value={`${this.props.id}`}
             checked={this.props.isChecked}
             onChange={this.props.onChange}
           />

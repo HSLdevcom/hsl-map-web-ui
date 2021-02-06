@@ -6,6 +6,8 @@ import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+
 import Home from "./home";
 import MapContainer from "./mapContainer";
 import style from "./app.module.css";
@@ -26,10 +28,12 @@ const App = () => (
     <Provider {...stores}>
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
-          <Router basename={rootPath}>
-            <Route component={Home} path="/" exact />
-            <Route path={"/map"} component={MapContainer} />
-          </Router>
+          <MuiThemeProvider>
+            <Router basename={rootPath}>
+              <Route component={Home} path="/" exact />
+              <Route path={"/map"} component={MapContainer} />
+            </Router>
+          </MuiThemeProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
     </Provider>

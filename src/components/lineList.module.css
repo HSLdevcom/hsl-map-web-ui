@@ -6,6 +6,10 @@
   border-radius: 5px;
 }
 
+.loading {
+  padding-top: 10vh;
+}
+
 .titleContainer {
   display: flex;
 }

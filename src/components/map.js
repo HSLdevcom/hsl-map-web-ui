@@ -36,10 +36,10 @@ class Map extends React.Component {
 
   addToColorMap(route) {
     const routeColorSchema = this.state.routeColorSchema;
-
     if (routeColorSchema[route]) return;
 
-    const routeColor = `#${COLORS[this.state.selectedRoutes.length % COLORS.length]}`;
+    const routeColorSchemaValues = Object.values(routeColorSchema);
+    const routeColor = `#${COLORS[routeColorSchemaValues.length % COLORS.length]}`;
     routeColorSchema[route] = routeColor;
     this.setState({ routeColorSchema });
   }
@@ -79,7 +79,7 @@ class Map extends React.Component {
   coloredRoutes(routes) {
     const colorSchema = this.state.routeColorSchema;
     routes.forEach((route, index) => {
-      const routeId = `${route.routeId}_${route.direction}_${route.dateBegin}`;
+      const routeId = `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`;
       route.color = colorSchema[routeId];
     });
     return routes;
@@ -88,7 +88,12 @@ class Map extends React.Component {
   render() {
     let routes = [];
     this.props.mapProps.forEach((props) => {
-      routes = routes.concat(props.lineRoutes);
+      const lineRoutes = props.lineRoutes.map((route) => {
+        route.name = props.nameFi;
+        return route;
+      });
+
+      routes = routes.concat(lineRoutes);
     });
     const lines = this.props.mapProps.map((props) => {
       return {

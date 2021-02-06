@@ -186,7 +186,7 @@ class MapLeaflet extends React.Component {
     if (this.props.routes) {
       const selectedStops = this.props.routes.filter((route) =>
         this.props.selectedRoutes.includes(
-          `${route.routeId}_${route.direction}_${route.dateBegin}`
+          `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`
         )
       );
 
@@ -202,7 +202,7 @@ class MapLeaflet extends React.Component {
         })
         .filter((route) =>
           this.props.selectedRoutes.includes(
-            `${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}`
+            `${route.properties.name}_${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}_${route.properties.dateEnd}`
           )
         );
 
