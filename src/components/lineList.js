@@ -134,7 +134,10 @@ const LineList = inject("lineStore")(
           {({ data }) => {
             if (!data.allLines) {
               return (
-                <div className={styles.loading}>
+                <div
+                  className={`${
+                    props.frontpage ? styles.frontpageLoading : styles.loading
+                  }`}>
                   <CircularProgress
                     size={200}
                     style={{ display: "block", margin: "auto" }}
