@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import L from "leaflet";
-import chroma from "chroma-js";
 import "leaflet/dist/leaflet.css";
 import { routeIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
@@ -12,22 +11,16 @@ import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import styles from "./mapLeaflet.module.css";
 
-const blueColorScale = chroma.scale(["00B9E4", "004E80", "001F33"]).domain([0, 5]);
-const redColorScale = chroma.scale(["FF6699", "800000", "4D0000"]).domain([0, 5]);
-
-const modifiedColor = (colorScale, key) => colorScale(key);
-
 const addMarkersToLayer = (stops, direction, map) => {
   /** Sets the correct icon based on direction (1 or 2),
     and what type of stop (regular, first stop or timing stop) **/
-  let directionStyle = styles.direction1;
   let startIcon = startIcon1;
   let timeIcon = timeIcon1;
   if (direction === "2") {
-    directionStyle = styles.direction2;
     startIcon = startIcon2;
     timeIcon = timeIcon2;
   }
+
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
@@ -35,11 +28,7 @@ const addMarkersToLayer = (stops, direction, map) => {
     } else if (stop.timingStopType > 0) {
       icon = routeIcon(timeIcon);
     } else {
-      icon = stopIcon(
-        styles.stopIcon,
-        directionStyle,
-        stop.isCenteredStop && styles.centeredStop
-      );
+      icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
     }
 
     const marker = L.marker([stop.lat, stop.lon], { icon });
@@ -57,6 +46,7 @@ const addStopLayer = (routes, map, centeredStop) => {
           timingStopType: node.timingStopType,
           stopIndex: node.stopIndex,
           isCenteredStop: centeredStop && centeredStop.stopId === node.stop.stopId,
+          color: route.color,
         }))
         .sort((a, b) => a.stopIndex - b.stopIndex),
       route.direction,
@@ -69,23 +59,10 @@ const addGeometryLayer = (geometries, map) => {
   geometries.forEach((route) => {
     L.geoJson(route, {
       style: (feature) => {
-        switch (feature.properties.direction) {
-          case "1":
-            return {
-              color: modifiedColor(blueColorScale, route.properties.colorKey),
-              opacity: 1,
-            };
-          case "2":
-            return {
-              color: modifiedColor(redColorScale, route.properties.colorKey),
-              opacity: 1,
-            };
-          default:
-            return {
-              color: "001F33",
-              opacity: 1,
-            };
-        }
+        return {
+          color: feature.properties.color,
+          opacity: 1,
+        };
       },
     }).addTo(map);
   });
@@ -209,33 +186,23 @@ class MapLeaflet extends React.Component {
     if (this.props.routes) {
       const selectedStops = this.props.routes.filter((route) =>
         this.props.selectedRoutes.includes(
-          `${route.routeId}_${route.direction}_${route.dateBegin}`
+          `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`
         )
       );
 
       addStopLayer(selectedStops, this.map, this.props.center);
 
-      let index1 = 0;
-      let index2 = 0;
-      let colorKey;
       const selectedGeometries = this.props.routes
         .map((route) => {
-          if (route.direction === "1") {
-            colorKey = index1;
-            index1 += 1;
-          } else if (route.direction === "2") {
-            colorKey = index2;
-            index2 += 1;
-          }
           return {
             type: "Feature",
-            properties: { ...route, colorKey },
+            properties: { ...route },
             geometry: route.geometries.nodes[0].geometry,
           };
         })
         .filter((route) =>
           this.props.selectedRoutes.includes(
-            `${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}`
+            `${route.properties.name}_${route.properties.routeId}_${route.properties.direction}_${route.properties.dateBegin}_${route.properties.dateEnd}`
           )
         );
 

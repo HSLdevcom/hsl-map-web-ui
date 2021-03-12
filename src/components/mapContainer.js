@@ -26,6 +26,8 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
   ) {
     lineId
     nameFi
+    dateBegin
+    dateEnd
     routes {
       nodes {
         routeId
@@ -125,15 +127,49 @@ class MapContainer extends Component {
     return lines;
   };
 
+  setUrl = (selectedLines) => {
+    let params = "?";
+    selectedLines.forEach((selectedLine, index) => {
+      const and = index === selectedLines.length - 1 ? "" : "&";
+      const lineId = selectedLine.data.line.lineId;
+      params = `${params}${lineId}[dateBegin]=${selectedLine.data.line.dateBegin}&${lineId}[dateEnd]=${selectedLine.data.line.dateEnd}${and}`;
+    });
+    this.props.history.push(`/map/${params}`);
+  };
+  addLines = async (newLines) => {
+    const existingParams = this.getQueryParamValues(this.props.location.search);
+    newLines.forEach((newLine) => {
+      existingParams.push({
+        lineId: newLine.lineId,
+        dateBegin: newLine.dateBegin,
+        dateEnd: newLine.dateEnd,
+      });
+    });
+
+    let params = "?";
+    existingParams.forEach((param, index) => {
+      const and = index === existingParams.length - 1 ? "" : "&";
+      const lineId = param.lineId;
+      params = `${params}${lineId}[dateBegin]=${param.dateBegin}&${lineId}[dateEnd]=${param.dateEnd}${and}`;
+    });
+
+    this.props.history.push(`/map/${params}`);
+
+    const lines = await this.getLines(existingParams);
+    this.setState({ lines });
+  };
+
   render() {
     if (!this.state || !this.state.lines) {
       return null;
     }
     const mapProps = this.state.lines.map((lineData) => {
       const line = lineData.data.line;
+      const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return {
         lineId: line.lineId,
         nameFi: line.nameFi,
+        lineKey: lineKey,
         transportType: getTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
@@ -147,7 +183,18 @@ class MapContainer extends Component {
         ),
       };
     });
-    return <Map mapProps={mapProps} />;
+    mapProps.removeSelectedLine = (line) => {
+      const lineKey = `${line.lineId}${line.lineNameFi}`;
+      const currentLines = this.state.lines;
+      const newLines = currentLines.filter((currentLine) => {
+        const currentLineKey = `${currentLine.data.line.lineId}${currentLine.data.line.nameFi}`;
+        if (currentLineKey !== lineKey) return currentLine;
+      });
+      this.setUrl(newLines);
+      this.setState({ lines: newLines });
+    };
+
+    return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }
 export default inject("lineStore")(observer(MapContainer));
