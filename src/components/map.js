@@ -3,11 +3,23 @@ import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
 import styles from "./map.module.css";
 
+const COLORS = [
+  "66B2FF",
+  "FF3333",
+  "10864B",
+  "CDB100",
+  "1D80B2",
+  "6600CC",
+  "F7922D",
+  "DC00DC",
+];
+
 class Map extends React.Component {
   constructor() {
     super();
     this.state = {
       selectedRoutes: [],
+      routeColorSchema: {},
       showFilterFullScreen: false,
       isFullScreen: false,
       center: null,
@@ -22,7 +34,19 @@ class Map extends React.Component {
     this.setState({ center });
   }
 
+  addToColorMap(route) {
+    const routeColorSchema = this.state.routeColorSchema;
+    if (routeColorSchema[route]) return;
+
+    const routeColorSchemaValues = Object.values(routeColorSchema);
+    const routeColor = `#${COLORS[routeColorSchemaValues.length % COLORS.length]}`;
+    routeColorSchema[route] = routeColor;
+    this.setState({ routeColorSchema });
+  }
+
   addSelection(route) {
+    this.addToColorMap(route);
+
     this.setState({
       selectedRoutes: this.state.selectedRoutes.concat(route),
     });
@@ -52,21 +76,38 @@ class Map extends React.Component {
     } else this.addSelection(e.target.value);
   }
 
+  coloredRoutes(routes) {
+    const colorSchema = this.state.routeColorSchema;
+    routes.forEach((route, index) => {
+      const routeId = `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`;
+      route.color = colorSchema[routeId];
+    });
+    return routes;
+  }
+
   render() {
     let routes = [];
     this.props.mapProps.forEach((props) => {
-      routes = routes.concat(props.lineRoutes);
+      const lineRoutes = props.lineRoutes.map((route) => {
+        route.name = props.nameFi;
+        return route;
+      });
+
+      routes = routes.concat(lineRoutes);
     });
     const lines = this.props.mapProps.map((props) => {
       return {
+        lineId: props.lineId,
+        lineKey: props.lineKey,
         transportType: props.transportType,
         lineNumber: props.lineNumber,
-        lineNameFi: props.lineNameFi,
+        lineNameFi: props.nameFi,
         routes: props.lineRoutes,
         notes: props.notes,
       };
     });
 
+    const coloredRoutes = this.coloredRoutes(routes);
     return (
       <div className={styles.root}>
         <Sidebar
@@ -78,10 +119,12 @@ class Map extends React.Component {
           toggleFilter={this.routeFilterToggleFilter}
           notes={lines.notes}
           setMapCenter={this.setMapCenter}
+          removeSelectedLine={this.props.mapProps.removeSelectedLine}
+          onAddLines={this.props.onAddLines}
         />
         <MapLeaflet
           center={this.state.center}
-          routes={routes}
+          routes={coloredRoutes}
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}
           toggleFullscreen={this.mapLeafletToggleFullscreen}

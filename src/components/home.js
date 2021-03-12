@@ -59,7 +59,7 @@ class Home extends React.Component {
       <div>
         <Header />
         <div className={styles.root}>
-          <LineList />
+          <LineList frontpage={true} />
         </div>
         <div className={styles.buttonContainer}>
           <div

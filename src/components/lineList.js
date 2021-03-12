@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
+import CircularProgress from "material-ui/CircularProgress";
 import Line from "./line";
 import LineSearch from "./lineSearch";
 import gql from "graphql-tag";
@@ -109,18 +110,48 @@ const LineList = inject("lineStore")(
       return isSelected;
     };
 
+    const isIgnoredLine = (line) => {
+      if (!props.ignoredLines) {
+        return true;
+      }
+      const ignoredLineKeys = props.ignoredLines.map(
+        (ignoredLine) => ignoredLine.lineKey
+      );
+      const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
+      return !ignoredLineKeys.includes(lineKey);
+    };
+
     return (
       <div>
-        <h3>Reitit</h3>
+        {!props.hideTitle && (
+          <div className={styles.titleContainer}>
+            <h3>Reitit</h3>
+          </div>
+        )}
+
         <LineSearch query={query} onChange={updateQuery} />
         <Query query={allLinesQuery}>
           {({ data }) => {
+            if (!data.allLines) {
+              return (
+                <div
+                  className={`${
+                    props.frontpage ? styles.frontpageLoading : styles.loading
+                  }`}>
+                  <CircularProgress
+                    size={200}
+                    style={{ display: "block", margin: "auto" }}
+                  />
+                </div>
+              );
+            }
             const lines = get(data, "allLines.nodes", []);
             const queries = query.toLowerCase().split(",");
             return lines
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
+              .filter((line) => isIgnoredLine(line))
               .map(setTransportTypeMapper)
               .map(lineNumberMapper)
               .sort(linesSorter)

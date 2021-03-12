@@ -34,28 +34,31 @@ const RouteFilter = (props) => (
             {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
           </p>
           <div className={styles.filterItemsWrapper}>
-            {routeDate.map((route, routeIndex) => (
-              <RouteFilterItem
-                key={`routeFilterItem_${dateIndex * routeDate.length + routeIndex}`}
-                routeID={route.routeId}
-                routeDirection={route.direction}
-                routeDateBegin={route.dateBegin}
-                routeStops={route.routeSegments.nodes
-                  .map((node) => ({
-                    ...node.stop,
-                    duration: node.duration,
-                    stopIndex: node.stopIndex,
-                  }))
-                  .sort((a, b) => a.stopIndex - b.stopIndex)}
-                transportType={props.transportType}
-                isFullScreen={props.isFullScreen}
-                isChecked={props.selectedRoutes.includes(
-                  `${route.routeId}_${route.direction}_${route.dateBegin}`
-                )}
-                onChange={props.toggleChecked}
-                setMapCenter={props.setMapCenter}
-              />
-            ))}
+            {routeDate.map((route, routeIndex) => {
+              const id = `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`;
+              return (
+                <RouteFilterItem
+                  key={`routeFilterItem_${dateIndex * routeDate.length + routeIndex}`}
+                  id={id}
+                  routeID={route.routeId}
+                  routeDirection={route.direction}
+                  routeDateBegin={route.dateBegin}
+                  routeStops={route.routeSegments.nodes
+                    .map((node) => ({
+                      ...node.stop,
+                      duration: node.duration,
+                      stopIndex: node.stopIndex,
+                    }))
+                    .sort((a, b) => a.stopIndex - b.stopIndex)}
+                  transportType={props.transportType}
+                  isFullScreen={props.isFullScreen}
+                  isChecked={props.selectedRoutes.includes(id)}
+                  onChange={props.toggleChecked}
+                  setMapCenter={props.setMapCenter}
+                  color={route.color}
+                />
+              );
+            })}
           </div>
         </div>
       ))}
