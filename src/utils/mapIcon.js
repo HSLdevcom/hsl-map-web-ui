@@ -1,6 +1,6 @@
 import L from "leaflet";
 
-export function routeIcon(iconUrl) {
+export function mapIcon(iconUrl) {
   return L.icon({
     iconSize: [30, 30],
     iconAnchor: [15, 30],

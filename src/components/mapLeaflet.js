@@ -2,11 +2,12 @@ import React from "react";
 import classNames from "classnames";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { routeIcon, stopIcon } from "../utils/mapIcon";
+import { mapIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
 import startIcon2 from "../icons/icon-suunta2.svg";
 import timeIcon1 from "../icons/icon-time1.svg";
 import timeIcon2 from "../icons/icon-time2.svg";
+import userLocationIcon from "../icons/icon-user-location.svg";
 import locationIconOnline from "../icons/icon-location-online.svg";
 import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
@@ -26,9 +27,9 @@ const addMarkersToLayer = (stops, direction, map) => {
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
-      icon = routeIcon(startIcon);
+      icon = mapIcon(startIcon);
     } else if (stop.timingStopType > 0) {
-      icon = routeIcon(timeIcon);
+      icon = mapIcon(timeIcon);
     } else {
       icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
     }
@@ -147,7 +148,8 @@ class MapLeaflet extends React.Component {
     super(props);
     this.state = {
       locationOn: false,
-      locationMarker: null
+      locationMarker: null,
+      locationFound: false,
     }
 
     this.map = null;
@@ -160,7 +162,7 @@ class MapLeaflet extends React.Component {
     this.initializeMap();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // All layers except the base layer are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) this.map.removeLayer(layer);
@@ -170,6 +172,7 @@ class MapLeaflet extends React.Component {
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
       prevProps.selectedRoutes.length < 1 &&
+      this.props.selectedRoutes.length > 0 &&
       this.props.routes &&
       this.props.routes[0]
     ) {
@@ -182,6 +185,11 @@ class MapLeaflet extends React.Component {
 
     if (prevProps.center !== this.props.center) {
       this.map.panTo(this.props.center);
+    }
+
+    // Zoom to the user location once, when the signal is received
+    if (!prevState.locationFound && this.state.locationFound) {
+      this.map.panTo(this.state.locationMarker.getLatLng());
     }
 
     this.addLayersToMap(this.map);
@@ -197,25 +205,32 @@ class MapLeaflet extends React.Component {
 
   toggleLocation() {
     const nextLocationOn = !this.state.locationOn;
-    let locationMarker;
 
     if (nextLocationOn) {
-      locationMarker = L.circleMarker([0,0], { radius: 8, fillOpacity: 1, interactive: false, color: "#ffffff", fillColor: "#3388ff" });
-      this.map.on("locationfound", (e) => { locationMarker.setLatLng(e.latlng); });
-      this.map.on("locationerror", (e) => { alert("Sijantia ei voitu määrittää. Tarkista selaimen ja laitteen asetukset.") });
+      const locationMarker = L.marker([0,0], { icon: mapIcon(userLocationIcon) });
+      this.map.on("locationfound", (e) => { 
+        locationMarker.setLatLng(e.latlng); 
+        if (!this.state.locationFound) this.setState({ locationFound: true });
+      });
+      this.map.on("locationerror", (e) => { 
+        alert("Sijantia ei voitu määrittää. Tarkista selaimen ja laitteen asetukset.");
+      });
       this.map.locate({ watch: true });
+      this.setState({
+        locationOn: nextLocationOn,
+        locationMarker: locationMarker
+      });
+
     } else {
-      locationMarker = null;
       this.map.off("locationfound");
       this.map.off("locationerror");
       this.map.stopLocate();
+      this.setState({ 
+        locationOn: nextLocationOn,
+        locationMarker: null,
+        locationFound: false
+      });
     }
-
-    this.setState({
-      locationOn: nextLocationOn,
-      locationMarker: locationMarker
-    })
-
     return nextLocationOn;
   }
 
