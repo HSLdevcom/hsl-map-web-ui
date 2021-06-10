@@ -126,6 +126,7 @@ class Map extends React.Component {
         />
         <MapLeaflet
           center={this.state.center}
+          setMapCenter={this.setMapCenter}
           routes={coloredRoutes}
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}

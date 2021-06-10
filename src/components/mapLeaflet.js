@@ -87,6 +87,7 @@ const addControlButton = (map, toggleFullscreen) => {
       container.onclick = () => {
         icon.src = toggleFullscreen() ? fullScreenExitIcon : fullScreenEnterIcon;
       };
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });
@@ -109,6 +110,7 @@ const addLocationButton = (map, toggleLocation) => {
       container.onclick = () => {
         icon.src = toggleLocation() ? locationIconOnline : locationIconOffline;
       };
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });
@@ -149,10 +151,10 @@ class MapLeaflet extends React.Component {
     this.state = {
       locationOn: false,
       locationMarker: null,
-      locationFound: false,
     }
 
     this.map = null;
+    this.locationFound = false; // Class variable, because this doesn't affect the rendering.
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
     this.toggleLocation = this.toggleLocation.bind(this);
@@ -187,11 +189,6 @@ class MapLeaflet extends React.Component {
       this.map.panTo(this.props.center);
     }
 
-    // Zoom to the user location once, when the signal is received
-    if (!prevState.locationFound && this.state.locationFound) {
-      this.map.panTo(this.state.locationMarker.getLatLng());
-    }
-
     this.addLayersToMap(this.map);
 
     // Add location marker to map if user location is on
@@ -209,8 +206,12 @@ class MapLeaflet extends React.Component {
     if (nextLocationOn) {
       const locationMarker = L.marker([0,0], { icon: mapIcon(userLocationIcon) });
       this.map.on("locationfound", (e) => { 
-        locationMarker.setLatLng(e.latlng); 
-        if (!this.state.locationFound) this.setState({ locationFound: true });
+        locationMarker.setLatLng(e.latlng);
+        // Update map only once when the location is received first time.
+        if (!this.locationFound) {
+          this.locationFound = true;
+          this.props.setMapCenter(e.latlng);
+        }
       });
       this.map.on("locationerror", (e) => { 
         alert("Sijantia ei voitu määrittää. Tarkista selaimen ja laitteen asetukset.");
@@ -225,10 +226,10 @@ class MapLeaflet extends React.Component {
       this.map.off("locationfound");
       this.map.off("locationerror");
       this.map.stopLocate();
+      this.locationFound = false;
       this.setState({ 
         locationOn: nextLocationOn,
         locationMarker: null,
-        locationFound: false
       });
     }
     return nextLocationOn;
