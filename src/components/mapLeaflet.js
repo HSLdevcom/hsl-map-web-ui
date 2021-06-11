@@ -173,15 +173,20 @@ class MapLeaflet extends React.Component {
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
-      prevProps.selectedRoutes.length < 1 &&
       this.props.selectedRoutes.length > 0 &&
+      prevProps.selectedRoutes.length !== this.props.selectedRoutes.length &&
       this.props.routes &&
       this.props.routes[0]
     ) {
-      const arrBounds = this.props.routes[0].routeSegments.nodes.map(({ stop }) => [
-        stop.lat,
-        stop.lon,
-      ]);
+
+      const selected = this.props.routes.filter(r => this.props.selectedRoutes.includes(r.id));
+      const arrBounds = selected.reduce((acc, curr) => 
+        acc.concat(curr.routeSegments.nodes.map(({ stop }) => [
+          stop.lat,
+          stop.lon,
+        ])), []
+      );
+
       this.map.fitBounds(arrBounds);
     }
 
