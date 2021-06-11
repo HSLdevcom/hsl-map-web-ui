@@ -37,7 +37,7 @@
   height: 100%;
 }
 
-.fullScreenButton {
+.controlButton {
   background-color: white;
   width: 26px;
   height: 26px;
@@ -47,10 +47,10 @@
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
 }
 
-.fullScreenButton img {
+.controlButton img {
   padding-top: 4px;
 }
 
-.fullScreenButton:hover {
+.controlButton:hover {
   background-color: #f4f4f4 !important;
 }
