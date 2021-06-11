@@ -2,11 +2,14 @@ import React from "react";
 import classNames from "classnames";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { routeIcon, stopIcon } from "../utils/mapIcon";
+import { mapIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
 import startIcon2 from "../icons/icon-suunta2.svg";
 import timeIcon1 from "../icons/icon-time1.svg";
 import timeIcon2 from "../icons/icon-time2.svg";
+import userLocationIcon from "../icons/icon-user-location.svg";
+import locationIconOnline from "../icons/icon-location-online.svg";
+import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import styles from "./mapLeaflet.module.css";
@@ -24,9 +27,9 @@ const addMarkersToLayer = (stops, direction, map) => {
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
-      icon = routeIcon(startIcon);
+      icon = mapIcon(startIcon);
     } else if (stop.timingStopType > 0) {
-      icon = routeIcon(timeIcon);
+      icon = mapIcon(timeIcon);
     } else {
       icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
     }
@@ -79,16 +82,40 @@ const addControlButton = (map, toggleFullscreen) => {
       icon.src = fullScreenEnterIcon;
       icon.height = "11";
       icon.width = "11";
-      container.className = styles.fullScreenButton;
+      container.className = styles.controlButton;
       container.appendChild(icon);
       container.onclick = () => {
         icon.src = toggleFullscreen() ? fullScreenExitIcon : fullScreenEnterIcon;
       };
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });
   map.addControl(new FullScreenControl());
 };
+
+const addLocationButton = (map, toggleLocation) => {
+  const LocationControl = L.Control.extend({
+    options: {
+      position: "topleft",
+    },
+    onAdd: () => {
+      const icon = L.DomUtil.create("img");
+      const container = L.DomUtil.create("button", "leaflet-bar leaflet-control");
+      icon.src = locationIconOffline;
+      icon.height = "11";
+      icon.width = "11";
+      container.className = styles.controlButton;
+      container.appendChild(icon);
+      container.onclick = () => {
+        icon.src = toggleLocation() ? locationIconOnline : locationIconOffline;
+      };
+      L.DomEvent.disableClickPropagation(container);
+      return container;
+    },
+  });
+  map.addControl(new LocationControl());
+}
 
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
@@ -119,19 +146,25 @@ const updateFilterLayer = (isFullScreen) => {
 };
 
 class MapLeaflet extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      locationOn: false,
+      locationMarker: null,
+    }
 
     this.map = null;
+    this.locationFound = false; // Class variable, because this doesn't affect the rendering.
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
+    this.toggleLocation = this.toggleLocation.bind(this);
   }
 
   componentDidMount() {
     this.initializeMap();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     // All layers except the base layer are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) this.map.removeLayer(layer);
@@ -141,6 +174,7 @@ class MapLeaflet extends React.Component {
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
       prevProps.selectedRoutes.length < 1 &&
+      this.props.selectedRoutes.length > 0 &&
       this.props.routes &&
       this.props.routes[0]
     ) {
@@ -156,8 +190,49 @@ class MapLeaflet extends React.Component {
     }
 
     this.addLayersToMap(this.map);
+
+    // Add location marker to map if user location is on
+    if (this.state.locationOn === true && this.state.locationMarker) {
+      this.state.locationMarker.addTo(this.map)
+    }
+
     updateFilterLayer(this.props.isFullScreen);
     this.map.invalidateSize();
+  }
+
+  toggleLocation() {
+    const nextLocationOn = !this.state.locationOn;
+
+    if (nextLocationOn) {
+      const locationMarker = L.marker([0,0], { icon: mapIcon(userLocationIcon) });
+      this.map.on("locationfound", (e) => { 
+        locationMarker.setLatLng(e.latlng);
+        // Update map only once when the location is received first time.
+        if (!this.locationFound) {
+          this.locationFound = true;
+          this.props.setMapCenter(e.latlng);
+        }
+      });
+      this.map.on("locationerror", (e) => { 
+        alert("Sijantia ei voitu määrittää. Tarkista selaimen ja laitteen asetukset.");
+      });
+      this.map.locate({ watch: true });
+      this.setState({
+        locationOn: nextLocationOn,
+        locationMarker: locationMarker
+      });
+
+    } else {
+      this.map.off("locationfound");
+      this.map.off("locationerror");
+      this.map.stopLocate();
+      this.locationFound = false;
+      this.setState({ 
+        locationOn: nextLocationOn,
+        locationMarker: null,
+      });
+    }
+    return nextLocationOn;
   }
 
   initializeMap() {
@@ -179,6 +254,7 @@ class MapLeaflet extends React.Component {
     ).addTo(this.map);
 
     addControlButton(this.map, this.props.toggleFullscreen);
+    addLocationButton(this.map, this.toggleLocation );
     addRouteFilterLayer(this.map);
   }
 

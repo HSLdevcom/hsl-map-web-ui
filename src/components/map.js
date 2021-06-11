@@ -59,9 +59,11 @@ class Map extends React.Component {
   }
 
   mapLeafletToggleFullscreen() {
+    const nextIsFullScreen = !this.state.isFullScreen;
     this.setState({
-      isFullScreen: !this.state.isFullScreen,
+      isFullScreen: nextIsFullScreen,
     });
+    return nextIsFullScreen;
   }
 
   routeFilterToggleFilter() {
@@ -124,6 +126,7 @@ class Map extends React.Component {
         />
         <MapLeaflet
           center={this.state.center}
+          setMapCenter={this.setMapCenter}
           routes={coloredRoutes}
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}
