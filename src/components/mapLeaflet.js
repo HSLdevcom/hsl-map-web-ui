@@ -174,7 +174,7 @@ class MapLeaflet extends React.Component {
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
       this.props.selectedRoutes.length > 0 &&
-      prevProps.selectedRoutes.length !== this.props.selectedRoutes.length &&
+      this.props.selectedRoutes.length > prevProps.selectedRoutes.length &&
       this.props.routes &&
       this.props.routes[0]
     ) {
