@@ -81,34 +81,30 @@ class Map extends React.Component {
   coloredRoutes(routes) {
     const colorSchema = this.state.routeColorSchema;
     routes.forEach((route, index) => {
-      const routeId = `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`;
-      route.color = colorSchema[routeId];
+      route.color = colorSchema[route.id];
     });
     return routes;
   }
 
   render() {
-    let routes = [];
-    this.props.mapProps.forEach((props) => {
-      const lineRoutes = props.lineRoutes.map((route) => {
-        route.name = props.nameFi;
-        return route;
-      });
-
-      routes = routes.concat(lineRoutes);
-    });
     const lines = this.props.mapProps.map((props) => {
+      const routes = props.lineRoutes.map((r) => ({
+        ...r, 
+        name: props.nameFi, 
+        id: `${props.nameFi}_${r.routeId}_${r.direction}_${r.dateBegin}_${r.dateEnd}`
+      }));
       return {
         lineId: props.lineId,
         lineKey: props.lineKey,
         transportType: props.transportType,
         lineNumber: props.lineNumber,
         lineNameFi: props.nameFi,
-        routes: props.lineRoutes,
+        routes: routes,
         notes: props.notes,
       };
     });
 
+    const routes = lines.reduce(( acc, curr ) => acc.concat(curr.routes), [])
     const coloredRoutes = this.coloredRoutes(routes);
     return (
       <div className={styles.root}>

@@ -35,11 +35,10 @@ const RouteFilter = (props) => (
           </p>
           <div className={styles.filterItemsWrapper}>
             {routeDate.map((route, routeIndex) => {
-              const id = `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`;
               return (
                 <RouteFilterItem
                   key={`routeFilterItem_${dateIndex * routeDate.length + routeIndex}`}
-                  id={id}
+                  id={route.id}
                   routeID={route.routeId}
                   routeDirection={route.direction}
                   routeDateBegin={route.dateBegin}
@@ -52,7 +51,7 @@ const RouteFilter = (props) => (
                     .sort((a, b) => a.stopIndex - b.stopIndex)}
                   transportType={props.transportType}
                   isFullScreen={props.isFullScreen}
-                  isChecked={props.selectedRoutes.includes(id)}
+                  isChecked={props.selectedRoutes.includes(route.id)}
                   onChange={props.toggleChecked}
                   setMapCenter={props.setMapCenter}
                   color={route.color}
