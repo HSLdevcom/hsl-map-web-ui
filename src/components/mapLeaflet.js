@@ -125,9 +125,10 @@ const addRouteFilterLayer = (map) => {
     onAdd: () => {
       const container = L.DomUtil.create(
         "div",
-        "leaflet-bar leaflet-control leaflet-control-bottomright"
+        "leaflet-bar leaflet-control leaflet-control-bottomright " + styles.filterArea 
       );
       L.DomEvent.disableScrollPropagation(container);
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });

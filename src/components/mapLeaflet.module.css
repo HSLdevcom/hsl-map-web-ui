@@ -54,3 +54,8 @@
 .controlButton:hover {
   background-color: #f4f4f4 !important;
 }
+
+.filterArea {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
