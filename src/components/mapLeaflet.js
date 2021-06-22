@@ -125,9 +125,10 @@ const addRouteFilterLayer = (map) => {
     onAdd: () => {
       const container = L.DomUtil.create(
         "div",
-        "leaflet-bar leaflet-control leaflet-control-bottomright"
+        "leaflet-bar leaflet-control leaflet-control-bottomright " + styles.filterArea 
       );
       L.DomEvent.disableScrollPropagation(container);
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });
@@ -135,14 +136,22 @@ const addRouteFilterLayer = (map) => {
 };
 
 const updateFilterLayer = (isFullScreen) => {
-  if (isFullScreen)
-    document
-      .getElementsByClassName("leaflet-control-bottomright")[0]
-      .appendChild(document.getElementById("route-filter"));
-  else
-    document
-      .getElementById("map-container")
-      .appendChild(document.getElementById("route-filter"));
+  // This function moves all routeFilters from sidebar to map and vice versa
+  if (isFullScreen) {
+    for (const node of document.querySelectorAll(".route-filter")) {
+      document
+        .getElementsByClassName("leaflet-control-bottomright")[0]
+        .appendChild(node);
+    }
+  } else {
+    for (const node of document.querySelectorAll(".route-filter")) {
+      // Connect right routefilters to their lines by this id
+      const lineIdPrefix = node.id.match(/_\d*/)
+      document
+        .getElementById("map-container" + lineIdPrefix)
+        .appendChild(node);
+    }
+  }
 };
 
 class MapLeaflet extends React.Component {

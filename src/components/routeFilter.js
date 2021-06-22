@@ -12,15 +12,17 @@ const parseDate = (date) => {
 
 const RouteFilter = (props) => (
   <div
-    id="route-filter"
+    // LineId is used when changing fullscreen mode and moving routes in and out the sidebar.
+    id={"route-filter_" + props.lineId} 
     className={classNames(
+      "route-filter",
       styles.root,
       { [styles.filterContainerFullScreen]: props.isFullScreen },
       {
         [styles.filterContainerHideFilter]: props.isFullScreen && !props.showFilter,
       }
     )}>
-    {props.isFullScreen ? (
+    {props.isFullScreen && props.routeIndex === 0 ? (
       <ExpandButton
         onClick={props.toggleFilter}
         labelText="Valitse reitit"
