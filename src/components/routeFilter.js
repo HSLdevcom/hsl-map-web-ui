@@ -22,7 +22,7 @@ const RouteFilter = (props) => (
         [styles.filterContainerHideFilter]: props.isFullScreen && !props.showFilter,
       }
     )}>
-    {props.isFullScreen ? (
+    {props.isFullScreen && props.routeIndex === 0 ? (
       <ExpandButton
         onClick={props.toggleFilter}
         labelText="Valitse reitit"

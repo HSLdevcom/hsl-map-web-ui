@@ -118,6 +118,7 @@ class Sidebar extends React.Component {
               </div>
               <div id={"map-container_" + line.lineId} className="map-container">
                 <RouteFilter
+                  routeIndex={index}
                   lineId={line.lineId}
                   transportType={line.transportType}
                   lineName={line.lineNameFi}

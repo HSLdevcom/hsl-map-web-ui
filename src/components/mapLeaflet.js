@@ -138,18 +138,18 @@ const addRouteFilterLayer = (map) => {
 const updateFilterLayer = (isFullScreen) => {
   // This function moves all routeFilters from sidebar to map and vice versa
   if (isFullScreen) {
-    for (const node of document.getElementsByClassName("route-filter")) {
+    for (const node of document.querySelectorAll(".route-filter")) {
       document
         .getElementsByClassName("leaflet-control-bottomright")[0]
-        .appendChild(node)
+        .appendChild(node);
     }
   } else {
-    for (const node of document.getElementsByClassName("route-filter")) {
+    for (const node of document.querySelectorAll(".route-filter")) {
       // Connect right routefilters to their lines by this id
       const lineIdPrefix = node.id.match(/_\d*/)
       document
         .getElementById("map-container" + lineIdPrefix)
-        .appendChild(node)
+        .appendChild(node);
     }
   }
 };
