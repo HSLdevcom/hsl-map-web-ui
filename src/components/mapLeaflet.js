@@ -115,7 +115,7 @@ const addLocationButton = (map, toggleLocation) => {
     },
   });
   map.addControl(new LocationControl());
-}
+};
 
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
@@ -125,9 +125,10 @@ const addRouteFilterLayer = (map) => {
     onAdd: () => {
       const container = L.DomUtil.create(
         "div",
-        "leaflet-bar leaflet-control leaflet-control-bottomright"
+        "leaflet-bar leaflet-control leaflet-control-bottomright " + styles.filterArea
       );
       L.DomEvent.disableScrollPropagation(container);
+      L.DomEvent.disableClickPropagation(container);
       return container;
     },
   });
@@ -135,14 +136,18 @@ const addRouteFilterLayer = (map) => {
 };
 
 const updateFilterLayer = (isFullScreen) => {
-  if (isFullScreen)
-    document
-      .getElementsByClassName("leaflet-control-bottomright")[0]
-      .appendChild(document.getElementById("route-filter"));
-  else
-    document
-      .getElementById("map-container")
-      .appendChild(document.getElementById("route-filter"));
+  // This function moves all routeFilters from sidebar to map and vice versa
+  if (isFullScreen) {
+    for (const node of document.querySelectorAll(".route-filter")) {
+      document.getElementsByClassName("leaflet-control-bottomright")[0].appendChild(node);
+    }
+  } else {
+    for (const node of document.querySelectorAll(".route-filter")) {
+      // Connect right routefilters to their lines by this id
+      const lineIdPrefix = node.id.match(/_\d+.*/);
+      document.getElementById("map-container" + lineIdPrefix).appendChild(node);
+    }
+  }
 };
 
 class MapLeaflet extends React.Component {
@@ -151,7 +156,7 @@ class MapLeaflet extends React.Component {
     this.state = {
       locationOn: false,
       locationMarker: null,
-    }
+    };
 
     this.map = null;
     this.locationFound = false; // Class variable, because this doesn't affect the rendering.
@@ -173,15 +178,20 @@ class MapLeaflet extends React.Component {
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
-      prevProps.selectedRoutes.length < 1 &&
       this.props.selectedRoutes.length > 0 &&
+      this.props.selectedRoutes.length > prevProps.selectedRoutes.length &&
       this.props.routes &&
       this.props.routes[0]
     ) {
-      const arrBounds = this.props.routes[0].routeSegments.nodes.map(({ stop }) => [
-        stop.lat,
-        stop.lon,
-      ]);
+      const selected = this.props.routes.filter((r) =>
+        this.props.selectedRoutes.includes(r.id)
+      );
+      const arrBounds = selected.reduce(
+        (acc, curr) =>
+          acc.concat(curr.routeSegments.nodes.map(({ stop }) => [stop.lat, stop.lon])),
+        []
+      );
+
       this.map.fitBounds(arrBounds);
     }
 
@@ -193,7 +203,7 @@ class MapLeaflet extends React.Component {
 
     // Add location marker to map if user location is on
     if (this.state.locationOn === true && this.state.locationMarker) {
-      this.state.locationMarker.addTo(this.map)
+      this.state.locationMarker.addTo(this.map);
     }
 
     updateFilterLayer(this.props.isFullScreen);
@@ -204,8 +214,8 @@ class MapLeaflet extends React.Component {
     const nextLocationOn = !this.state.locationOn;
 
     if (nextLocationOn) {
-      const locationMarker = L.marker([0,0], { icon: mapIcon(userLocationIcon) });
-      this.map.on("locationfound", (e) => { 
+      const locationMarker = L.marker([0, 0], { icon: mapIcon(userLocationIcon) });
+      this.map.on("locationfound", (e) => {
         locationMarker.setLatLng(e.latlng);
         // Update map only once when the location is received first time.
         if (!this.locationFound) {
@@ -213,21 +223,20 @@ class MapLeaflet extends React.Component {
           this.props.setMapCenter(e.latlng);
         }
       });
-      this.map.on("locationerror", (e) => { 
+      this.map.on("locationerror", (e) => {
         alert("Sijantia ei voitu määrittää. Tarkista selaimen ja laitteen asetukset.");
       });
       this.map.locate({ watch: true });
       this.setState({
         locationOn: nextLocationOn,
-        locationMarker: locationMarker
+        locationMarker: locationMarker,
       });
-
     } else {
       this.map.off("locationfound");
       this.map.off("locationerror");
       this.map.stopLocate();
       this.locationFound = false;
-      this.setState({ 
+      this.setState({
         locationOn: nextLocationOn,
         locationMarker: null,
       });
@@ -254,7 +263,7 @@ class MapLeaflet extends React.Component {
     ).addTo(this.map);
 
     addControlButton(this.map, this.props.toggleFullscreen);
-    addLocationButton(this.map, this.toggleLocation );
+    addLocationButton(this.map, this.toggleLocation);
     addRouteFilterLayer(this.map);
   }
 
