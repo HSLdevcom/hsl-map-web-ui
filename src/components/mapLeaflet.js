@@ -210,16 +210,11 @@ class MapLeaflet extends React.Component {
     // All layers except the base layer are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) {
-        if (
-          layer.options.type !== "mapillaryGeoJsonLayer" &&
-          layer.options.type !== "mapillaryHighlightMarker" &&
-          !layer._layers
-        ) {
+        if (layer.options.type !== "mapillaryGeoJsonLayer" && !layer._layers) {
           this.map.removeLayer(layer);
         }
       }
     });
-
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
@@ -251,6 +246,14 @@ class MapLeaflet extends React.Component {
       this.state.locationMarker.addTo(this.map);
     }
 
+    if (
+      this.props.selectedRoutes.length === 0 &&
+      !this.state.showMapillaryLayer &&
+      this.state.mapillaryLocation
+    ) {
+      this.setState({ mapillaryLocation: null });
+    }
+
     updateFilterLayer(this.props.isFullScreen);
     this.map.invalidateSize();
   }
@@ -271,6 +274,7 @@ class MapLeaflet extends React.Component {
       return;
     }
 
+    this.map.on("dragend", this.onDrag);
     this.map.off("click", this.onMapClick);
     this.map.off("mousemove", this.onHover);
     this.eventsEnabled = false;
