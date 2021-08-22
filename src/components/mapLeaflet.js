@@ -3,6 +3,12 @@ import classNames from "classnames";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { mapIcon, stopIcon } from "../utils/mapIcon";
+import {
+  closestPointCompareReducer,
+  closestPointInGeometry,
+} from "../utils/closestPoint";
+import { circleMarker } from "leaflet";
+import "mapillary-js/dist/mapillary.min.css";
 import startIcon1 from "../icons/icon-suunta1.svg";
 import startIcon2 from "../icons/icon-suunta2.svg";
 import timeIcon1 from "../icons/icon-time1.svg";
@@ -13,6 +19,7 @@ import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import styles from "./mapLeaflet.module.css";
+import MapillaryViewer from "./MapillaryViewer.js";
 
 const addMarkersToLayer = (stops, direction, map) => {
   /** Sets the correct icon based on direction (1 or 2),
@@ -117,6 +124,29 @@ const addLocationButton = (map, toggleLocation) => {
   map.addControl(new LocationControl());
 };
 
+const addMapillaryButton = (map, initMapillaryLayer) => {
+  const MapillaryControl = L.Control.extend({
+    options: {
+      position: "topleft",
+    },
+    onAdd: () => {
+      const icon = L.DomUtil.create("div");
+      const container = L.DomUtil.create("button", "leaflet-bar leaflet-control");
+      icon.height = "11";
+      icon.width = "11";
+      icon.innerHTML = "M";
+      container.className = styles.controlButton;
+      container.appendChild(icon);
+      container.onclick = () => {
+        initMapillaryLayer();
+      };
+      L.DomEvent.disableClickPropagation(container);
+      return container;
+    },
+  });
+  map.addControl(new MapillaryControl());
+};
+
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
     options: {
@@ -156,6 +186,8 @@ class MapLeaflet extends React.Component {
     this.state = {
       locationOn: false,
       locationMarker: null,
+      showMapillaryLayer: false,
+      mapillaryLocation: null,
     };
 
     this.map = null;
@@ -163,18 +195,26 @@ class MapLeaflet extends React.Component {
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
     this.toggleLocation = this.toggleLocation.bind(this);
+    this.initMapillaryLayer = this.initMapillaryLayer.bind(this);
+    this.bindEvents = this.bindEvents.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onDrag = this.onDrag.bind(this);
   }
 
   componentDidMount() {
     this.initializeMap();
+    this.bindEvents();
   }
 
   componentDidUpdate(prevProps, prevState) {
     // All layers except the base layer are removed when the component is updated
     this.map.eachLayer((layer) => {
-      if (!layer.options.baseLayer) this.map.removeLayer(layer);
+      if (!layer.options.baseLayer) {
+        if (layer.options.type !== "mapillaryGeoJsonLayer" && !layer._layers) {
+          this.map.removeLayer(layer);
+        }
+      }
     });
-
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
@@ -206,8 +246,81 @@ class MapLeaflet extends React.Component {
       this.state.locationMarker.addTo(this.map);
     }
 
+    if (
+      this.props.selectedRoutes.length === 0 &&
+      !this.state.showMapillaryLayer &&
+      this.state.mapillaryLocation
+    ) {
+      this.setState({ mapillaryLocation: null });
+    }
+
     updateFilterLayer(this.props.isFullScreen);
     this.map.invalidateSize();
+  }
+
+  bindEvents = () => {
+    if (!this.map || this.eventsEnabled) {
+      return;
+    }
+
+    this.map.on("dragend", this.onDrag);
+    this.map.on("click", this.onClick);
+    this.map.on("mousemove", this.onHover);
+    this.eventsEnabled = true;
+  };
+
+  unbindEvents = () => {
+    if (!this.map || !this.eventsEnabled) {
+      return;
+    }
+
+    this.map.on("dragend", this.onDrag);
+    this.map.off("click", this.onMapClick);
+    this.map.off("mousemove", this.onHover);
+    this.eventsEnabled = false;
+  };
+
+  removeMarker = () => {
+    if (this.marker) {
+      this.marker.remove();
+      this.marker = null;
+    }
+  };
+
+  componentWillUnmount() {
+    this.unbindEvents();
+    this.removeMarker();
+  }
+
+  async initMapillaryLayer() {
+    if (this.state.showMapillaryLayer) {
+      this.map.eachLayer((layer) => {
+        if (
+          layer.feature &&
+          layer.feature.properties &&
+          layer.feature.properties.camera_make
+        ) {
+          this.map.removeLayer(layer);
+        }
+      });
+      this.setState({ showMapillaryLayer: false });
+      return false;
+    }
+    this.setState({ showMapillaryLayer: true });
+    const data = await this.fetchMapillaryFeatures();
+
+    data.features.forEach((route) => {
+      L.geoJson(route, {
+        type: "mapillaryGeoJsonLayer",
+        style: (feature) => {
+          return {
+            color: "#00b3b3",
+            opacity: 0.8,
+          };
+        },
+      }).addTo(this.map);
+    });
+    return true;
   }
 
   toggleLocation() {
@@ -264,10 +377,11 @@ class MapLeaflet extends React.Component {
 
     addControlButton(this.map, this.props.toggleFullscreen);
     addLocationButton(this.map, this.toggleLocation);
+    addMapillaryButton(this.map, this.initMapillaryLayer);
     addRouteFilterLayer(this.map);
   }
 
-  addLayersToMap() {
+  async addLayersToMap() {
     if (this.props.routes) {
       const selectedStops = this.props.routes.filter((route) =>
         this.props.selectedRoutes.includes(
@@ -295,15 +409,125 @@ class MapLeaflet extends React.Component {
     }
   }
 
+  fetchMapillaryFeatures = async () => {
+    const bounds = this.map.getBounds();
+    const bboxStr = `${bounds
+      .getSouthWest()
+      .lng.toFixed(6)},${bounds
+      .getSouthWest()
+      .lat.toFixed(6)},${bounds
+      .getNorthEast()
+      .lng.toFixed(6)},${bounds.getNorthEast().lat.toFixed(6)}`;
+    const url = `https://a.mapillary.com/v3/sequences?bbox=${bboxStr}&client_id=V2RqRUsxM2dPVFBMdnlhVUliTkM0ZzoxNmI5ZDZhOTc5YzQ2MzEw&per_page=1000&start_time=2019-08-01&organization_keys=mstFdbqROWkgC2sNNU2tZ1`;
+    const request = await fetch(url);
+    const data = await request.json();
+    return data;
+  };
+
+  async onDrag(e) {
+    if (!this.state.showMapillaryLayer) return;
+    const data = await this.fetchMapillaryFeatures();
+    const currentFeatures = {};
+    for (const key in e.target._layers) {
+      const layer = e.target._layers[key];
+      if (layer && layer.feature && layer.feature.properties) {
+        currentFeatures[layer.feature.properties.key] = layer;
+      }
+    }
+    data.features.forEach((feature) => {
+      if (!currentFeatures[feature.properties.key]) {
+        L.geoJson(feature, {
+          type: "mapillaryGeoJsonLayer",
+          style: () => {
+            return {
+              color: "#00b3b3",
+              opacity: 0.8,
+            };
+          },
+        }).addTo(this.map);
+      }
+    });
+  }
+
+  onClick(e) {
+    for (const key in e.target._layers) {
+      const layer = e.target._layers[key];
+      if (layer) {
+        if (layer.options.type === "mapillaryHighlightMarker") {
+          this.setState({ mapillaryLocation: layer._latlng });
+        }
+      }
+    }
+  }
+
+  onHover = (e) => {
+    const { latlng } = e;
+    const features = [];
+    this.map.eachLayer((layer) => {
+      if (layer.feature && layer.feature.geometry) {
+        features.push(layer.feature);
+      }
+    });
+    if (!features.length) {
+      return;
+    }
+
+    // Get the feature closest to where the user is hovering
+    let featurePoint = closestPointCompareReducer(
+      features,
+      (feature) => closestPointInGeometry(latlng, feature.geometry, 200),
+      latlng
+    );
+    this.highlightedLocation = featurePoint;
+
+    featurePoint = featurePoint && !featurePoint.equals(latlng) ? featurePoint : false;
+    this.highlightMapillaryPoint(featurePoint);
+  };
+
+  createMarker = (position) => {
+    return circleMarker(position, {
+      type: "mapillaryHighlightMarker",
+      radius: 4,
+      color: "red",
+    });
+  };
+
+  highlightMapillaryPoint = (position) => {
+    if (this.map && position) {
+      const marker = this.marker || this.createMarker(position);
+      if (!this.marker) {
+        this.marker = marker;
+        this.marker.addTo(this.map);
+      } else {
+        this.marker.setLatLng(position);
+      }
+    } else if (!position) {
+      this.removeMarker();
+    }
+  };
+
+  resetMapillaryLocation = () => {
+    this.setState({ mapillaryLocation: null });
+  };
+
   render() {
-    // Container div (id="map-leaflet") for leaflet map is created
     return (
-      <div
-        id="map-leaflet"
-        className={classNames(styles.root, {
-          [styles.fullScreen]: this.props.isFullScreen,
-        })}
-      />
+      <div className={classNames(styles.container)}>
+        <div
+          id="map-leaflet"
+          className={classNames(styles.root, {
+            [styles.fullScreen]: this.props.isFullScreen,
+          })}
+        />
+        {this.state.mapillaryLocation && (
+          <MapillaryViewer
+            onCloseViewer={this.resetMapillaryLocation}
+            elementId="mly"
+            onNavigation={() => {}}
+            location={this.state.mapillaryLocation}
+          />
+        )}
+      </div>
     );
   }
 }
