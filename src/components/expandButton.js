@@ -10,7 +10,7 @@ const ExpandButton = ({ onClick, labelText, isExpanded }) => (
       [styles.expanded]: isExpanded,
     })}
     onClick={onClick}>
-    <img src={isExpanded ? iconMenuOpen : iconMenuClosed} alt="" height="18" />
+    <img src={isExpanded ? iconMenuClosed : iconMenuOpen} alt="" height="18" />
     <p>{labelText}</p>
   </button>
 );

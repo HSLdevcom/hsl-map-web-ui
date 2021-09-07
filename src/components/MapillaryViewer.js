@@ -24,8 +24,7 @@ const MapillaryViewer = observer(
         if (currentMly) {
           currentMly.setCenter([0.5, 0.675]);
         }
-
-        onNavigation(evt);
+        onNavigation(evt.latLon, currentMly._navigator.playService);
       },
       []
     );
@@ -58,16 +57,21 @@ const MapillaryViewer = observer(
 
       currentMly.setFilter(["==", "organizationKey", "mstFdbqROWkgC2sNNU2tZ1"]);
       currentMly.on(Mapillary.Viewer.nodechanged, createViewerNavigator(currentMly));
-
       mly.current = currentMly;
     }, [mly.current, resizeListener.current]);
 
     const showLocation = useCallback(
       (location) => {
-        if (mly.current && mly.current.isNavigable) {
+        if (
+          mly.current &&
+          mly.current.isNavigable &&
+          !locationEquals(location, prevLocation.current)
+        ) {
           mly.current
             .moveCloseTo(location.lat, location.lng)
-            .then((node) => {})
+            .then((node) => {
+              onNavigation(node.latLon);
+            })
             .catch((err) => console.error(err));
         }
       },
@@ -86,8 +90,18 @@ const MapillaryViewer = observer(
       };
     }, []);
 
+    const locationEquals = (location, prevLocation) => {
+      if (!prevLocation) {
+        return false;
+      }
+      return location.lat == prevLocation.lat && location.lng == prevLocation.lng;
+    };
+
     useEffect(() => {
-      if (location) {
+      if (
+        location &&
+        (!prevLocation.current || !locationEquals(location, prevLocation.current))
+      ) {
         showLocation(location);
         prevLocation.current = location;
       }

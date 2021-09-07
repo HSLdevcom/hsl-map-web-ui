@@ -5,7 +5,7 @@ import styles from "./map.module.css";
 
 const COLORS = [
   "66B2FF",
-  "FF3333",
+  "ff6633",
   "10864B",
   "CDB100",
   "1D80B2",
@@ -89,9 +89,9 @@ class Map extends React.Component {
   render() {
     const lines = this.props.mapProps.map((props) => {
       const routes = props.lineRoutes.map((r) => ({
-        ...r, 
-        name: props.nameFi, 
-        id: `${props.nameFi}_${r.routeId}_${r.direction}_${r.dateBegin}_${r.dateEnd}`
+        ...r,
+        name: props.nameFi,
+        id: `${props.nameFi}_${r.routeId}_${r.direction}_${r.dateBegin}_${r.dateEnd}`,
       }));
       return {
         lineId: props.lineId,
@@ -104,7 +104,7 @@ class Map extends React.Component {
       };
     });
 
-    const routes = lines.reduce(( acc, curr ) => acc.concat(curr.routes), [])
+    const routes = lines.reduce((acc, curr) => acc.concat(curr.routes), []);
     const coloredRoutes = this.coloredRoutes(routes);
     return (
       <div className={styles.root}>
@@ -127,6 +127,7 @@ class Map extends React.Component {
           selectedRoutes={this.state.selectedRoutes}
           isFullScreen={this.state.isFullScreen}
           toggleFullscreen={this.mapLeafletToggleFullscreen}
+          isRouteFilterExpanded={this.state.showFilterFullScreen}
         />
       </div>
     );

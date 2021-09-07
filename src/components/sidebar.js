@@ -61,7 +61,7 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     return (
-      <div className={styles.root}>
+      <div className={this.props.isFullScreen ? styles.hideRoot : styles.root}>
         <Header />
         <div
           className={styles.addLineTitleContainer}

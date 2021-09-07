@@ -78,7 +78,7 @@ const addGeometryLayer = (geometries, map) => {
   });
 };
 
-const addControlButton = (map, toggleFullscreen) => {
+const addControlButton = (map, toggleFullscreen, resetMapillaryLocation) => {
   const FullScreenControl = L.Control.extend({
     options: {
       position: "topleft",
@@ -93,6 +93,7 @@ const addControlButton = (map, toggleFullscreen) => {
       container.appendChild(icon);
       container.onclick = () => {
         icon.src = toggleFullscreen() ? fullScreenExitIcon : fullScreenEnterIcon;
+        resetMapillaryLocation();
       };
       L.DomEvent.disableClickPropagation(container);
       return container;
@@ -150,12 +151,12 @@ const addMapillaryButton = (map, initMapillaryLayer) => {
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
     options: {
-      position: "bottomright",
+      position: "topright",
     },
     onAdd: () => {
       const container = L.DomUtil.create(
         "div",
-        "leaflet-bar leaflet-control leaflet-control-bottomright " + styles.filterArea
+        "leaflet-bar leaflet-control leaflet-control-topright " + styles.filterArea
       );
       L.DomEvent.disableScrollPropagation(container);
       L.DomEvent.disableClickPropagation(container);
@@ -165,11 +166,18 @@ const addRouteFilterLayer = (map) => {
   map.addControl(new RouteFilterControl());
 };
 
-const updateFilterLayer = (isFullScreen) => {
+const updateFilterLayer = (isFullScreen, isRouteFilterExpanded, mapillaryLocation) => {
   // This function moves all routeFilters from sidebar to map and vice versa
+  const routeFilter = document.getElementsByClassName("leaflet-control-topright")[0];
+
   if (isFullScreen) {
+    if (isRouteFilterExpanded && mapillaryLocation) {
+      routeFilter.style.height = "45vh";
+    } else {
+      routeFilter.style.height = null;
+    }
     for (const node of document.querySelectorAll(".route-filter")) {
-      document.getElementsByClassName("leaflet-control-bottomright")[0].appendChild(node);
+      document.getElementsByClassName("leaflet-control-topright")[0].appendChild(node);
     }
   } else {
     for (const node of document.querySelectorAll(".route-filter")) {
@@ -188,6 +196,7 @@ class MapLeaflet extends React.Component {
       locationMarker: null,
       showMapillaryLayer: false,
       mapillaryLocation: null,
+      mapillaryImageLocation: null,
     };
 
     this.map = null;
@@ -199,6 +208,7 @@ class MapLeaflet extends React.Component {
     this.bindEvents = this.bindEvents.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onDrag = this.onDrag.bind(this);
+    this.setMapillaryLocation = this.setMapillaryLocation.bind(this);
   }
 
   componentDidMount() {
@@ -210,7 +220,12 @@ class MapLeaflet extends React.Component {
     // All layers except the base layer are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) {
-        if (layer.options.type !== "mapillaryGeoJsonLayer" && !layer._layers) {
+        if (
+          layer.options.type !== "mapillaryGeoJsonLayer" &&
+          layer.options.type !== "mapillaryImageMarker" &&
+          layer.options.type !== "mapillaryHighlightMarker" &&
+          !layer._layers
+        ) {
           this.map.removeLayer(layer);
         }
       }
@@ -246,15 +261,15 @@ class MapLeaflet extends React.Component {
       this.state.locationMarker.addTo(this.map);
     }
 
-    if (
-      this.props.selectedRoutes.length === 0 &&
-      !this.state.showMapillaryLayer &&
-      this.state.mapillaryLocation
-    ) {
-      this.setState({ mapillaryLocation: null });
+    if (this.props.selectedRoutes.length !== prevProps.selectedRoutes.length) {
+      this.resetMapillaryLocation();
     }
 
-    updateFilterLayer(this.props.isFullScreen);
+    updateFilterLayer(
+      this.props.isFullScreen,
+      this.props.isRouteFilterExpanded,
+      this.state.mapillaryLocation
+    );
     this.map.invalidateSize();
   }
 
@@ -375,7 +390,7 @@ class MapLeaflet extends React.Component {
       }
     ).addTo(this.map);
 
-    addControlButton(this.map, this.props.toggleFullscreen);
+    addControlButton(this.map, this.props.toggleFullscreen, this.resetMapillaryLocation);
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
     addRouteFilterLayer(this.map);
@@ -460,6 +475,36 @@ class MapLeaflet extends React.Component {
     }
   }
 
+  setMapillaryLocation(position, playService) {
+    if (!this.state.mapillaryLocation) {
+      if (playService) {
+        playService.stop();
+      }
+      return;
+    }
+    if (this.imageMarker) {
+      this.imageMarker.remove();
+      this.imageMarker = null;
+    }
+    if (this.map && position) {
+      const marker = this.createMarker({
+        position: position,
+        opacity: 1,
+        type: "mapillaryImageMarker",
+        color: "red",
+      });
+      if (!this.imageMarker) {
+        this.imageMarker = marker;
+        this.imageMarker.addTo(this.map);
+      } else {
+        this.imageMarker.setLatLng(position);
+      }
+    } else if (!position) {
+      this.removeMarker();
+    }
+    this.setState({ mapillaryImageLocation: { lat: position.lat, lng: position.lon } });
+  }
+
   onHover = (e) => {
     const { latlng } = e;
     const features = [];
@@ -484,29 +529,41 @@ class MapLeaflet extends React.Component {
     this.highlightMapillaryPoint(featurePoint);
   };
 
-  createMarker = (position) => {
-    return circleMarker(position, {
-      type: "mapillaryHighlightMarker",
+  createMarker = (options) => {
+    return circleMarker(options.position, {
+      type: options.type,
       radius: 4,
-      color: "red",
+      color: options.color,
+      opacity: options.opacity,
     });
   };
 
   highlightMapillaryPoint = (position) => {
+    if (this.mapillaryHighlightMarker) {
+      this.mapillaryHighlightMarker.remove();
+      this.marker = null;
+    }
+
     if (this.map && position) {
-      const marker = this.marker || this.createMarker(position);
-      if (!this.marker) {
-        this.marker = marker;
-        this.marker.addTo(this.map);
-      } else {
-        this.marker.setLatLng(position);
-      }
+      const marker = this.createMarker({
+        position: position,
+        opacity: 0.25,
+        type: "mapillaryHighlightMarker",
+        color: "red",
+      });
+      this.mapillaryHighlightMarker = marker;
+      this.mapillaryHighlightMarker.addTo(this.map);
     } else if (!position) {
       this.removeMarker();
     }
   };
 
   resetMapillaryLocation = () => {
+    this.map.eachLayer((layer) => {
+      if (!layer.options.baseLayer) {
+        this.map.removeLayer(layer);
+      }
+    });
     this.setState({ mapillaryLocation: null });
   };
 
@@ -523,7 +580,7 @@ class MapLeaflet extends React.Component {
           <MapillaryViewer
             onCloseViewer={this.resetMapillaryLocation}
             elementId="mly"
-            onNavigation={() => {}}
+            onNavigation={this.setMapillaryLocation}
             location={this.state.mapillaryLocation}
           />
         )}

@@ -4,6 +4,10 @@
   overflow-y: auto;
 }
 
+.hideRoot {
+  display: none;
+}
+
 .addLineTitleContainer {
   display: flex;
   justify-content: space-between;
@@ -126,5 +130,9 @@
     min-width: 400px;
     max-width: 400px;
     max-height: 100vh;
+  }
+
+  .hideRoot {
+    display: none;
   }
 }
