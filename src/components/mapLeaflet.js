@@ -373,23 +373,39 @@ class MapLeaflet extends React.Component {
   }
 
   initializeMap() {
-    this.map = L.map("map-leaflet").setView([60.170988, 24.940842], 13);
-
-    L.tileLayer(
+    const baseMapOptions = {
+      maxZoom: 18,
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution:
+        'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      retina: L.retina ? "@2x" : "",
+      baseLayer: true,
+    };
+    const digitransitTileLayer = L.tileLayer(
       "https://digitransit-prod-cdn-origin.azureedge.net/map/v1/hsl-map/{z}/{x}/{y}{retina}.png",
-      {
-        maxZoom: 18,
-        tileSize: 512,
-        zoomOffset: -1,
-        attribution:
-          'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-        retina: L.retina ? "@2x" : "",
-        baseLayer: true,
-      }
-    ).addTo(this.map);
+      baseMapOptions
+    );
 
+    const aerialTileLayer = L.tileLayer(
+      "https://ortophotos.blob.core.windows.net/hsy-map/hsy_tiles2/{z}/{x}/{y}{retina}.jpg",
+      baseMapOptions
+    );
+
+    this.map = L.map("map-leaflet", {
+      center: [60.170988, 24.940842],
+      zoom: 13,
+      layers: [digitransitTileLayer, aerialTileLayer],
+    });
+
+    const baseMaps = {
+      Aerial: aerialTileLayer,
+      Digitransit: digitransitTileLayer,
+    };
+
+    L.control.layers(baseMaps).addTo(this.map);
     addControlButton(this.map, this.props.toggleFullscreen, this.resetMapillaryLocation);
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
