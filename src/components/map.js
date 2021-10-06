@@ -128,6 +128,7 @@ class Map extends React.Component {
           isFullScreen={this.state.isFullScreen}
           toggleFullscreen={this.mapLeafletToggleFullscreen}
           isRouteFilterExpanded={this.state.showFilterFullScreen}
+          restrooms={this.props.mapProps.restrooms}
         />
       </div>
     );
