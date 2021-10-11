@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import L from "leaflet";
+import { first, last } from "lodash";
 import "leaflet/dist/leaflet.css";
 import { mapIcon, stopIcon } from "../utils/mapIcon";
 import startIcon1 from "../icons/icon-suunta1.svg";
@@ -12,9 +13,12 @@ import locationIconOnline from "../icons/icon-location-online.svg";
 import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
+import restroomIcon from "../icons/restroom-solid.svg";
 import styles from "./mapLeaflet.module.css";
 
-const addMarkersToLayer = (stops, direction, map) => {
+const MAX_DISTANCE_TO_RESTROOM = 500;
+
+const addMarkersToLayer = (stops, direction, map, restrooms) => {
   /** Sets the correct icon based on direction (1 or 2),
     and what type of stop (regular, first stop or timing stop) **/
   let startIcon = startIcon1;
@@ -33,14 +37,39 @@ const addMarkersToLayer = (stops, direction, map) => {
     } else {
       icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
     }
-
     const marker = L.marker([stop.lat, stop.lon], { icon });
     marker.bindTooltip(`${stop.shortId} ${stop.nameFi}`, { direction: "top" });
     marker.addTo(map);
   });
+
+  const firstStop = first(stops);
+  const lastStop = last(stops);
+  const firstStopMarkerLatLng = L.marker([firstStop.lat, firstStop.lon]).getLatLng();
+  const lastStopMarkerLatLng = L.marker([lastStop.lat, lastStop.lon]).getLatLng();
+  const closeByRestrooms = [];
+  restrooms.forEach((restroom) => {
+    const restroomMarker = L.marker([restroom.node.lat, restroom.node.lon]).getLatLng();
+    const distanceFromFirstStop = firstStopMarkerLatLng.distanceTo(restroomMarker);
+    const distanceFromLastStop = lastStopMarkerLatLng.distanceTo(restroomMarker);
+    if (
+      distanceFromFirstStop < MAX_DISTANCE_TO_RESTROOM ||
+      distanceFromLastStop < MAX_DISTANCE_TO_RESTROOM
+    ) {
+      closeByRestrooms.push(restroom.node);
+    }
+  });
+
+  closeByRestrooms.forEach((closeByRestroom) => {
+    let icon = mapIcon(restroomIcon);
+    const markerr = L.marker([closeByRestroom.lat, closeByRestroom.lon], { icon });
+    markerr.bindTooltip(`${closeByRestroom.nameFi}, ${closeByRestroom.addressFi}`, {
+      direction: "top",
+    });
+    markerr.addTo(map);
+  });
 };
 
-const addStopLayer = (routes, map, centeredStop) => {
+const addStopLayer = (routes, map, centeredStop, restrooms) => {
   routes.forEach((route) => {
     addMarkersToLayer(
       route.routeSegments.nodes
@@ -53,7 +82,8 @@ const addStopLayer = (routes, map, centeredStop) => {
         }))
         .sort((a, b) => a.stopIndex - b.stopIndex),
       route.direction,
-      map
+      map,
+      restrooms
     );
   });
 };
@@ -290,8 +320,7 @@ class MapLeaflet extends React.Component {
           `${route.name}_${route.routeId}_${route.direction}_${route.dateBegin}_${route.dateEnd}`
         )
       );
-
-      addStopLayer(selectedStops, this.map, this.props.center);
+      addStopLayer(selectedStops, this.map, this.props.center, this.props.restrooms);
 
       const selectedGeometries = this.props.routes
         .map((route) => {
