@@ -68,11 +68,30 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
   }
 }`;
 
+const restroomQuery = `
+  query AllRestrooms {
+    allRestrooms {
+      edges {
+        node {
+          nameFi
+          addressFi
+          type
+          lat
+          lon
+          point
+          dateImported
+        }
+      }
+    }
+  }
+`;
+
 class MapContainer extends Component {
   async componentDidMount() {
     const params = this.getQueryParamValues(this.props.location.search);
     const lines = await this.getLines(params);
-    this.setState({ lines });
+    const restrooms = await this.getRestrooms();
+    this.setState({ lines, restrooms });
   }
 
   queryPromise = async (params) => {
@@ -94,6 +113,18 @@ class MapContainer extends Component {
       paramsArray.map((params) => this.queryPromise(params))
     );
     return lines;
+  };
+
+  getRestrooms = async (params) => {
+    const fetch = createApolloFetch({
+      uri: process.env.REACT_APP_GRAPHQL_URL,
+    });
+    const restrooms = await fetch({
+      query: restroomQuery,
+    });
+    return restrooms.data && restrooms.data.allRestrooms
+      ? restrooms.data.allRestrooms.edges
+      : [];
   };
 
   lineObject = (param, params, index) => {
@@ -193,7 +224,7 @@ class MapContainer extends Component {
       this.setUrl(newLines);
       this.setState({ lines: newLines });
     };
-
+    mapProps.restrooms = this.state.restrooms;
     return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }

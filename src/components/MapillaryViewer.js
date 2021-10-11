@@ -94,7 +94,7 @@ const MapillaryViewer = observer(
       if (!prevLocation) {
         return false;
       }
-      return location.lat == prevLocation.lat && location.lng == prevLocation.lng;
+      return location.lat === prevLocation.lat && location.lng === prevLocation.lng;
     };
 
     useEffect(() => {
