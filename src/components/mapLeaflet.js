@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames";
-import L from "leaflet";
+import L, { Draggable } from "leaflet";
 import { first, last } from "lodash";
 import "leaflet/dist/leaflet.css";
 import { mapIcon, stopIcon } from "../utils/mapIcon";
@@ -428,6 +428,8 @@ class MapLeaflet extends React.Component {
       center: [60.170988, 24.940842],
       zoom: 13,
       layers: [digitransitTileLayer, aerialTileLayer],
+      dragging: true,
+      touchZoom: true,
     });
 
     const baseMaps = {
