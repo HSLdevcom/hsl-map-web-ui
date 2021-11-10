@@ -2,6 +2,10 @@
   padding: var(--contentContainerPadding);
 }
 
+.rootMobile {
+  overflow: hidden;
+}
+
 .button {
   color: #fff;
   text-align: center;
@@ -17,6 +21,11 @@
   width: 350px;
   transition: 0.2s;
   margin-right: 15px;
+  border-radius: 5px;
+}
+
+.buttonMobile {
+  height: 40px;
 }
 
 .disabled {
@@ -39,6 +48,10 @@
   background-color: #eef1f3;
   padding: 15px;
   border-top: 1px solid #dedede;
+}
+
+.buttonContainerMobile {
+  flex-direction: column;
 }
 
 .divider {

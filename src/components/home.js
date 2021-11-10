@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 import Header from "./header";
 import styles from "./home.module.css";
+import { isMobile } from "../utils/browser";
 import { inject, observer } from "mobx-react";
 import LineList from "./lineList";
 
@@ -58,15 +59,20 @@ class Home extends React.Component {
     return (
       <div>
         <Header />
-        <div className={styles.root}>
-          <LineList frontpage={true} />
+        <div className={classnames(styles.root, isMobile ? styles.rootMobile : null)}>
+          <LineList isMobile={isMobile} frontpage={true} />
         </div>
-        <div className={styles.buttonContainer}>
+        <div
+          className={classnames(
+            styles.buttonContainer,
+            isMobile ? styles.buttonContainerMobile : null
+          )}>
           <div
             onClick={this.handleClick}
             className={classnames(
               styles.button,
-              selectedLines.length > 0 ? null : styles.disabled
+              selectedLines.length > 0 ? null : styles.disabled,
+              isMobile ? styles.buttonMobile : null
             )}>
             Siirry karttanäkymään
           </div>

@@ -1,8 +1,19 @@
 .root {
-  height: 150px;
+  height: auto;
   padding: var(--contentContainerPadding);
   background-color: var(--busBlue);
   color: white;
+  z-index: 10;
+}
+
+.rootMobile {
+  display: flex;
+  padding: 10px;
+}
+
+.logoMobile img {
+  height: 30px;
+  display: flex;
 }
 
 .logo img {
@@ -11,4 +22,12 @@
 
 .sectionTitle {
   color: white;
+}
+
+.sectionTitleMobile {
+  display: flex;
+  font-size: 1.3em;
+  margin: 0px;
+  margin-left: 20px;
+  align-items: center;
 }

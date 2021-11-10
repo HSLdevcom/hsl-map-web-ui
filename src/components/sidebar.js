@@ -35,12 +35,21 @@ class Sidebar extends React.Component {
     return shortIds;
   };
 
+  onAddLinesToggle = () => {
+    const showAddLines = this.state.showAddLines;
+    this.setState({ showAddLines: !showAddLines });
+    if (!showAddLines && this.props.isMobile) {
+      // Show drawer when "Lisää linjoja" is clicked
+      this.props.setDrawerHeight(1700);
+    }
+  };
+
   render() {
     const selectedLines = this.props.lineStore.getSelectedLines;
     const headerIcon = (
       <div>
         {this.state.showAddLines ? (
-          <FiChevronUp className={styles.dropdownButton} />
+          <FiChevronUp className={styles.dropdownButtonExpanded} />
         ) : (
           <FiChevronDown className={styles.dropdownButton} />
         )}
@@ -60,24 +69,33 @@ class Sidebar extends React.Component {
       }
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
+    const isMobile = this.props.isMobile;
     return (
       <div className={styles.root}>
-        <Header />
+        {!isMobile && <Header />}
         <div
-          className={styles.addLineTitleContainer}
-          onClick={() => {
-            this.setState({ showAddLines: !this.state.showAddLines });
-          }}>
-          <div className={styles.addLineTitle}>Lisää linjoja</div>
+          className={classnames(
+            styles.addLineTitleContainer,
+            this.state.showAddLines ? styles.addLineTitleContainerExpanded : null
+          )}
+          onClick={() => this.onAddLinesToggle()}>
+          <div
+            className={classnames(
+              styles.addLineTitle,
+              this.state.showAddLines ? styles.addLineTitleExpanded : null
+            )}>
+            Lisää linjoja
+          </div>
           {headerIcon}
         </div>
         <div
           className={classNames(
             styles.sideBarLineList,
-            this.state.showAddLines ? "" : styles.hidden
+            this.state.showAddLines ? "" : styles.hidden,
+            isMobile ? styles.sideBarLineListMobile : null
           )}>
           {this.state.showAddLines && (
-            <LineList hideTitle ignoredLines={this.props.lines} />
+            <LineList hideTitle isMobile={isMobile} ignoredLines={this.props.lines} />
           )}
         </div>
         <div
@@ -110,9 +128,13 @@ class Sidebar extends React.Component {
                         ? this.props.removeSelectedLine(line)
                         : ""
                     }
-                    className={
-                      this.props.lines.length > 1 ? styles.icon : styles.iconDisabled
-                    }
+                    className={classnames(
+                      this.props.lines.length > 1
+                        ? isMobile
+                          ? styles.iconMobile
+                          : styles.icon
+                        : styles.iconDisabled
+                    )}
                   />
                 </div>
               </div>

@@ -6,6 +6,12 @@
   border-radius: 5px;
 }
 
+.divContainerMobile {
+  margin: 5px;
+  padding: 3px 3px 3px 7px;
+  border-radius: 5px;
+}
+
 .loading {
   padding-top: 10vh;
 }
