@@ -40,7 +40,7 @@ class Sidebar extends React.Component {
     this.setState({ showAddLines: !showAddLines });
     if (!showAddLines && this.props.isMobile) {
       // Show drawer when "Lisää linjoja" is clicked
-      this.props.setDrawerHeight(1700);
+      this.props.setDrawerHeight(380);
     }
   };
 

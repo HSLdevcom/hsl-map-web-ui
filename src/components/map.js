@@ -105,11 +105,9 @@ class Map extends React.Component {
   }
 
   setDrawerHeight = (height) => {
-    this.refs.drawer.scrollTop = 500;
-    console.log(this.refs.drawer.scrollTop);
-    // if (this.refs.drawer.scrollTop < height) {
-    //   this.refs.drawer.scrollTop = height;
-    // }
+    if (this.refs.drawer.scrollTop < height) {
+      this.refs.drawer.scrollTop = height;
+    }
   };
 
   render() {
