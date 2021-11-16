@@ -44,7 +44,7 @@ const MapillaryViewer = observer(
       window.addEventListener("resize", currentResizeListener);
       resizeListener.current = currentResizeListener;
 
-      currentMly.setFilter(["==", "organizationKey", "mstFdbqROWkgC2sNNU2tZ1"]);
+      currentMly.setFilter(["==", "organizationKey", "227572519135262"]);
       currentMly.on("image", (evt) => onNavigation(evt.image.lngLat));
       mly.current = currentMly;
     }, [mly.current, resizeListener.current]);

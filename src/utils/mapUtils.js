@@ -6,7 +6,7 @@ export async function getClosestMapillaryImage({ lat, lng }) {
   const maxx = lat + latOffset;
   const maxy = lng + lngOffset;
   const authResponse = await fetch(
-    `https://graph.mapillary.com/images?fields=id,geometry&bbox=${miny},${minx},${maxy},${maxx}&limit=100`,
+    `https://graph.mapillary.com/images?fields=id,geometry&bbox=${miny},${minx},${maxy},${maxx}&limit=100&organization_id=227572519135262`,
     {
       method: "GET",
       contentType: "application/json",

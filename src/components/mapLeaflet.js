@@ -166,10 +166,12 @@ const addMapillaryButton = (map, initMapillaryLayer) => {
       icon.height = "11";
       icon.width = "11";
       icon.innerHTML = "M";
+      icon.style.fontSize = "15px";
+      icon.style.fontWeight = "500";
       container.className = styles.controlButton;
       container.appendChild(icon);
       container.onclick = () => {
-        initMapillaryLayer();
+        icon.style.color = initMapillaryLayer() ? "rgb(5, 203, 99)" : "black";
       };
       L.DomEvent.disableClickPropagation(container);
       return container;
@@ -237,7 +239,6 @@ class MapLeaflet extends React.Component {
     this.initMapillaryLayer = this.initMapillaryLayer.bind(this);
     this.bindEvents = this.bindEvents.bind(this);
     this.onClick = this.onClick.bind(this);
-    this.onDrag = this.onDrag.bind(this);
     this.setMapillaryLocation = this.setMapillaryLocation.bind(this);
   }
 
@@ -308,7 +309,6 @@ class MapLeaflet extends React.Component {
       return;
     }
 
-    this.map.on("dragend", this.onDrag);
     this.map.on("click", this.onClick);
     this.map.on("mousemove", this.onHover);
     this.eventsEnabled = true;
@@ -319,7 +319,6 @@ class MapLeaflet extends React.Component {
       return;
     }
 
-    this.map.on("dragend", this.onDrag);
     this.map.off("click", this.onMapClick);
     this.map.off("mousemove", this.onHover);
     this.eventsEnabled = false;
@@ -337,35 +336,10 @@ class MapLeaflet extends React.Component {
     this.removeMarker();
   }
 
-  async initMapillaryLayer() {
-    if (this.state.showMapillaryLayer) {
-      this.map.eachLayer((layer) => {
-        if (
-          layer.feature &&
-          layer.feature.properties &&
-          layer.feature.properties.camera_make
-        ) {
-          this.map.removeLayer(layer);
-        }
-      });
-      this.setState({ showMapillaryLayer: false });
-      return false;
-    }
-    this.setState({ showMapillaryLayer: true });
-    const data = await this.fetchMapillaryFeatures();
-
-    data.features.forEach((route) => {
-      L.geoJson(route, {
-        type: "mapillaryGeoJsonLayer",
-        style: (feature) => {
-          return {
-            color: "#00b3b3",
-            opacity: 0.8,
-          };
-        },
-      }).addTo(this.map);
-    });
-    return true;
+  initMapillaryLayer() {
+    const showMapillaryLayer = this.state.showMapillaryLayer;
+    this.setState({ showMapillaryLayer: !showMapillaryLayer });
+    return this.state.showMapillaryLayer;
   }
 
   toggleLocation() {
@@ -469,47 +443,10 @@ class MapLeaflet extends React.Component {
     }
   }
 
-  fetchMapillaryFeatures = async () => {
-    const bounds = this.map.getBounds();
-    const bboxStr = `${bounds
-      .getSouthWest()
-      .lng.toFixed(6)},${bounds
-      .getSouthWest()
-      .lat.toFixed(6)},${bounds
-      .getNorthEast()
-      .lng.toFixed(6)},${bounds.getNorthEast().lat.toFixed(6)}`;
-    const url = `https://a.mapillary.com/v3/sequences?bbox=${bboxStr}&client_id=V2RqRUsxM2dPVFBMdnlhVUliTkM0ZzoxNmI5ZDZhOTc5YzQ2MzEw&per_page=1000&start_time=2019-08-01&organization_keys=mstFdbqROWkgC2sNNU2tZ1`;
-    const request = await fetch(url);
-    const data = await request.json();
-    return data;
-  };
-
-  async onDrag(e) {
-    if (!this.state.showMapillaryLayer) return;
-    const data = await this.fetchMapillaryFeatures();
-    const currentFeatures = {};
-    for (const key in e.target._layers) {
-      const layer = e.target._layers[key];
-      if (layer && layer.feature && layer.feature.properties) {
-        currentFeatures[layer.feature.properties.key] = layer;
-      }
-    }
-    data.features.forEach((feature) => {
-      if (!currentFeatures[feature.properties.key]) {
-        L.geoJson(feature, {
-          type: "mapillaryGeoJsonLayer",
-          style: () => {
-            return {
-              color: "#00b3b3",
-              opacity: 0.8,
-            };
-          },
-        }).addTo(this.map);
-      }
-    });
-  }
-
   onClick(e) {
+    if (!this.state.showMapillaryLayer) {
+      return;
+    }
     for (const key in e.target._layers) {
       const layer = e.target._layers[key];
       if (layer) {
@@ -551,6 +488,9 @@ class MapLeaflet extends React.Component {
   }
 
   onHover = (e) => {
+    if (!this.state.showMapillaryLayer) {
+      return;
+    }
     const { latlng } = e;
     const features = [];
     this.map.eachLayer((layer) => {
