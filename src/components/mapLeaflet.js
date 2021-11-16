@@ -9,7 +9,7 @@ import {
   closestPointInGeometry,
 } from "../utils/closestPoint";
 import { circleMarker } from "leaflet";
-import "mapillary-js/dist/mapillary.min.css";
+import "mapillary-js/dist/mapillary.css";
 import startIcon1 from "../icons/icon-suunta1.svg";
 import startIcon2 from "../icons/icon-suunta2.svg";
 import timeIcon1 from "../icons/icon-time1.svg";

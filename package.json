@@ -16,7 +16,7 @@
     "graphql-tag": "^2.10.1",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.11",
-    "mapillary-js": "^2.20.0",
+    "mapillary-js": "^4.0.0",
     "material-ui": "^0.20.2",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.2",
