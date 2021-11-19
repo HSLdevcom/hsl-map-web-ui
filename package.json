@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "/kuljettaja",
   "dependencies": {
+    "@turf/turf": "^6.5.0",
     "apollo-cache-inmemory": "^1.6.2",
     "apollo-client": "^2.6.3",
     "apollo-fetch": "^0.7.0",

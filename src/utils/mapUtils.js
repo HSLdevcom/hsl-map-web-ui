@@ -1,12 +1,11 @@
+import * as turf from "@turf/turf";
+
 export async function getClosestMapillaryImage({ lat, lng }) {
-  const latOffset = 0.001;
-  const lngOffset = 0.002;
-  const minx = lat - latOffset;
-  const miny = lng - lngOffset;
-  const maxx = lat + latOffset;
-  const maxy = lng + lngOffset;
+  const p = turf.point([lng, lat]);
+  const buffer = turf.buffer(p, 0.05, { units: "kilometers" });
+  const bbox = turf.bbox(buffer);
   const authResponse = await fetch(
-    `https://graph.mapillary.com/images?fields=id,geometry&bbox=${miny},${minx},${maxy},${maxx}&limit=100&organization_id=227572519135262`,
+    `https://graph.mapillary.com/images?fields=id,geometry&bbox=${bbox}&limit=100&organization_id=227572519135262`,
     {
       method: "GET",
       contentType: "application/json",
