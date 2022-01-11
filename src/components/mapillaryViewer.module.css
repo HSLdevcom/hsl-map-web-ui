@@ -11,12 +11,19 @@
   color: white;
 }
 
-div[class~="AttributionUsername"] {
+div[class~="mapillary-attribution-username"] {
   color: white;
 }
 
-div[class~="AttributionDate"] {
+div[class~="mapillary-attribution-date"] {
   color: white;
+}
+
+.errorMessage {
+  position: absolute;
+  color: red;
+  z-index: 99;
+  padding: 3px;
 }
 
 .closeButton {

@@ -22,6 +22,7 @@ import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import restroomIcon from "../icons/restroom-solid.svg";
 import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
+import { isMobile } from "../utils/browser";
 
 const MAX_DISTANCE_TO_RESTROOM = 500;
 
@@ -54,18 +55,19 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
   const firstStopMarkerLatLng = L.marker([firstStop.lat, firstStop.lon]).getLatLng();
   const lastStopMarkerLatLng = L.marker([lastStop.lat, lastStop.lon]).getLatLng();
   const closeByRestrooms = [];
-  restrooms.forEach((restroom) => {
-    const restroomMarker = L.marker([restroom.node.lat, restroom.node.lon]).getLatLng();
-    const distanceFromFirstStop = firstStopMarkerLatLng.distanceTo(restroomMarker);
-    const distanceFromLastStop = lastStopMarkerLatLng.distanceTo(restroomMarker);
-    if (
-      distanceFromFirstStop < MAX_DISTANCE_TO_RESTROOM ||
-      distanceFromLastStop < MAX_DISTANCE_TO_RESTROOM
-    ) {
-      closeByRestrooms.push(restroom.node);
-    }
-  });
-
+  if (restrooms) {
+    restrooms.forEach((restroom) => {
+      const restroomMarker = L.marker([restroom.node.lat, restroom.node.lon]).getLatLng();
+      const distanceFromFirstStop = firstStopMarkerLatLng.distanceTo(restroomMarker);
+      const distanceFromLastStop = lastStopMarkerLatLng.distanceTo(restroomMarker);
+      if (
+        distanceFromFirstStop < MAX_DISTANCE_TO_RESTROOM ||
+        distanceFromLastStop < MAX_DISTANCE_TO_RESTROOM
+      ) {
+        closeByRestrooms.push(restroom.node);
+      }
+    });
+  }
   closeByRestrooms.forEach((closeByRestroom) => {
     let icon = mapIcon(restroomIcon);
     const markerr = L.marker([closeByRestroom.lat, closeByRestroom.lon], { icon });
@@ -169,6 +171,7 @@ const addMapillaryButton = (map, initMapillaryLayer) => {
       icon.style.fontSize = "15px";
       icon.style.fontWeight = "500";
       container.className = styles.controlButton;
+      icon.style.color = isMobile ? "black" : "rgb(5, 203, 99)";
       container.appendChild(icon);
       container.onclick = () => {
         icon.style.color = initMapillaryLayer() ? "rgb(5, 203, 99)" : "black";
@@ -226,7 +229,7 @@ class MapLeaflet extends React.Component {
     this.state = {
       locationOn: false,
       locationMarker: null,
-      showMapillaryLayer: false,
+      showMapillaryLayer: !isMobile,
       mapillaryLocation: null,
       mapillaryImageLocation: null,
     };
@@ -410,7 +413,13 @@ class MapLeaflet extends React.Component {
     };
 
     L.control.layers(baseMaps).addTo(this.map);
-    addControlButton(this.map, this.props.toggleFullscreen, this.resetMapillaryLocation);
+    if (!isMobile) {
+      addControlButton(
+        this.map,
+        this.props.toggleFullscreen,
+        this.resetMapillaryLocation
+      );
+    }
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
     addRouteFilterLayer(this.map);
@@ -554,7 +563,10 @@ class MapLeaflet extends React.Component {
 
   render() {
     return (
-      <div className={classNames(styles.container)}>
+      <div
+        className={classNames(styles.container, {
+          [styles.containerMobile]: isMobile,
+        })}>
         <div
           id="map-leaflet"
           className={classNames(styles.root, {

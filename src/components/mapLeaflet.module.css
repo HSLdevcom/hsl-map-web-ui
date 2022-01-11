@@ -12,6 +12,10 @@
   flex-direction: column;
 }
 
+.containerMobile {
+  height: calc(100vh - 55px);
+}
+
 @media (max-width: 767px) {
   .root {
     height: calc(100vh - 100px);

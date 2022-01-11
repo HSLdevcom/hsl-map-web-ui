@@ -8,3 +8,50 @@
     flex-direction: row;
   }
 }
+
+.drawerContainer {
+  background-color: #eef1f3;
+  overflow-y: scroll;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+.drawerPadding {
+  height: 99%;
+  width: 0;
+}
+
+.drawerContent {
+  z-index: 5;
+  min-height: 55vh;
+  background: white;
+  position: relative;
+  background-color: #eef1f3;
+}
+
+.dragLine {
+  width: 30px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: #cccccc;
+  display: block;
+  z-index: 2;
+  margin: auto;
+  position: relative;
+  top: -65px;
+}
+.contentContainer {
+  position: relative;
+  transition: 0.5s;
+  top: -80px;
+  box-shadow: 0 -10px 10px -10px rgba(0, 0, 0, 0.3);
+  border-radius: 15px 15px 0 0;
+  padding-top: 15px;
+  background-color: #eef1f3;
+}
+
+.mapContainer {
+  z-index: 1;
+}
