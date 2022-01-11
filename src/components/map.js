@@ -139,6 +139,7 @@ class Map extends React.Component {
         selectedRoutes={this.state.selectedRoutes}
         isFullScreen={this.state.isFullScreen}
         toggleFullscreen={this.mapLeafletToggleFullscreen}
+        restrooms={this.props.mapProps.restrooms}
       />
     );
 
