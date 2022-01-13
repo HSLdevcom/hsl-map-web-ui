@@ -116,12 +116,63 @@
 
 .icon:hover {
   transition: 0.1s;
-  stroke: rgb(0, 109, 182);
+  stroke: rgb(0, 110, 184);
   cursor: pointer;
 }
 
 .iconDisabled {
   display: none;
+}
+
+.printModeContainer {
+  margin-top: 1rem;
+  height: 30px;
+}
+
+.printModeTitle {
+  padding-left: 8px;
+  font-weight: 400;
+}
+
+.switch {
+  position: relative;
+  top: -30px;
+  left: 320px;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: lightGray;
+  transition: 0.4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
 }
 
 @media (min-width: 768px) {
@@ -134,5 +185,18 @@
 
   .hideRoot {
     display: none;
+  }
+}
+
+@media print {
+  .noPrint, .addLineTitleContainer {
+    visibility: hidden;
+    height: 0px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .root {
+    max-height: fit-content;
   }
 }

@@ -56,3 +56,11 @@
     position: static;
   }
 }
+
+@media print {
+  .root {
+    margin: 0px;
+    padding: 3px;
+    border-bottom: 1px solid gray;
+  }
+}

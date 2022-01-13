@@ -75,3 +75,22 @@ input:checked + .tram {
   top: 5px;
   left: 0;
 }
+
+@media print {
+  button {
+    background: transparent;
+    border: none;
+    margin-left: -1em;
+  }
+
+  .stopListButtonWrapper img {
+    visibility: none;
+    height: 0px;
+    width: 0px;
+  }
+
+  .noPrint {
+    display: none;
+    height: 0px;
+  }
+}

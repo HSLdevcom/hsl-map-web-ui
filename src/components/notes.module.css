@@ -1,3 +1,10 @@
 .note {
   font-size: 12px;
 }
+
+@media print {
+  .note {
+    visibility: hidden;
+    height: 0px;
+  }
+}

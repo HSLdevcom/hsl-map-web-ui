@@ -619,6 +619,7 @@ class MapLeaflet extends React.Component {
           id="map-leaflet"
           className={classNames(styles.root, {
             [styles.fullScreen]: this.props.isFullScreen,
+            [styles.printableMap]: this.props.showPrintLayout,
           })}
         />
         {this.state.mapillaryLocation && (
