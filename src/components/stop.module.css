@@ -18,6 +18,7 @@
   font-size: var(--mainTextSize);
   font-weight: 600;
   width: 68px;
+  flex-wrap: wrap;
 }
 
 .textPrimary {
@@ -37,6 +38,12 @@
   right: 15px;
   bottom: 0;
   font-size: var(--helpTextSize);
+}
+
+.timingStopIcon {
+  width: 20px;
+  margin-left: 10px;
+  float: right;
 }
 
 @media (min-width: 400px) {
@@ -62,5 +69,10 @@
     margin: 0px;
     padding: 3px;
     border-bottom: 1px solid gray;
+  }
+
+  .timingStopIcon {
+    width: 10px;
+    padding-top: 2px;
   }
 }
