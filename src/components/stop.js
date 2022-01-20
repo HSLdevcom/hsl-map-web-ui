@@ -19,7 +19,7 @@ const Stop = ({
       <p className={styles.textAdditional}>{stopNameSv}</p>
       <p className={styles.textDuration}>{duration} min</p>
     </div>
-    {timingStopType === 2 && (
+    {timingStopType > 0 && (
       <img className={styles.timingStopIcon} alt="timing stop" src={timeIcon2} />
     )}
   </button>
