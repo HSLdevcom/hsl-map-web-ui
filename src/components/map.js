@@ -23,11 +23,13 @@ class Map extends React.Component {
       showFilterFullScreen: false,
       isFullScreen: false,
       center: null,
+      showPrintLayout: false,
     };
     this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
     this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
     this.routeFilterItemToggleChecked = this.routeFilterItemToggleChecked.bind(this);
     this.setMapCenter = this.setMapCenter.bind(this);
+    this.togglePrintLayout = this.togglePrintLayout.bind(this);
   }
 
   setMapCenter(center) {
@@ -86,6 +88,11 @@ class Map extends React.Component {
     return routes;
   }
 
+  togglePrintLayout() {
+    this.setState({ showPrintLayout: !this.state.showPrintLayout });
+    this.setState();
+  }
+
   render() {
     const lines = this.props.mapProps.map((props) => {
       const routes = props.lineRoutes.map((r) => ({
@@ -107,29 +114,66 @@ class Map extends React.Component {
     const routes = lines.reduce((acc, curr) => acc.concat(curr.routes), []);
     const coloredRoutes = this.coloredRoutes(routes);
     return (
-      <div className={styles.root}>
-        <Sidebar
-          lines={lines}
-          selectedRoutes={this.state.selectedRoutes}
-          showFilter={this.state.showFilterFullScreen}
-          isFullScreen={this.state.isFullScreen}
-          toggleChecked={this.routeFilterItemToggleChecked}
-          toggleFilter={this.routeFilterToggleFilter}
-          notes={lines.notes}
-          setMapCenter={this.setMapCenter}
-          removeSelectedLine={this.props.mapProps.removeSelectedLine}
-          onAddLines={this.props.onAddLines}
-        />
-        <MapLeaflet
-          center={this.state.center}
-          setMapCenter={this.setMapCenter}
-          routes={coloredRoutes}
-          selectedRoutes={this.state.selectedRoutes}
-          isFullScreen={this.state.isFullScreen}
-          toggleFullscreen={this.mapLeafletToggleFullscreen}
-          isRouteFilterExpanded={this.state.showFilterFullScreen}
-          restrooms={this.props.mapProps.restrooms}
-        />
+      <div>
+        {!this.state.showPrintLayout && (
+          <div className={styles.root}>
+            <Sidebar
+              lines={lines}
+              selectedRoutes={this.state.selectedRoutes}
+              showFilter={this.state.showFilterFullScreen}
+              isFullScreen={this.state.isFullScreen}
+              toggleChecked={this.routeFilterItemToggleChecked}
+              toggleFilter={this.routeFilterToggleFilter}
+              notes={lines.notes}
+              setMapCenter={this.setMapCenter}
+              removeSelectedLine={this.props.mapProps.removeSelectedLine}
+              onAddLines={this.props.onAddLines}
+              togglePrintLayout={this.togglePrintLayout}
+              showPrintLayout={this.state.showPrintLayout}
+            />
+            <MapLeaflet
+              center={this.state.center}
+              setMapCenter={this.setMapCenter}
+              routes={coloredRoutes}
+              selectedRoutes={this.state.selectedRoutes}
+              isFullScreen={this.state.isFullScreen}
+              toggleFullscreen={this.mapLeafletToggleFullscreen}
+              isRouteFilterExpanded={this.state.showFilterFullScreen}
+              restrooms={this.props.mapProps.restrooms}
+            />
+          </div>
+        )}
+        {this.state.showPrintLayout && (
+          <div>
+            <Sidebar
+              lines={lines}
+              selectedRoutes={this.state.selectedRoutes}
+              showFilter={this.state.showFilterFullScreen}
+              isFullScreen={this.state.isFullScreen}
+              toggleChecked={this.routeFilterItemToggleChecked}
+              toggleFilter={this.routeFilterToggleFilter}
+              notes={lines.notes}
+              setMapCenter={this.setMapCenter}
+              removeSelectedLine={this.props.mapProps.removeSelectedLine}
+              onAddLines={this.props.onAddLines}
+              togglePrintLayout={this.togglePrintLayout}
+              showPrintLayout={this.state.showPrintLayout}
+            />
+            <div>
+              <MapLeaflet
+                center={this.state.center}
+                setMapCenter={this.setMapCenter}
+                routes={coloredRoutes}
+                selectedRoutes={this.state.selectedRoutes}
+                isFullScreen={this.state.isFullScreen}
+                toggleFullscreen={this.mapLeafletToggleFullscreen}
+                isRouteFilterExpanded={this.state.showFilterFullScreen}
+                restrooms={this.props.mapProps.restrooms}
+                showPrintLayout={this.state.showPrintLayout}
+              />
+            </div>
+          </div>
+        )}
       </div>
     );
   }

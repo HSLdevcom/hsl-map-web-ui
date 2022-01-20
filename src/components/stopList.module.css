@@ -5,3 +5,10 @@
   border: 1px solid rgb(180, 180, 180);
   background-color: white;
 }
+
+@media print {
+  .root {
+    border: none;
+    margin: 0px;
+  }
+}
