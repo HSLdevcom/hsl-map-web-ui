@@ -154,13 +154,14 @@
 }
 
 .printModeTitle {
-  padding-left: 8px;
+  padding-top: 20px;
+  padding-left: 10px;
   font-weight: 400;
 }
 
 .switch {
   position: relative;
-  top: -30px;
+  top: -25px;
   left: 320px;
   display: inline-block;
   width: 60px;
