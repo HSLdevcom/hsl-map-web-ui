@@ -45,6 +45,7 @@ class Sidebar extends React.Component {
 
   render() {
     const selectedLines = this.props.lineStore.getSelectedLines;
+    const sliderBackgroundColor = this.props.showPrintLayout ? "#006db6" : "#d3d3d3";
     const headerIcon = (
       <div>
         {this.state.showAddLines ? (
@@ -100,6 +101,23 @@ class Sidebar extends React.Component {
             <LineList hideTitle isMobile={isMobile} ignoredLines={this.props.lines} />
           )}
         </div>
+        {!isMobile && (
+          <div className={(styles.printModeContainer, styles.noPrint)}>
+            <div className={styles.printModeTitle}>Tulostustila</div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                value={`${this.props.id}`}
+                checked={this.props.showPrintLayout}
+                onChange={this.props.togglePrintLayout}
+              />
+              <div
+                style={{ backgroundColor: sliderBackgroundColor }}
+                className={classnames(styles.slider)}
+              />
+            </label>
+          </div>
+        )}
         <div
           onClick={() => this.addLines(selectedLines)}
           className={classnames(

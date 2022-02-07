@@ -25,3 +25,10 @@ button.noStyle {
   padding: 0 0 0 0;
   cursor: pointer;
 }
+
+@media print {
+  :root {
+    --mainTextSize: 10px;
+    --helpTextSize: 6px;
+  }
+}

@@ -13,7 +13,7 @@ const parseDate = (date) => {
 const RouteFilter = (props) => (
   <div
     // LineId is used when changing fullscreen mode and moving routes in and out the sidebar.
-    id={"route-filter_" + props.lineId} 
+    id={"route-filter_" + props.lineId}
     className={classNames(
       "route-filter",
       styles.root,
@@ -30,39 +30,47 @@ const RouteFilter = (props) => (
       />
     ) : null}
     <div className={props.isFullScreen && !props.showFilter ? styles.hidden : ""}>
-      {Object.values(groupBy(props.routes, "dateBegin")).map((routeDate, dateIndex) => (
-        <div key={`routeFilterDateGroup${dateIndex}`}>
-          <p className={styles.dateLabel}>
-            {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
-          </p>
-          <div className={styles.filterItemsWrapper}>
-            {routeDate.map((route, routeIndex) => {
-              return (
-                <RouteFilterItem
-                  key={`routeFilterItem_${dateIndex * routeDate.length + routeIndex}`}
-                  id={route.id}
-                  routeID={route.routeId}
-                  routeDirection={route.direction}
-                  routeDateBegin={route.dateBegin}
-                  routeStops={route.routeSegments.nodes
-                    .map((node) => ({
-                      ...node.stop,
-                      duration: node.duration,
-                      stopIndex: node.stopIndex,
-                    }))
-                    .sort((a, b) => a.stopIndex - b.stopIndex)}
-                  transportType={props.transportType}
-                  isFullScreen={props.isFullScreen}
-                  isChecked={props.selectedRoutes.includes(route.id)}
-                  onChange={props.toggleChecked}
-                  setMapCenter={props.setMapCenter}
-                  color={route.color}
-                />
-              );
-            })}
+      {Object.values(groupBy(props.routes, "dateBegin")).map((routeDate, dateIndex) => {
+        const hasSelectedRoutes = routeDate.find((route) => {
+          return props.selectedRoutes.includes(route.id);
+        });
+        return (
+          <div
+            key={`routeFilterDateGroup${dateIndex}`}
+            className={classNames(hasSelectedRoutes === undefined ? styles.noPrint : "")}>
+            <p className={styles.dateLabel}>
+              {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
+            </p>
+            <div className={styles.filterItemsWrapper}>
+              {routeDate.map((route, routeIndex) => {
+                return (
+                  <RouteFilterItem
+                    key={`routeFilterItem_${dateIndex * routeDate.length + routeIndex}`}
+                    id={route.id}
+                    routeID={route.routeId}
+                    routeDirection={route.direction}
+                    routeDateBegin={route.dateBegin}
+                    routeStops={route.routeSegments.nodes
+                      .map((node) => ({
+                        ...node.stop,
+                        duration: node.duration,
+                        stopIndex: node.stopIndex,
+                        timingStopType: node.timingStopType,
+                      }))
+                      .sort((a, b) => a.stopIndex - b.stopIndex)}
+                    transportType={props.transportType}
+                    isFullScreen={props.isFullScreen}
+                    isChecked={props.selectedRoutes.includes(route.id)}
+                    onChange={props.toggleChecked}
+                    setMapCenter={props.setMapCenter}
+                    color={route.color}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   </div>
 );

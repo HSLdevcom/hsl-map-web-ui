@@ -27,6 +27,7 @@ class Map extends React.Component {
       center: null,
       bottomsheetState: { context: { mapBottomPadding: 0, buttonBottomPadding: 0 } },
       isMobile: false,
+      showPrintLayout: false,
     };
     this.mapLeafletToggleFullscreen = this.mapLeafletToggleFullscreen.bind(this);
     this.routeFilterToggleFilter = this.routeFilterToggleFilter.bind(this);
@@ -38,6 +39,7 @@ class Map extends React.Component {
   componentDidMount() {
     window.addEventListener("resize", this.resizeHandler);
     this.setState({ isMobile: isMobile });
+    this.togglePrintLayout = this.togglePrintLayout.bind(this);
   }
 
   componentWillUnmount() {
@@ -110,6 +112,10 @@ class Map extends React.Component {
       this.refs.drawer.scrollTop = height;
     }
   };
+  togglePrintLayout() {
+    this.setState({ showPrintLayout: !this.state.showPrintLayout });
+    this.setState();
+  }
 
   render() {
     const lines = this.props.mapProps.map((props) => {
@@ -139,7 +145,9 @@ class Map extends React.Component {
         selectedRoutes={this.state.selectedRoutes}
         isFullScreen={this.state.isFullScreen}
         toggleFullscreen={this.mapLeafletToggleFullscreen}
+        isRouteFilterExpanded={this.state.showFilterFullScreen}
         restrooms={this.props.mapProps.restrooms}
+        showPrintLayout={this.state.showPrintLayout}
       />
     );
 
@@ -182,6 +190,8 @@ class Map extends React.Component {
             setMapCenter={this.setMapCenter}
             removeSelectedLine={this.props.mapProps.removeSelectedLine}
             onAddLines={this.props.onAddLines}
+            togglePrintLayout={this.togglePrintLayout}
+            showPrintLayout={this.state.showPrintLayout}
           />
         )}
         {this.state.isMobile ? (

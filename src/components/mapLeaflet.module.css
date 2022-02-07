@@ -81,3 +81,8 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
+
+.printableMap {
+  max-width: 750px;
+  max-height: 750px;
+}

@@ -33,3 +33,14 @@
 .hidden {
   display: none;
 }
+
+@media print {
+  .root {
+    border: none;
+    font-size: 8px;
+  }
+
+  .noPrint {
+    display: none;
+  }
+}
