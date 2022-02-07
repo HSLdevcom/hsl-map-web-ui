@@ -11,6 +11,7 @@
     "classnames": "^2.2.6",
     "eslint-config-prettier": "^5.0.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "forever": "^1.0.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
     "leaflet": "^1.6.0",
@@ -29,6 +30,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "redux": "^4.0.1",
+    "serve": "^11.0.2",
     "url-join": "^4.0.0"
   },
   "scripts": {
@@ -36,7 +38,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier \"src/**/*.{css,js}\" --write"
+    "prettier": "prettier \"src/**/*.{css,js}\" --write",
+    "production": "forever start -c \"yarn run serve -s -l 3000\" build && forever logs -f 0"
   },
   "browserslist": {
     "production": [

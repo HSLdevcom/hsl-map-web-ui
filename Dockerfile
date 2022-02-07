@@ -1,4 +1,4 @@
-FROM node:12-alpine as builder
+FROM node:12-alpine
 
 ENV WORK /opt/driver-instructions
 
@@ -7,7 +7,8 @@ RUN mkdir -p ${WORK}
 WORKDIR ${WORK}
 
 # Install app dependencies
-COPY package.json yarn.lock ${WORK}/
+COPY package.json ${WORK}
+COPY yarn.lock ${WORK}
 RUN yarn
 
 # Bundle app source
@@ -17,6 +18,4 @@ ARG BUILD_ENV=prod
 COPY .env.${BUILD_ENV} ${WORK}/.env.production
 
 RUN yarn build
-
-FROM nginx:1.21-alpine
-COPY --from=builder /opt/driver-instructions/build /usr/share/nginx/html
+CMD yarn run production
