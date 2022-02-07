@@ -12,6 +12,10 @@
   flex-direction: column;
 }
 
+.containerMobile {
+  height: calc(100vh - 55px);
+}
+
 @media (max-width: 767px) {
   .root {
     height: calc(100vh - 100px);
@@ -46,6 +50,16 @@
 
 .controlButton {
   background-color: white;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.controlbuttontest {
+  background-color: red;
   width: 26px;
   height: 26px;
   border: none;
