@@ -173,6 +173,7 @@ class Map extends React.Component {
                   onAddLines={this.props.onAddLines}
                   isMobile={this.state.isMobile}
                   setDrawerHeight={this.setDrawerHeight}
+                  alerts={this.props.mapProps.alerts}
                 />
               </div>
             </div>
@@ -192,6 +193,7 @@ class Map extends React.Component {
             onAddLines={this.props.onAddLines}
             togglePrintLayout={this.togglePrintLayout}
             showPrintLayout={this.state.showPrintLayout}
+            alerts={this.props.mapProps.alerts}
           />
         )}
         {this.state.isMobile ? (

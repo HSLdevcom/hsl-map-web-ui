@@ -200,6 +200,68 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+.tabGroup {
+  border-radius: 6px;
+  padding-top: 0;
+  margin-left: .5rem;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.tabGroup ul {
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 9px;
+}
+
+.tabDiv {
+  background-color: #DDDDDD;
+  max-width: fit-content;
+  height: 2.4em;
+  border-radius: 6px;
+  margin-left: 1rem;
+}
+
+.inlineTab {
+  height: 2.4em;
+  display: inline;
+  width: 4rem;
+  padding: .5rem 1rem .5rem 1rem;
+  font-size: .92rem;
+  border-radius: 6px;
+}
+
+.selectedTab {
+    background-color: #fff;
+    font-weight: 500;
+}
+
+.disabledTab {
+  background-color: #868686;
+  color: #333;
+  font-weight: 400;
+}
+
+.noAlertsText {
+  opacity: .5;
+}
+
+.noAlertsContainer {
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccccdf;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.noAlertsIcon {
+  overflow: visible;
+  transform: scale(.2);
+  width: 200px;
+  height: 150px;
+  margin-left: -2rem;
+}
+
 @media (min-width: 768px) {
   .root {
     overflow-y: auto;

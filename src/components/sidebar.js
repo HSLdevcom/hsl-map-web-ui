@@ -9,6 +9,9 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { ReactComponent as NoAlerts } from "../icons/icon-no-alerts.svg";
+import LineAlertList from "./lineAlertList";
 
 class Sidebar extends React.Component {
   constructor() {
@@ -101,6 +104,18 @@ class Sidebar extends React.Component {
             <LineList hideTitle isMobile={isMobile} ignoredLines={this.props.lines} />
           )}
         </div>
+        <div
+          onClick={() => this.addLines(selectedLines)}
+          className={classnames(
+            styles.button,
+            selectedLines.length > 0 ? null : styles.disabled,
+            this.state.showAddLines ? "" : styles.buttonHidden
+          )}>
+          {selectedLines.length < 1
+            ? "Valitse linjoja"
+            : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
+        </div>
+        {this.state.showAddLines && <div className={styles.divider} />}
         {!isMobile && (
           <div className={(styles.printModeContainer, styles.noPrint)}>
             <div className={styles.printModeTitle}>Tulostustila</div>
@@ -118,65 +133,86 @@ class Sidebar extends React.Component {
             </label>
           </div>
         )}
-        <div
-          onClick={() => this.addLines(selectedLines)}
-          className={classnames(
-            styles.button,
-            selectedLines.length > 0 ? null : styles.disabled,
-            this.state.showAddLines ? "" : styles.buttonHidden
-          )}>
-          {selectedLines.length < 1
-            ? "Valitse linjoja"
-            : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
-        </div>
-        {this.state.showAddLines && <div className={styles.divider} />}
-        {sortedLines.map((line, index) => {
-          return (
-            <div key={index} className={styles.elementContainer}>
-              <div className={styles.headerContainer}>
-                <LineIcon
-                  transportType={line.transportType}
-                  shortName={line.lineNumber}
-                  lineNameFi={line.lineNameFi}
-                  iconSize="24"
-                  additionalStyle={{ marginBottom: "15px" }}
-                />
-                <div className={styles.removeButtonContainer}>
-                  <FiXCircle
-                    onClick={() =>
-                      this.props.lines.length > 1
-                        ? this.props.removeSelectedLine(line)
-                        : ""
-                    }
-                    className={classnames(
-                      this.props.lines.length > 1
-                        ? isMobile
-                          ? styles.iconMobile
-                          : styles.icon
-                        : styles.iconDisabled
-                    )}
-                  />
-                </div>
-              </div>
-              <div id={"map-container_" + line.lineId} className="map-container">
-                <RouteFilter
-                  routeIndex={index}
-                  lineId={line.lineId}
-                  transportType={line.transportType}
-                  lineName={line.lineNameFi}
-                  routes={line.routes}
-                  selectedRoutes={this.props.selectedRoutes}
-                  toggleChecked={this.props.toggleChecked}
-                  isFullScreen={this.props.isFullScreen}
-                  showFilter={this.props.showFilter}
-                  toggleFilter={this.props.toggleFilter}
-                  setMapCenter={this.props.setMapCenter}
-                />
-              </div>
-              <Notes notes={line.notes} />
+        <div>
+          <Tabs
+            selectedTabClassName={styles.selectedTab}
+            disabledTabClassName={styles.disabledTab}
+            className={styles.tabGroup}>
+            <div className={styles.tabDiv}>
+              <TabList>
+                <Tab className={styles.inlineTab}>Linjat</Tab>
+                <Tab
+                  className={classnames(styles.inlineTab, {
+                    [styles.noAlertsText]: this.props.alerts.length < 1,
+                  })}>
+                  Poikkeukset
+                </Tab>
+              </TabList>
             </div>
-          );
-        })}
+
+            <TabPanel>
+              {sortedLines.map((line, index) => {
+                return (
+                  <div key={index} className={styles.elementContainer}>
+                    <div className={styles.headerContainer}>
+                      <LineIcon
+                        transportType={line.transportType}
+                        shortName={line.lineNumber}
+                        lineNameFi={line.lineNameFi}
+                        iconSize="24"
+                        additionalStyle={{ marginBottom: "15px" }}
+                      />
+                      <div className={styles.removeButtonContainer}>
+                        <FiXCircle
+                          onClick={() =>
+                            this.props.lines.length > 1
+                              ? this.props.removeSelectedLine(line)
+                              : ""
+                          }
+                          className={classnames(
+                            this.props.lines.length > 1
+                              ? isMobile
+                                ? styles.iconMobile
+                                : styles.icon
+                              : styles.iconDisabled
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div id={"map-container_" + line.lineId} className="map-container">
+                      <RouteFilter
+                        routeIndex={index}
+                        lineId={line.lineId}
+                        transportType={line.transportType}
+                        lineName={line.lineNameFi}
+                        routes={line.routes}
+                        selectedRoutes={this.props.selectedRoutes}
+                        toggleChecked={this.props.toggleChecked}
+                        isFullScreen={this.props.isFullScreen}
+                        showFilter={this.props.showFilter}
+                        toggleFilter={this.props.toggleFilter}
+                        setMapCenter={this.props.setMapCenter}
+                      />
+                    </div>
+                    <Notes notes={line.notes} />
+                  </div>
+                );
+              })}
+            </TabPanel>
+            <TabPanel>
+              {this.props.alerts.length < 1 && (
+                <div className={styles.noAlertsContainer}>
+                  <NoAlerts className={styles.noAlertsIcon} />
+                  <h3>Ei poikkeustiedotteita.</h3>
+                </div>
+              )}
+              {this.props.alerts.length >= 1 &&
+                this.props.alerts.map((alertArray) => {
+                  return <LineAlertList alerts={alertArray} />;
+                })}
+            </TabPanel>
+          </Tabs>
+        </div>
       </div>
     );
   }

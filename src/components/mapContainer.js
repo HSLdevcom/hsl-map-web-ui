@@ -91,7 +91,8 @@ class MapContainer extends Component {
     const params = this.getQueryParamValues(this.props.location.search);
     const lines = await this.getLines(params);
     const restrooms = await this.getRestrooms();
-    this.setState({ lines, restrooms });
+    const alerts = await this.getAlerts(params);
+    this.setState({ lines, restrooms, alerts });
   }
 
   queryPromise = async (params) => {
@@ -158,6 +159,24 @@ class MapContainer extends Component {
     return lines;
   };
 
+  getAlerts = async (params) => {
+    const linesArray = params.map((line) => {
+      return { id: line.lineId, dateBegin: line.dateBegin, dateEnd: line.dateEnd };
+    });
+    try {
+      const lineAlertsArray = linesArray.map(async (line) => {
+        return await fetch(`http://localhost:3001/alerts/${line.id}`).then((res) =>
+          res.json()
+        );
+      });
+      const alerts = await Promise.all(lineAlertsArray);
+      console.log(alerts);
+      return alerts;
+    } catch (e) {
+      return [];
+    }
+  };
+
   setUrl = (selectedLines) => {
     let params = "?";
     selectedLines.forEach((selectedLine, index) => {
@@ -194,6 +213,7 @@ class MapContainer extends Component {
     if (!this.state || !this.state.lines) {
       return null;
     }
+
     const mapProps = this.state.lines.map((lineData) => {
       const line = lineData.data.line;
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
@@ -225,6 +245,7 @@ class MapContainer extends Component {
       this.setState({ lines: newLines });
     };
     mapProps.restrooms = this.state.restrooms;
+    mapProps.alerts = this.state.alerts;
     return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }
