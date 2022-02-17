@@ -229,6 +229,7 @@ input:checked + .slider:before {
   padding: .5rem 1rem .5rem 1rem;
   font-size: .92rem;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .selectedTab {

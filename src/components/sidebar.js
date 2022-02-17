@@ -73,6 +73,12 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
+    const mappedAlerts = this.props.alerts.map((alertArray) => {
+      return {
+        line: sortedLines.find((line) => line.lineId === alertArray[0].route_id),
+        alerts: alertArray,
+      };
+    })
     return (
       <div
         className={classnames(styles.root, {
@@ -207,8 +213,8 @@ class Sidebar extends React.Component {
                 </div>
               )}
               {this.props.alerts.length >= 1 &&
-                this.props.alerts.map((alertArray) => {
-                  return <LineAlertList alerts={alertArray} />;
+                mappedAlerts.map(({ alerts, line }, index) => {
+                  return <LineAlertList key={index} alerts={alerts} line={line} />;
                 })}
             </TabPanel>
           </Tabs>

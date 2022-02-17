@@ -165,9 +165,9 @@ class MapContainer extends Component {
     });
     try {
       const lineAlertsArray = linesArray.map(async (line) => {
-        return await fetch(`http://localhost:3001/alerts/${line.id}`).then((res) =>
-          res.json()
-        );
+        return await fetch(
+          `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts/${line.id}`
+        ).then((res) => res.json());
       });
       const alerts = await Promise.all(lineAlertsArray);
       console.log(alerts);
