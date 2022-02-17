@@ -10,7 +10,6 @@ import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { ReactComponent as NoAlerts } from "../icons/icon-no-alerts.svg";
 import LineAlertList from "./lineAlertList";
 
 class Sidebar extends React.Component {
@@ -58,12 +57,6 @@ class Sidebar extends React.Component {
         )}
       </div>
     );
-    const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
-      return {
-        line: sortedLines.find((line) => line.lineId === lineId),
-        alerts: alerts,
-      };
-    });
     const sortedLines = this.props.lines.sort((a, b) => {
       const transportTypeOrder = ["tram", "bus"];
       if (a.transportType !== b.transportType) {
@@ -79,6 +72,12 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
+    const mappedAlerts = this.props.alerts.map((alertArray) => {
+      return {
+        line: sortedLines.find((line) => line.lineId === alertArray[0].route_id),
+        alerts: alertArray,
+      };
+    });
     return (
       <div
         className={classnames(styles.root, {

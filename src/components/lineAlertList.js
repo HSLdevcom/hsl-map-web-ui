@@ -1,15 +1,24 @@
 import React from "react";
 import LineAlert from "./lineAlert";
+import LineIcon from "./lineIcon";
+import styles from "./lineAlertList.module.css";
 
 const LineAlertList = (props) => {
+  console.log(props);
   return (
-    <div>
-      <h2>{props.alerts[0]["route_id"]}</h2>
-      <ul>
+    <div className={styles.alertListContainer}>
+      <LineIcon
+        transportType={props.line.transportType}
+        shortName={props.line.lineNumber}
+        lineNameFi={props.line.lineNameFi}
+        iconSize="24"
+        additionalStyle={{ marginBottom: "15px" }}
+      />
+      <div>
         {props.alerts.map((alert) => {
           return <LineAlert key={alert.id} alert={alert} />;
         })}
-      </ul>
+      </div>
     </div>
   );
 };
