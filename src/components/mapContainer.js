@@ -5,6 +5,7 @@ import qs from "qs";
 import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
+import dayjs from "dayjs";
 
 const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
@@ -159,18 +160,26 @@ class MapContainer extends Component {
     return lines;
   };
 
+  getAlertQueryParams = (params) => {
+    let query = "";
+    params.map((lineData, index) => {
+      return index === 0
+        ? (query += `${lineData.id}[date]=${lineData.date}`)
+        : (query += `&${lineData.id}[date]=${lineData.date}`);
+    });
+    return query;
+  };
+
   getAlerts = async (params) => {
     const linesArray = params.map((line) => {
-      return { id: line.lineId, dateBegin: line.dateBegin, dateEnd: line.dateEnd };
+      return { id: line.lineId, date: dayjs(new Date()).format("YYYY-MM-DDTHH:MM") };
     });
+    const alertQueryParams = this.getAlertQueryParams(linesArray);
     try {
-      const lineAlertsArray = linesArray.map(async (line) => {
-        return await fetch(
-          `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts/${line.id}`
-        ).then((res) => res.json());
-      });
+      const lineAlertsArray = await fetch(
+        `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
+      ).then((res) => res.json());
       const alerts = await Promise.all(lineAlertsArray);
-      console.log(alerts);
       return alerts;
     } catch (e) {
       return [];
@@ -215,7 +224,7 @@ class MapContainer extends Component {
     }
 
     const mapProps = this.state.lines.map((lineData) => {
-      const line = lineData.data.line;
+      const line = lineData.data;
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return {
         lineId: line.lineId,

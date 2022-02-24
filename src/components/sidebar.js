@@ -10,7 +10,6 @@ import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { ReactComponent as NoAlerts } from "../icons/icon-no-alerts.svg";
 import LineAlertList from "./lineAlertList";
 
 class Sidebar extends React.Component {
@@ -73,10 +72,10 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
-    const mappedAlerts = this.props.alerts.map((alertArray) => {
+    const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
       return {
-        line: sortedLines.find((line) => line.lineId === alertArray[0].route_id),
-        alerts: alertArray,
+        line: sortedLines.find((line) => line.lineId === lineId),
+        alerts: alerts,
       };
     })
     return (
@@ -206,14 +205,8 @@ class Sidebar extends React.Component {
               })}
             </TabPanel>
             <TabPanel>
-              {this.props.alerts.length < 1 && (
-                <div className={styles.noAlertsContainer}>
-                  <NoAlerts className={styles.noAlertsIcon} />
-                  <h3>Ei poikkeustiedotteita.</h3>
-                </div>
-              )}
               {this.props.alerts.length >= 1 &&
-                mappedAlerts.map(({ alerts, line }, index) => {
+                mappedAlerts.map(({ line, alerts }, index) => {
                   return <LineAlertList key={index} alerts={alerts} line={line} />;
                 })}
             </TabPanel>

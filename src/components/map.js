@@ -2,7 +2,6 @@ import React from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
-import classnames from "classnames";
 import styles from "./map.module.css";
 import { isMobile } from "../utils/browser";
 
