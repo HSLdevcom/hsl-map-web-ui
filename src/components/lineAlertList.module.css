@@ -1,3 +1,19 @@
 .alertListContainer {
+    padding: var(--contentContainerPadding);
+}
+
+.noAlertsContainer {
+    margin: 1rem;
     padding: 1rem;
+    border: 1px solid #ccccdf;
+    border-radius: 10px;
+    text-align: center;
+}
+  
+.noAlertsIcon {
+    overflow: visible;
+    transform: scale(.2);
+    width: 200px;
+    height: 150px;
+    margin-left: -2rem;
 }

@@ -72,10 +72,10 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
-    const mappedAlerts = this.props.alerts.map((alertArray) => {
+    const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
       return {
-        line: sortedLines.find((line) => line.lineId === alertArray[0].route_id),
-        alerts: alertArray,
+        line: sortedLines.find((line) => line.lineId === lineId),
+        alerts: alerts,
       };
     });
     return (
