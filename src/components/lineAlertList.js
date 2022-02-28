@@ -5,7 +5,6 @@ import styles from "./lineAlertList.module.css";
 import { ReactComponent as NoAlerts } from "../icons/icon-no-alerts.svg";
 
 const LineAlertList = (props) => {
-  console.log(props);
   return (
     <div className={styles.alertListContainer}>
       <LineIcon

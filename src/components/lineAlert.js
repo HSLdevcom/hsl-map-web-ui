@@ -4,27 +4,22 @@ import classnames from "classnames";
 import dayjs from "dayjs";
 
 const LineAlert = (props) => {
+  const LANG = {
+    FI: "fi",
+    EN: "en",
+    SV: "sv",
+  };
+
   const alert = props.alert;
 
   const parseDate = (date) => {
     return dayjs(date).format("DD.MM.YYYY HH:MM");
   };
 
-  const getTitle = (titles) => {
+  const getTextWithLang = (texts, lang) => {
     try {
-      const finnishTitle = titles.find((title) => title.language === "fi");
-      console.log(finnishTitle);
-      return finnishTitle.text;
-    } catch {
-      return "";
-    }
-  };
-
-  const getDescription = (descriptions) => {
-    try {
-      const finnishDesc = descriptions.find((desc) => desc.language === "fi");
-      console.log(finnishDesc);
-      return finnishDesc.text;
+      const foundText = texts.find((text) => text.language === lang);
+      return foundText.text;
     } catch {
       return "";
     }
@@ -32,11 +27,14 @@ const LineAlert = (props) => {
 
   return (
     <div className={classnames(styles.alertContainer, styles.outline)}>
-      <h3>{getTitle(alert.data.titles)}</h3>
+      <h3>{getTextWithLang(alert.data.titles, LANG.FI)}</h3>
       <p className={styles.dateText}>{`${parseDate(alert.valid_from)} - ${parseDate(
         alert.valid_to
       )}`}</p>
-      <p>{getDescription(alert.data.descriptions)}</p>
+      <p>{getTextWithLang(alert.data.descriptions, LANG.FI)}</p>
+      <a className={styles.link} href={getTextWithLang(alert.data.urls, LANG.FI)}>
+        {getTextWithLang(alert.data.urls, LANG.FI)}
+      </a>
     </div>
   );
 };
