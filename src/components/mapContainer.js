@@ -6,6 +6,7 @@ import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
 import dayjs from "dayjs";
+import { map } from "lodash";
 
 const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
@@ -180,6 +181,7 @@ class MapContainer extends Component {
         `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
       ).then((res) => res.json());
       const alerts = await Promise.all(lineAlertsArray);
+      console.log(alerts);
       return alerts;
     } catch (e) {
       return [];
@@ -215,7 +217,8 @@ class MapContainer extends Component {
     this.props.history.push(`/map/${params}`);
 
     const lines = await this.getLines(existingParams);
-    this.setState({ lines });
+    const alerts = await this.getAlerts(existingParams);
+    this.setState({ lines, alerts });
   };
 
   render() {
@@ -224,7 +227,7 @@ class MapContainer extends Component {
     }
 
     const mapProps = this.state.lines.map((lineData) => {
-      const line = lineData.data;
+      const { line } = lineData.data;
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return {
         lineId: line.lineId,
@@ -243,16 +246,22 @@ class MapContainer extends Component {
         ),
       };
     });
-    mapProps.removeSelectedLine = (line) => {
+
+    mapProps.removeSelectedLine = async (line) => {
       const lineKey = `${line.lineId}${line.lineNameFi}`;
       const currentLines = this.state.lines;
       const newLines = currentLines.filter((currentLine) => {
         const currentLineKey = `${currentLine.data.line.lineId}${currentLine.data.line.nameFi}`;
         if (currentLineKey !== lineKey) return currentLine;
       });
+      const mappedLineData = newLines.map((line) => {
+        return { lineId: line.data.line.lineId };
+      });
+      const newAlerts = await this.getAlerts(mappedLineData);
       this.setUrl(newLines);
-      this.setState({ lines: newLines });
+      this.setState({ lines: newLines, alerts: newAlerts });
     };
+
     mapProps.restrooms = this.state.restrooms;
     mapProps.alerts = this.state.alerts;
     return <Map onAddLines={this.addLines} mapProps={mapProps} />;
