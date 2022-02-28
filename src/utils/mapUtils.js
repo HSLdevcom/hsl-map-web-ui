@@ -23,7 +23,7 @@ export async function getClosestMapillaryImage({ lat, lng }) {
   const buffer = turf.buffer(p, 0.05, { units: "kilometers" });
   const bbox = turf.bbox(buffer);
 
-  const url = `https://graph.mapillary.com/images?fields=id,geometry&bbox=${bbox}&limit=100&organization_id=227572519135262`;
+  const url = `https://graph.mapillary.com/images?fields=id,geometry&bbox=${bbox}&limit=100`;
   const delay = 500;
   const tries = 3;
 
@@ -35,9 +35,20 @@ export async function getClosestMapillaryImage({ lat, lng }) {
     },
   };
 
-  const authResponse = await fetchRetry(url, delay, tries, fetchOptions);
+  let authResponse = await fetchRetry(
+    `${url}&organization_id=227572519135262`,
+    delay,
+    tries,
+    fetchOptions
+  );
+  let json = await authResponse.json();
 
-  const json = await authResponse.json();
+  //If we get no images with organization_id then try fetching without it
+  if (json.data.length === 0) {
+    const res = await fetch(url, fetchOptions);
+    json = await res.json();
+  }
+
   if (!json.data) {
     return null;
   }
