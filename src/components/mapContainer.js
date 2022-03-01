@@ -189,8 +189,7 @@ class MapContainer extends Component {
         `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
       ).then((res) => res.json());
       const alerts = await Promise.all(lineAlertsArray);
-      console.log(alerts);
-      return alerts;
+      return alerts || [];
     } catch (e) {
       return [];
     }
