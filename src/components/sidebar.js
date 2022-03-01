@@ -77,7 +77,7 @@ class Sidebar extends React.Component {
         line: sortedLines.find((line) => line.lineId === lineId),
         alerts: alerts,
       };
-    })
+    });
     return (
       <div
         className={classnames(styles.root, {
@@ -138,6 +138,7 @@ class Sidebar extends React.Component {
             </label>
           </div>
         )}
+        <div className={classnames([styles.divider, styles.tabDivider])} />
         <div>
           <Tabs
             selectedTabClassName={styles.selectedTab}
@@ -145,9 +146,11 @@ class Sidebar extends React.Component {
             className={styles.tabGroup}>
             <div className={styles.tabDiv}>
               <TabList>
-                <Tab className={styles.inlineTab}>Linjat</Tab>
+                <Tab className={classnames(styles.inlineTab, styles.linesTabBtn)}>
+                  Linjat
+                </Tab>
                 <Tab
-                  className={classnames(styles.inlineTab, {
+                  className={classnames(styles.inlineTab, styles.alertsTabBtn, {
                     [styles.noAlertsText]: this.props.alerts.length < 1,
                   })}>
                   Poikkeukset

@@ -65,6 +65,11 @@
   margin-right: 20px;
 }
 
+.tabDivider {
+  margin-top: -2rem;
+  margin-bottom: .5rem;
+}
+
 .button {
   color: #fff;
   text-align: center;
@@ -216,7 +221,7 @@ input:checked + .slider:before {
 
 .tabDiv {
   background-color: #DDDDDD;
-  max-width: fit-content;
+  max-width: 88.3%;
   height: 2.4em;
   border-radius: 6px;
   margin-left: 1rem;
@@ -225,11 +230,19 @@ input:checked + .slider:before {
 .inlineTab {
   height: 2.4em;
   display: inline;
-  width: 4rem;
-  padding: .5rem 1rem .5rem 1rem;
+  width: 45%;
+  padding: .5rem 3rem .5rem 3rem;
   font-size: .92rem;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.linesTabBtn {
+  padding: .5rem 4rem .5rem 4rem;
+}
+
+.alertsTabBtn {
+  padding: .5rem 2rem .5rem 2rem;
 }
 
 .selectedTab {
@@ -241,6 +254,7 @@ input:checked + .slider:before {
   background-color: #868686;
   color: #333;
   font-weight: 400;
+  width: 50%;
 }
 
 .noAlertsText {
