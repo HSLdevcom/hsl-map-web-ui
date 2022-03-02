@@ -254,7 +254,6 @@ input:checked + .slider:before {
   background-color: #868686;
   color: #333;
   font-weight: 400;
-  width: 50%;
 }
 
 .noAlertsText {
@@ -263,6 +262,12 @@ input:checked + .slider:before {
 
 .loadingText {
   opacity: 0.8;
+  margin-top: 2rem;
+  margin-left: 2rem;
+}
+
+.loadingText {
+  opacity: .8;
   margin-top: 2rem;
   margin-left: 2rem;
 }

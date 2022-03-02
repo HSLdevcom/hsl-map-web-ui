@@ -20,6 +20,10 @@ class Sidebar extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    this.props.getAlerts();
+  }
+
   addLines = (selectedLines) => {
     this.setState({ showAddLines: false });
     this.props.onAddLines(selectedLines);
