@@ -193,6 +193,8 @@ class Map extends React.Component {
             togglePrintLayout={this.togglePrintLayout}
             showPrintLayout={this.state.showPrintLayout}
             alerts={this.props.mapProps.alerts}
+            getAlerts={this.props.mapProps.getAlerts}
+            isLoading={this.props.mapProps.isLoading}
           />
         )}
         {this.state.isMobile ? (

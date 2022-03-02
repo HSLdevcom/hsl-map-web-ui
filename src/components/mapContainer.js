@@ -6,7 +6,6 @@ import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
 import dayjs from "dayjs";
-import { map } from "lodash";
 
 const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
@@ -93,8 +92,7 @@ class MapContainer extends Component {
     const params = this.getQueryParamValues(this.props.location.search);
     const lines = await this.getLines(params);
     const restrooms = await this.getRestrooms();
-    const alerts = await this.getAlerts(params);
-    this.setState({ lines, restrooms, alerts });
+    this.setState({ lines, restrooms, alerts: [], isLoading: false });
   }
 
   queryPromise = async (params) => {
@@ -172,6 +170,7 @@ class MapContainer extends Component {
   };
 
   getAlerts = async (params) => {
+    this.setState({ isLoading: true });
     const linesArray = params.map((line) => {
       return { id: line.lineId, date: dayjs(new Date()).format("YYYY-MM-DDTHH:MM") };
     });
@@ -181,8 +180,10 @@ class MapContainer extends Component {
         `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
       ).then((res) => res.json());
       const alerts = await Promise.all(lineAlertsArray);
+      this.setState({ isLoading: false });
       return alerts || [];
     } catch (e) {
+      this.setState({ isLoading: false });
       return [];
     }
   };
@@ -261,8 +262,17 @@ class MapContainer extends Component {
       this.setState({ lines: newLines, alerts: newAlerts });
     };
 
+    mapProps.getAlerts = async () => {
+      const mappedLineData = this.state.lines.map((line) => {
+        return { lineId: line.data.line.lineId };
+      });
+      const newAlerts = await this.getAlerts(mappedLineData);
+      this.setState({ alerts: newAlerts });
+    };
+
     mapProps.restrooms = this.state.restrooms;
     mapProps.alerts = this.state.alerts;
+    mapProps.isLoading = this.state.isLoading;
     return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }

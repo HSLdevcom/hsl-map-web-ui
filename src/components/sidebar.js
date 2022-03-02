@@ -20,6 +20,10 @@ class Sidebar extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    this.props.getAlerts();
+  }
+
   addLines = (selectedLines) => {
     this.setState({ showAddLines: false });
     this.props.onAddLines(selectedLines);
@@ -209,9 +213,13 @@ class Sidebar extends React.Component {
             </TabPanel>
             <TabPanel>
               {this.props.alerts.length >= 1 &&
+                !this.props.isLoading &&
                 mappedAlerts.map(({ line, alerts }, index) => {
                   return <LineAlertList key={index} alerts={alerts} line={line} />;
                 })}
+              {this.props.isLoading && (
+                <p className={styles.loadingText}>LADATAAN TIEDOTTEITA...</p>
+              )}
             </TabPanel>
           </Tabs>
         </div>
