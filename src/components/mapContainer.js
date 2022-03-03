@@ -80,6 +80,7 @@ const restroomQuery = `
           lon
           point
           dateImported
+          mode
         }
       }
     }
@@ -122,9 +123,16 @@ class MapContainer extends Component {
     const restrooms = await fetch({
       query: restroomQuery,
     });
-    return restrooms.data && restrooms.data.allRestrooms
-      ? restrooms.data.allRestrooms.edges
-      : [];
+
+    const restroomsData =
+      restrooms.data && restrooms.data.allRestrooms
+        ? restrooms.data.allRestrooms.edges
+        : [];
+
+    const restroomsInUse = restroomsData.filter(
+      (restroom) => restroom.node.mode === "käytössä"
+    );
+    return restroomsInUse;
   };
 
   lineObject = (param, params, index) => {
