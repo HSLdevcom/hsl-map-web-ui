@@ -101,6 +101,17 @@ class Sidebar extends React.Component {
             <LineList hideTitle isMobile={isMobile} ignoredLines={this.props.lines} />
           )}
         </div>
+        <div
+          onClick={() => this.addLines(selectedLines)}
+          className={classnames(
+            styles.button,
+            selectedLines.length > 0 ? null : styles.disabled,
+            this.state.showAddLines ? "" : styles.buttonHidden
+          )}>
+          {selectedLines.length < 1
+            ? "Valitse linjoja"
+            : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
+        </div>
         {!isMobile && (
           <div className={(styles.printModeContainer, styles.noPrint)}>
             <div className={styles.printModeTitle}>Tulostustila</div>
@@ -118,17 +129,6 @@ class Sidebar extends React.Component {
             </label>
           </div>
         )}
-        <div
-          onClick={() => this.addLines(selectedLines)}
-          className={classnames(
-            styles.button,
-            selectedLines.length > 0 ? null : styles.disabled,
-            this.state.showAddLines ? "" : styles.buttonHidden
-          )}>
-          {selectedLines.length < 1
-            ? "Valitse linjoja"
-            : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
-        </div>
         {this.state.showAddLines && <div className={styles.divider} />}
         {sortedLines.map((line, index) => {
           return (
