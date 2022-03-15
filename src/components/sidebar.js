@@ -112,7 +112,7 @@ class Sidebar extends React.Component {
             ? "Valitse linjoja"
             : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
         </div>
-        {!isMobile && (
+        {/* {!isMobile && (
           <div className={(styles.printModeContainer, styles.noPrint)}>
             <div className={styles.printModeTitle}>Tulostustila</div>
             <label className={styles.switch}>
@@ -128,7 +128,7 @@ class Sidebar extends React.Component {
               />
             </label>
           </div>
-        )}
+        )} */}
         {this.state.showAddLines && <div className={styles.divider} />}
         {sortedLines.map((line, index) => {
           return (
