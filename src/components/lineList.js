@@ -169,7 +169,11 @@ const LineList = inject("lineStore")(
               .map((line, index) => (
                 <div
                   className={
-                    isSelected(line) ? styles.divContainerSelected : styles.divContainer
+                    isSelected(line)
+                      ? styles.divContainerSelected
+                      : props.isMobile
+                      ? styles.divContainerMobile
+                      : styles.divContainer
                   }
                   key={index}
                   onClick={() => handleClick(line)}>

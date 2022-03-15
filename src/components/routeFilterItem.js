@@ -34,7 +34,10 @@ class RouteFilterItem extends React.Component {
 
     return (
       <div className={styles.root}>
-        <div className={styles.stopListButtonWrapper}>
+        <div
+          className={classNames(styles.stopListButtonWrapper, {
+            [styles.noPrint]: !this.props.isChecked,
+          })}>
           <button
             className={classNames(commonStyles.noStyle, styles.stopListButton)}
             onClick={this.toggleStopList}>
@@ -65,7 +68,6 @@ class RouteFilterItem extends React.Component {
             className={classNames(styles.slider)}
           />
         </label>
-
         <StopList
           routeStops={this.props.routeStops}
           isOpen={this.state.stopListOpen}

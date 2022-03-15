@@ -10,6 +10,7 @@ const renderStops = (routeStops, isFullScreen, setMapCenter) =>
       stopNameFi={stop.nameFi}
       stopNameSv={stop.nameSe}
       duration={stop.duration}
+      timingStopType={stop.timingStopType}
       isFullScreen={isFullScreen}
       onClick={() => setMapCenter({ lat: stop.lat, lng: stop.lon, stopId: stop.stopId })}
     />

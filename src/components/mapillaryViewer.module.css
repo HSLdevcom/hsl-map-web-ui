@@ -1,0 +1,52 @@
+.viewerWrapper {
+  display: flex;
+  width: 100%;
+  flex: 1;
+  color: white;
+}
+
+.mapillaryElement {
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+
+div[class~="mapillary-attribution-username"] {
+  color: white;
+}
+
+div[class~="mapillary-attribution-date"] {
+  color: white;
+}
+
+.errorMessage {
+  position: absolute;
+  color: red;
+  z-index: 99;
+  padding: 3px;
+}
+
+.closeButton {
+  position: absolute;
+  right: 0px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.mapillary-js-canvas {
+  width: 100%;
+}
+
+.closeButtonIcon {
+  height: 30px;
+  width: 30px;
+  fill: #66b2ff;
+  transition: 0.2s;
+}
+
+.closeButtonIcon:hover {
+  height: 30px;
+  width: 30px;
+  fill: #9bccfe;
+  transition: 0.2s;
+}

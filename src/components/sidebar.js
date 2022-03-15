@@ -5,7 +5,6 @@ import classnames from "classnames";
 import RouteFilter from "./routeFilter";
 import LineList from "./lineList";
 import LineIcon from "./lineIcon";
-import classNames from "classnames";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Header from "./header";
 import Notes from "./notes";
@@ -35,12 +34,22 @@ class Sidebar extends React.Component {
     return shortIds;
   };
 
+  onAddLinesToggle = () => {
+    const showAddLines = this.state.showAddLines;
+    this.setState({ showAddLines: !showAddLines });
+    if (!showAddLines && this.props.isMobile) {
+      // Show drawer when "Lisää linjoja" is clicked
+      this.props.setDrawerHeight(380);
+    }
+  };
+
   render() {
     const selectedLines = this.props.lineStore.getSelectedLines;
+    const sliderBackgroundColor = this.props.showPrintLayout ? "#006db6" : "#d3d3d3";
     const headerIcon = (
       <div>
         {this.state.showAddLines ? (
-          <FiChevronUp className={styles.dropdownButton} />
+          <FiChevronUp className={styles.dropdownButtonExpanded} />
         ) : (
           <FiChevronDown className={styles.dropdownButton} />
         )}
@@ -60,24 +69,36 @@ class Sidebar extends React.Component {
       }
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
+    const isMobile = this.props.isMobile;
     return (
-      <div className={styles.root}>
-        <Header />
+      <div
+        className={classnames(styles.root, {
+          [styles.hidden]: this.props.isFullScreen,
+        })}>
+        {!isMobile && <Header />}
         <div
-          className={styles.addLineTitleContainer}
-          onClick={() => {
-            this.setState({ showAddLines: !this.state.showAddLines });
-          }}>
-          <div className={styles.addLineTitle}>Lisää linjoja</div>
+          className={classnames(
+            styles.addLineTitleContainer,
+            this.state.showAddLines ? styles.addLineTitleContainerExpanded : null
+          )}
+          onClick={() => this.onAddLinesToggle()}>
+          <div
+            className={classnames(
+              styles.addLineTitle,
+              this.state.showAddLines ? styles.addLineTitleExpanded : null
+            )}>
+            Lisää linjoja
+          </div>
           {headerIcon}
         </div>
         <div
-          className={classNames(
+          className={classnames(
             styles.sideBarLineList,
-            this.state.showAddLines ? "" : styles.hidden
+            this.state.showAddLines ? "" : styles.hidden,
+            isMobile ? styles.sideBarLineListMobile : null
           )}>
           {this.state.showAddLines && (
-            <LineList hideTitle ignoredLines={this.props.lines} />
+            <LineList hideTitle isMobile={isMobile} ignoredLines={this.props.lines} />
           )}
         </div>
         <div
@@ -91,6 +112,23 @@ class Sidebar extends React.Component {
             ? "Valitse linjoja"
             : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
         </div>
+        {/* {!isMobile && (
+          <div className={(styles.printModeContainer, styles.noPrint)}>
+            <div className={styles.printModeTitle}>Tulostustila</div>
+            <label className={styles.switch}>
+              <input
+                type="checkbox"
+                value={`${this.props.id}`}
+                checked={this.props.showPrintLayout}
+                onChange={this.props.togglePrintLayout}
+              />
+              <div
+                style={{ backgroundColor: sliderBackgroundColor }}
+                className={classnames(styles.slider)}
+              />
+            </label>
+          </div>
+        )} */}
         {this.state.showAddLines && <div className={styles.divider} />}
         {sortedLines.map((line, index) => {
           return (
@@ -110,9 +148,13 @@ class Sidebar extends React.Component {
                         ? this.props.removeSelectedLine(line)
                         : ""
                     }
-                    className={
-                      this.props.lines.length > 1 ? styles.icon : styles.iconDisabled
-                    }
+                    className={classnames(
+                      this.props.lines.length > 1
+                        ? isMobile
+                          ? styles.iconMobile
+                          : styles.icon
+                        : styles.iconDisabled
+                    )}
                   />
                 </div>
               </div>
