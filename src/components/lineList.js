@@ -52,6 +52,8 @@ const allLinesQuery = gql`
         nameFi
         dateBegin
         dateEnd
+        trunkRoute
+        lineIdParsed
         routes {
           totalCount
         }
@@ -185,6 +187,7 @@ const LineList = inject("lineStore")(
                     transportType={line.transportType}
                     dateBegin={line.dateBegin}
                     dateEnd={line.dateEnd}
+                    trunkRoute={!line.trunkRoute || line.trunkRoute === "1"}
                   />
                 </div>
               ));

@@ -39,6 +39,11 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
             stopIndex
             timingStopType
             duration
+            line {
+              nodes {
+                trunkRoute
+              }
+            }
             stop: stopByStopId {
               stopId
               lat

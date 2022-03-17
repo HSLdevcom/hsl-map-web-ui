@@ -77,6 +77,10 @@
   color: rgb(0, 152, 95);
 }
 
+.trunk {
+  color: #ff6319;
+}
+
 .row {
   display: flex;
   align-items: baseline;
