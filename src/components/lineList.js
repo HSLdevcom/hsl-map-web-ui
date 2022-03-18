@@ -121,7 +121,7 @@ const LineList = inject("lineStore")(
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return !ignoredLineKeys.includes(lineKey);
     };
-    const isAsd = (line) => {
+    const inUseByDate = (line) => {
       const now = moment();
       const dateBegin = moment(line.dateBegin, "YYYY-MM-DD");
       const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
@@ -159,7 +159,7 @@ const LineList = inject("lineStore")(
             const lines = get(data, "allLines.nodes", []);
             const queries = query.toLowerCase().split(",");
             return lines
-              .filter((line) => isAsd(line))
+              .filter((line) => inUseByDate(line))
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
