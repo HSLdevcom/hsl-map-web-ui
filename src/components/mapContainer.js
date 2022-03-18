@@ -34,6 +34,14 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
         direction
         dateBegin
         dateEnd
+        mode
+        nameFi
+        line {
+          nodes {
+            trunkRoute
+            lineIdParsed
+          }
+        }
         routeSegments {
           nodes {
             stopIndex

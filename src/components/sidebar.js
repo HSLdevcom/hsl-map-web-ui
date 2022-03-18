@@ -134,13 +134,6 @@ class Sidebar extends React.Component {
           return (
             <div key={index} className={styles.elementContainer}>
               <div className={styles.headerContainer}>
-                <LineIcon
-                  transportType={line.transportType}
-                  shortName={line.lineNumber}
-                  lineNameFi={line.lineNameFi}
-                  iconSize="24"
-                  additionalStyle={{ marginBottom: "15px" }}
-                />
                 <div className={styles.removeButtonContainer}>
                   <FiXCircle
                     onClick={() =>
