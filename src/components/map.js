@@ -173,6 +173,8 @@ class Map extends React.Component {
                   isMobile={this.state.isMobile}
                   setDrawerHeight={this.setDrawerHeight}
                   alerts={this.props.mapProps.alerts}
+                  getAlerts={this.props.mapProps.getAlerts}
+                  isLoading={this.props.mapProps.isLoading}
                 />
               </div>
             </div>

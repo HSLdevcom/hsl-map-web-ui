@@ -140,9 +140,9 @@ class Sidebar extends React.Component {
                 className={classnames(styles.slider)}
               />
             </label>
+            <div className={classnames([styles.divider, styles.tabDivider])} />
           </div>
         )}
-        <div className={classnames([styles.divider, styles.tabDivider])} />
         <div>
           <Tabs
             selectedTabClassName={styles.selectedTab}
