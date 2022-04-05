@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
 import CircularProgress from "material-ui/CircularProgress";
-import Line from "./line";
-import LineSearch from "./lineSearch";
 import gql from "graphql-tag";
+import moment from "moment";
 import { Query } from "react-apollo";
 import get from "lodash/get";
+import Line from "./line";
+import LineSearch from "./lineSearch";
 import styles from "./lineList.module.css";
 
 const transportTypeOrder = ["tram", "bus"];
@@ -120,6 +121,16 @@ const LineList = inject("lineStore")(
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return !ignoredLineKeys.includes(lineKey);
     };
+    const inUseByDate = (line) => {
+      const now = moment();
+      const dateBegin = moment(line.dateBegin, "YYYY-MM-DD");
+      const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
+
+      return (
+        dateBegin.isSame(now, "day") ||
+        (dateBegin.isBefore(now) && (dateEnd.isSame(now, "day") || dateEnd.isAfter(now)))
+      );
+    };
 
     return (
       <div>
@@ -148,6 +159,7 @@ const LineList = inject("lineStore")(
             const lines = get(data, "allLines.nodes", []);
             const queries = query.toLowerCase().split(",");
             return lines
+              .filter((line) => inUseByDate(line))
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
