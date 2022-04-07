@@ -238,11 +238,11 @@ input:checked + .slider:before {
 }
 
 .linesTabBtn {
-  padding: .55rem 4rem .59rem 4.1rem;
+  padding: .55rem 3.9rem .59rem 4.1rem;
 }
 
 .alertsTabBtn {
-  padding: .55rem 2.68rem .59rem 2.7rem;
+  padding: .55rem 2.71rem .59rem 2.7rem;
 }
 
 .selectedTab {
