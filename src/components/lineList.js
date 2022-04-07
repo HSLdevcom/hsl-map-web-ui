@@ -121,6 +121,16 @@ const LineList = inject("lineStore")(
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return !ignoredLineKeys.includes(lineKey);
     };
+    const inUseByDate = (line) => {
+      const now = moment();
+      const dateBegin = moment(line.dateBegin, "YYYY-MM-DD");
+      const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
+
+      return (
+        dateBegin.isSame(now, "day") ||
+        (dateBegin.isBefore(now) && (dateEnd.isSame(now, "day") || dateEnd.isAfter(now)))
+      );
+    };
 
     return (
       <div>
