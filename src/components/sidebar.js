@@ -134,13 +134,21 @@ class Sidebar extends React.Component {
           return (
             <div key={index} className={styles.elementContainer}>
               <div className={styles.headerContainer}>
-                <LineIcon
-                  transportType={line.transportType}
-                  shortName={line.lineNumber}
-                  lineNameFi={line.lineNameFi}
-                  iconSize="24"
-                  additionalStyle={{ marginBottom: "15px" }}
-                />
+                <div id={"map-container_" + line.lineId} className="map-container">
+                  <RouteFilter
+                    routeIndex={index}
+                    lineId={line.lineId}
+                    transportType={line.transportType}
+                    lineName={line.lineNameFi}
+                    routes={line.routes}
+                    selectedRoutes={this.props.selectedRoutes}
+                    toggleChecked={this.props.toggleChecked}
+                    isFullScreen={this.props.isFullScreen}
+                    showFilter={this.props.showFilter}
+                    toggleFilter={this.props.toggleFilter}
+                    setMapCenter={this.props.setMapCenter}
+                  />
+                </div>
                 <div className={styles.removeButtonContainer}>
                   <FiXCircle
                     onClick={() =>
@@ -157,21 +165,6 @@ class Sidebar extends React.Component {
                     )}
                   />
                 </div>
-              </div>
-              <div id={"map-container_" + line.lineId} className="map-container">
-                <RouteFilter
-                  routeIndex={index}
-                  lineId={line.lineId}
-                  transportType={line.transportType}
-                  lineName={line.lineNameFi}
-                  routes={line.routes}
-                  selectedRoutes={this.props.selectedRoutes}
-                  toggleChecked={this.props.toggleChecked}
-                  isFullScreen={this.props.isFullScreen}
-                  showFilter={this.props.showFilter}
-                  toggleFilter={this.props.toggleFilter}
-                  setMapCenter={this.props.setMapCenter}
-                />
               </div>
               <Notes notes={line.notes} />
             </div>
