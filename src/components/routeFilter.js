@@ -1,7 +1,6 @@
 import React from "react";
 import { groupBy } from "lodash";
 import classNames from "classnames";
-import LineIcon from "./lineIcon";
 import RouteFilterItem from "./routeFilterItem";
 import ExpandButton from "./expandButton";
 import styles from "./routeFilter.module.css";
@@ -39,13 +38,6 @@ const RouteFilter = (props) => (
           <div
             key={`routeFilterDateGroup${dateIndex}`}
             className={classNames(hasSelectedRoutes === undefined ? styles.noPrint : "")}>
-            <LineIcon
-              transportType={routeDate[0].mode.toLowerCase()}
-              shortName={routeDate[0].line.nodes[0].lineIdParsed}
-              lineNameFi={routeDate[0].nameFi}
-              iconSize="24"
-              additionalStyle={{ marginBottom: "15px" }}
-            />
             <p className={styles.dateLabel}>
               {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
             </p>
