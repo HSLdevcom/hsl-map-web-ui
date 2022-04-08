@@ -121,16 +121,6 @@ const LineList = inject("lineStore")(
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return !ignoredLineKeys.includes(lineKey);
     };
-    const inUseByDate = (line) => {
-      const now = moment();
-      const dateBegin = moment(line.dateBegin, "YYYY-MM-DD");
-      const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
-
-      return (
-        dateBegin.isSame(now, "day") ||
-        (dateBegin.isBefore(now) && (dateEnd.isSame(now, "day") || dateEnd.isAfter(now)))
-      );
-    };
 
     return (
       <div>
@@ -159,7 +149,7 @@ const LineList = inject("lineStore")(
             const lines = get(data, "allLines.nodes", []).filter((line) => {
               const now = moment();
               const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
-              return !dateEnd.isSame(now, "day") && !dateEnd.isBefore(now);
+              return !dateEnd.isBefore(now);
             });
             const groupedLines = groupBy(lines, "lineId");
             const groupedLinesKeys = Object.keys(groupedLines);
