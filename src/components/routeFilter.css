@@ -2,6 +2,7 @@
 
 .root {
   flex: 0 0 100%;
+  width: calc(100vw - 20px);
   max-width: 360px;
   box-sizing: border-box;
 }
