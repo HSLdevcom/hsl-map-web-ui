@@ -4,7 +4,7 @@ import CircularProgress from "material-ui/CircularProgress";
 import gql from "graphql-tag";
 import moment from "moment";
 import { Query } from "react-apollo";
-import get from "lodash/get";
+import { get, groupBy, orderBy } from "lodash";
 import Line from "./line";
 import LineSearch from "./lineSearch";
 import styles from "./lineList.module.css";
@@ -121,22 +121,12 @@ const LineList = inject("lineStore")(
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return !ignoredLineKeys.includes(lineKey);
     };
-    const inUseByDate = (line) => {
-      const now = moment();
-      const dateBegin = moment(line.dateBegin, "YYYY-MM-DD");
-      const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
-
-      return (
-        dateBegin.isSame(now, "day") ||
-        (dateBegin.isBefore(now) && (dateEnd.isSame(now, "day") || dateEnd.isAfter(now)))
-      );
-    };
 
     return (
       <div>
         {!props.hideTitle && (
           <div className={styles.titleContainer}>
-            <h3>Reitit</h3>
+            <h3>Linjat</h3>
           </div>
         )}
 
@@ -156,10 +146,23 @@ const LineList = inject("lineStore")(
                 </div>
               );
             }
-            const lines = get(data, "allLines.nodes", []);
+            const lines = get(data, "allLines.nodes", []).filter((line) => {
+              const now = moment();
+              const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
+              return !dateEnd.isBefore(now);
+            });
+            const groupedLines = groupBy(lines, "lineId");
+            const groupedLinesKeys = Object.keys(groupedLines);
+            const linesFilteredByDate = groupedLinesKeys.map((key) => {
+              const lineGroupSortedByDate = orderBy(
+                groupedLines[key],
+                (line) => moment(line.dateBegin, "YYYY-MM-DD"),
+                ["asc"]
+              );
+              return lineGroupSortedByDate[0];
+            });
             const queries = query.toLowerCase().split(",");
-            return lines
-              .filter((line) => inUseByDate(line))
+            return linesFilteredByDate
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
