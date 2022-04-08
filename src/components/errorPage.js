@@ -6,16 +6,15 @@ import styles from "./errorPage.module.css";
 const TEXT_CONTENT = {
   fi: {
     title: "Hups, tapahtui virhe.",
-    subtitle:
-      "Pahoittelut, palvelussamme on juuri nyt ongelma. Ole hyvä ja yritä myöhemmin uudelleen.",
+    subtitle: "Pahoittelut, palvelussamme on juuri nyt ongelma.",
   },
   sv: {
     title: "Oj, ett fel har uppstått!",
-    subtitle: "Just nu är det problem i vår tjänst. Vänligen prova igen lite senare.",
+    subtitle: "Just nu är det problem i vår tjänst.",
   },
   en: {
     title: "Oops! An error occurred.",
-    subtitle: "Sorry, there is a problem with the service. Please try again later.",
+    subtitle: "Sorry, there is a problem with the service. ",
   },
 };
 
