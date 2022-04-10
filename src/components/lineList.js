@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
 import CircularProgress from "material-ui/CircularProgress";
+import gql from "graphql-tag";
+import moment from "moment";
+import { Query } from "react-apollo";
+import { get, groupBy, orderBy } from "lodash";
 import Line from "./line";
 import LineSearch from "./lineSearch";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import get from "lodash/get";
 import styles from "./lineList.module.css";
 
 const transportTypeOrder = ["tram", "bus"];
@@ -125,7 +126,7 @@ const LineList = inject("lineStore")(
       <div>
         {!props.hideTitle && (
           <div className={styles.titleContainer}>
-            <h3>Reitit</h3>
+            <h3>Linjat</h3>
           </div>
         )}
 
@@ -145,9 +146,23 @@ const LineList = inject("lineStore")(
                 </div>
               );
             }
-            const lines = get(data, "allLines.nodes", []);
+            const lines = get(data, "allLines.nodes", []).filter((line) => {
+              const now = moment();
+              const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
+              return !dateEnd.isBefore(now);
+            });
+            const groupedLines = groupBy(lines, "lineId");
+            const groupedLinesKeys = Object.keys(groupedLines);
+            const linesFilteredByDate = groupedLinesKeys.map((key) => {
+              const lineGroupSortedByDate = orderBy(
+                groupedLines[key],
+                (line) => moment(line.dateBegin, "YYYY-MM-DD"),
+                ["asc"]
+              );
+              return lineGroupSortedByDate[0];
+            });
             const queries = query.toLowerCase().split(",");
-            return lines
+            return linesFilteredByDate
               .filter((node) => node.routes.totalCount !== 0)
               .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
