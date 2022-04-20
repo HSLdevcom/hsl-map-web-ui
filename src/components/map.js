@@ -131,6 +131,7 @@ class Map extends React.Component {
         lineNumber: props.lineNumber,
         lineNameFi: props.nameFi,
         routes: routes,
+        trunkRoute: props.trunkRoute,
         notes: props.notes,
       };
     });

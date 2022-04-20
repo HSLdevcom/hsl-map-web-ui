@@ -28,6 +28,7 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
     nameFi
     dateBegin
     dateEnd
+    trunkRoute
     routes {
       nodes {
         routeId
@@ -217,6 +218,7 @@ class MapContainer extends Component {
         transportType: getTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
+        trunkRoute: line.trunkRoute === "1",
         notes: uniq(
           line.notes.nodes
             .filter((note) => note.noteType.includes("N"))

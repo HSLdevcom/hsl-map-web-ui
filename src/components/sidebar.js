@@ -138,7 +138,7 @@ class Sidebar extends React.Component {
                   transportType={line.transportType}
                   shortName={line.lineNumber}
                   lineNameFi={line.lineNameFi}
-                  trunkRoute={!line.trunkRoute || line.trunkRoute === "1"}
+                  trunkRoute={line.trunkRoute}
                   iconSize="24"
                   additionalStyle={{ marginBottom: "15px" }}
                 />
