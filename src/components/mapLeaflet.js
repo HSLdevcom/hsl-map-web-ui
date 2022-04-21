@@ -383,13 +383,12 @@ class MapLeaflet extends React.Component {
     const digitransitTileLayer = L.tileLayer(
       "https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}{retina}.png",
       {
-        maxZoom: 18,
+        maxZoom: 19,
         tileSize: 512,
         zoomOffset: -1,
         attribution:
-          'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          'Map data: <a href="https://openmaptiles.org/">&copy; OpenMapTiles</a> ' +
+          '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
         retina: L.Browser.retina ? "@2x" : "", // Use @2x tiles for retina displays
         baseLayer: true,
       }
@@ -398,17 +397,20 @@ class MapLeaflet extends React.Component {
     const aerialTileLayer = L.tileLayer(
       "https://ortophotos.blob.core.windows.net/hsy-map/hsy_tiles2/{z}/{x}/{y}.jpg",
       {
-        maxZoom: 18,
+        maxZoom: 19,
         tileSize: 256,
-        attribution: 'Imagery &copy; <a href="https://www.hsy.fi/">HSY</a>',
+        attribution:
+          'Imagery: <a href="https://www.hsy.fi/">&copy; HSY 2021</a> ' +
+          '<a href="https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40">&copy; Maamittauslaitos 2021</a>',
         detectRetina: true, // @2x tiles not available, use detectRetina -feature
+        baseLayer: true,
       }
     );
 
     this.map = L.map("map-leaflet", {
       center: [60.170988, 24.940842],
       zoom: 13,
-      layers: [digitransitTileLayer, aerialTileLayer],
+      layers: [digitransitTileLayer], // Digitransit layer as default
     });
 
     const baseMaps = {
