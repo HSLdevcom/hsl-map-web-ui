@@ -124,6 +124,7 @@ class Sidebar extends React.Component {
             ? "Valitse linjoja"
             : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
         </div>
+        {this.state.showAddLines && <div className={styles.divider} />}
         {!isMobile && (
           <div className={(styles.printModeContainer, styles.noPrint)}>
             <div className={styles.printModeTitle}>Tulostustila</div>
