@@ -10,6 +10,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import Home from "./home";
 import MapContainer from "./mapContainer";
+import ServerMessage from "./serverMessage";
 import ErrorPage from "./errorPage";
 import style from "./app.module.css";
 import LineStore from "../stores/lineStore";
@@ -48,6 +49,7 @@ class ErrorBoundary extends React.Component {
 
 const App = () => (
   <div className={style.root}>
+    <ServerMessage />
     <Provider {...stores}>
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
