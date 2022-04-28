@@ -16,8 +16,7 @@ class ServerMessage extends React.Component {
 
   fetchMessage = async () => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/UIMessages`);
-    const data = await response.json();
-    return data;
+    return await response.json();
   };
 
   render() {
