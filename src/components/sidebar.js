@@ -9,6 +9,8 @@ import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import LineAlertList from "./lineAlertList";
 
 class Sidebar extends React.Component {
   constructor() {
@@ -16,6 +18,10 @@ class Sidebar extends React.Component {
     this.state = {
       showAddLines: false,
     };
+  }
+
+  async componentDidMount() {
+    this.props.getAlerts();
   }
 
   addLines = (selectedLines) => {
@@ -70,6 +76,13 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
+    console.log(sortedLines);
+    const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
+      return {
+        line: sortedLines.find((line) => line.lineId === lineId),
+        alerts: alerts,
+      };
+    });
     return (
       <div
         className={classnames(styles.root, {
@@ -112,64 +125,80 @@ class Sidebar extends React.Component {
             ? "Valitse linjoja"
             : `Lisää linjat: ${this.getSelectedLineShortIds(selectedLines)}`}
         </div>
-        {/* {!isMobile && (
-          <div className={(styles.printModeContainer, styles.noPrint)}>
-            <div className={styles.printModeTitle}>Tulostustila</div>
-            <label className={styles.switch}>
-              <input
-                type="checkbox"
-                value={`${this.props.id}`}
-                checked={this.props.showPrintLayout}
-                onChange={this.props.togglePrintLayout}
-              />
-              <div
-                style={{ backgroundColor: sliderBackgroundColor }}
-                className={classnames(styles.slider)}
-              />
-            </label>
-          </div>
-        )} */}
         {this.state.showAddLines && <div className={styles.divider} />}
-        {sortedLines.map((line, index) => {
-          return (
-            <div key={index} className={styles.elementContainer}>
-              <div className={styles.headerContainer}>
-                <div id={"map-container_" + line.lineId} className="map-container">
-                  <RouteFilter
-                    routeIndex={index}
-                    lineId={line.lineId}
-                    transportType={line.transportType}
-                    lineName={line.lineNameFi}
-                    routes={line.routes}
-                    selectedRoutes={this.props.selectedRoutes}
-                    toggleChecked={this.props.toggleChecked}
-                    isFullScreen={this.props.isFullScreen}
-                    showFilter={this.props.showFilter}
-                    toggleFilter={this.props.toggleFilter}
-                    setMapCenter={this.props.setMapCenter}
-                  />
-                </div>
-                <div className={styles.removeButtonContainer}>
-                  <FiXCircle
-                    onClick={() =>
-                      this.props.lines.length > 1
-                        ? this.props.removeSelectedLine(line)
-                        : ""
-                    }
-                    className={classnames(
-                      this.props.lines.length > 1
-                        ? isMobile
-                          ? styles.iconMobile
-                          : styles.icon
-                        : styles.iconDisabled
-                    )}
-                  />
-                </div>
-              </div>
-              <Notes notes={line.notes} />
+        <div>
+          <Tabs
+            selectedTabClassName={styles.selectedTab}
+            disabledTabClassName={styles.disabledTab}
+            className={styles.tabGroup}>
+            <div className={styles.tabDiv}>
+              <TabList>
+                <Tab className={classnames(styles.inlineTab, styles.linesTabBtn)}>
+                  Linjat
+                </Tab>
+                <Tab
+                  className={classnames(styles.inlineTab, styles.alertsTabBtn, {
+                    [styles.noAlertsText]: this.props.alerts.length < 1,
+                  })}>
+                  Poikkeukset
+                </Tab>
+              </TabList>
             </div>
-          );
-        })}
+
+            <TabPanel>
+              {sortedLines.map((line, index) => {
+                return (
+                  <div key={index} className={styles.elementContainer}>
+                    <div className={styles.headerContainer}>
+                      <div id={"map-container_" + line.lineId} className="map-container">
+                        <RouteFilter
+                          routeIndex={index}
+                          lineId={line.lineId}
+                          transportType={line.transportType}
+                          lineName={line.lineNameFi}
+                          routes={line.routes}
+                          selectedRoutes={this.props.selectedRoutes}
+                          toggleChecked={this.props.toggleChecked}
+                          isFullScreen={this.props.isFullScreen}
+                          showFilter={this.props.showFilter}
+                          toggleFilter={this.props.toggleFilter}
+                          setMapCenter={this.props.setMapCenter}
+                        />
+                      </div>
+                      <div className={styles.removeButtonContainer}>
+                        <FiXCircle
+                          onClick={() =>
+                            this.props.lines.length > 1
+                              ? this.props.removeSelectedLine(line)
+                              : ""
+                          }
+                          className={classnames(
+                            this.props.lines.length > 1
+                              ? isMobile
+                                ? styles.iconMobile
+                                : styles.icon
+                              : styles.iconDisabled
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <Notes notes={line.notes} />
+                  </div>
+                );
+              })}
+            </TabPanel>
+            <TabPanel>
+              {this.props.alerts.length >= 1 &&
+                !this.props.isLoading &&
+                mappedAlerts.map(({ line, alerts }, index) => {
+                  return <LineAlertList key={index} alerts={alerts} line={line} />;
+                })}
+              {this.props.isLoading && (
+                <p className={styles.loadingText}>LADATAAN TIEDOTTEITA...</p>
+              )}
+            </TabPanel>
+          </Tabs>
+        </div>
       </div>
     );
   }
