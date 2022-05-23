@@ -216,7 +216,7 @@ input:checked + .slider:before {
 .tabGroup ul {
   padding-left: 2px;
   padding-right: 2px;
-  padding-top: 9px;
+  padding-top: 10px;
 }
 
 .tabDiv {
@@ -267,7 +267,7 @@ input:checked + .slider:before {
 }
 
 .loadingText {
-  opacity: .8;
+  opacity: 0.8;
   margin-top: 2rem;
   margin-left: 2rem;
 }
