@@ -6,7 +6,7 @@
 
 .filterContainerFullScreen {
   background-color: rgba(255, 255, 255, 0.7);
-  padding: var(--contentContainerPadding);
+  padding: 10px 20px 10px 20px;
 }
 
 .filterContainerHideFilter {
@@ -14,7 +14,7 @@
 }
 
 .filterContainerHideFilter > button {
-  padding: 2px 6px 3px 20px;
+  padding: 10px 20px 10px 20px;
   overflow: hidden;
 }
 

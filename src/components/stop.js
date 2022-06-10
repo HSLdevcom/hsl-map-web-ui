@@ -14,10 +14,12 @@ const Stop = ({
 }) => (
   <button className={styles.root} onClick={onClick}>
     <p className={styles.textTitle}>{shortId}</p>
-    <div className={isFullScreen ? styles.fullScreen : ""}>
-      <p className={styles.textPrimary}>{stopNameFi}</p>
-      <p className={styles.textAdditional}>{stopNameSv}</p>
-      <p className={styles.textDuration}>{duration} min</p>
+    <div className={styles.infoContainer}>
+      <div className={styles.textPrimary}>{stopNameFi}</div>
+      <div className={styles.additionalInfoContainer}>
+        <div className={styles.textAdditional}>{stopNameSv}</div>
+        <div className={styles.textDuration}>{duration} min</div>
+      </div>
     </div>
     {timingStopType > 0 && (
       <img className={styles.timingStopIcon} alt="timing stop" src={timeIcon2} />
