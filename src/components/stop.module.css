@@ -14,6 +14,13 @@
   text-align: start;
 }
 
+.infoContainer {
+  margin-left: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .textTitle {
   font-size: var(--mainTextSize);
   font-weight: 600;
@@ -22,22 +29,27 @@
 }
 
 .textPrimary {
+  text-align: left;
   font-size: var(--mainTextSize);
   margin-bottom: 8px !important;
 }
 
 .textAdditional {
+  text-align: left;
   font-size: var(--helpTextSize);
   color: var(--mediumGray);
   margin-bottom: 8px !important;
 }
 
 .textDuration {
+  display: flex;
   white-space: nowrap;
-  position: static;
-  right: 15px;
-  bottom: 0;
   font-size: var(--helpTextSize);
+}
+
+.additionalInfoContainer {
+  place-content: space-between;
+  display: flex;
 }
 
 .timingStopIcon {
@@ -48,10 +60,11 @@
 
 @media (min-width: 400px) {
   .textDuration {
-    position: absolute;
+    display: flex;
   }
 
   .textAdditional {
+    text-align: left;
     margin-bottom: 0 !important;
   }
 
