@@ -55,6 +55,7 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
               shortId
               nameFi
               nameSe
+              platform
             }
           }
         }
@@ -122,6 +123,7 @@ class MapContainer extends Component {
     const lines = await Promise.all(
       paramsArray.map((params) => this.queryPromise(params))
     );
+    console.log(lines);
     return lines;
   };
 

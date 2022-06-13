@@ -76,7 +76,6 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
-    console.log(sortedLines);
     const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
       return {
         line: sortedLines.find((line) => line.lineId === lineId),
@@ -150,7 +149,10 @@ class Sidebar extends React.Component {
                 return (
                   <div key={index} className={styles.elementContainer}>
                     <div className={styles.headerContainer}>
-                      <div id={"map-container_" + line.lineId} className="map-container">
+                      <div
+                        id={"map-container_" + line.lineId}
+                        className="map-container"
+                        style={{ width: "100%" }}>
                         <RouteFilter
                           routeIndex={index}
                           lineId={line.lineId}
