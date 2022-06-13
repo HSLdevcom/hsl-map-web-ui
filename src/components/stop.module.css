@@ -31,20 +31,37 @@
 .textPrimary {
   text-align: left;
   font-size: var(--mainTextSize);
-  margin-bottom: 8px !important;
+  margin-bottom: 8px;
 }
 
 .textAdditional {
   text-align: left;
   font-size: var(--helpTextSize);
   color: var(--mediumGray);
-  margin-bottom: 8px !important;
+  margin-bottom: 8px;
 }
 
 .textDuration {
   display: flex;
   white-space: nowrap;
   font-size: var(--helpTextSize);
+}
+
+.infoContentContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.platformNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f4f5;
+  color: #333;
+  width: 24px;
+  height: 17px;
+  border-radius: 4px;
+  margin-left: 7px;
 }
 
 .additionalInfoContainer {

@@ -8,14 +8,17 @@ const Stop = ({
   stopNameFi,
   stopNameSv,
   duration,
-  isFullScreen,
+  platform,
   onClick,
   timingStopType,
 }) => (
   <button className={styles.root} onClick={onClick}>
     <p className={styles.textTitle}>{shortId}</p>
     <div className={styles.infoContainer}>
-      <div className={styles.textPrimary}>{stopNameFi}</div>
+      <div className={styles.infoContentContainer}>
+        <div className={styles.textPrimary}>{stopNameFi}</div>
+        {platform && <div className={styles.platformNumber}>{platform}</div>}
+      </div>
       <div className={styles.additionalInfoContainer}>
         <div className={styles.textAdditional}>{stopNameSv}</div>
         <div className={styles.textDuration}>{duration} min</div>
