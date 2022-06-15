@@ -4,7 +4,6 @@ import { inject, observer } from "mobx-react";
 import classnames from "classnames";
 import RouteFilter from "./routeFilter";
 import LineList from "./lineList";
-import LineIcon from "./lineIcon";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Header from "./header";
 import Notes from "./notes";
@@ -76,7 +75,6 @@ class Sidebar extends React.Component {
       return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
     });
     const isMobile = this.props.isMobile;
-    console.log(sortedLines);
     const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
       return {
         line: sortedLines.find((line) => line.lineId === lineId),

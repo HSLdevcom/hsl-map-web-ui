@@ -16,7 +16,9 @@
     "forever": "^1.0.0",
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.1",
+    "hsl-map-style": "https://github.com/HSLdevcom/hsl-map-style",
     "leaflet": "^1.6.0",
+    "leaflet-cascade-buttons": "^1.0.9",
     "lodash": "^4.17.11",
     "mapillary-js": "^4.0.0",
     "material-ui": "^0.20.2",
@@ -35,6 +37,7 @@
     "react-tabs": "^3.2.3",
     "redux": "^4.0.1",
     "serve": "^11.0.2",
+    "streamsaver": "^2.0.6",
     "url-join": "^4.0.0"
   },
   "scripts": {
