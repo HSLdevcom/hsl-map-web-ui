@@ -91,7 +91,7 @@ class MapPrinter extends React.Component {
     this.printToolBar = this.addPrintToolbox();
     this.printButton = null;
 
-    return this.addMapPrinter();
+    this.addMapPrinter();
   }
 
   addMapPrinter() {
@@ -270,7 +270,6 @@ class MapPrinter extends React.Component {
           meterPerPxRatio: PIXEL_DENSITY,
         };
         const timestamp = dayjs(new Date()).format("DD-MM-YY");
-        const fileStream = streamSaver.createWriteStream(`tuloste-${timestamp}.png`);
 
         fetchJobs.push(
           fetch("https://dev.kartat.hsl.fi/map-generator/generateImage", {
@@ -284,26 +283,21 @@ class MapPrinter extends React.Component {
               "Content-Type": "application/json",
               "Accept-Encoding": "gzip, deflate, br",
             },
-          }).then((response) => {
-            const readableStream = response.body;
-
-            if (window.WritableStream && readableStream.pipeTo) {
-              return readableStream.pipeTo(fileStream);
-            }
-
-            window.writer = fileStream.getWriter();
-
-            const reader = response.body.getReader();
-            const pump = () =>
-              reader
-                .read()
-                .then((res) =>
-                  res.done
-                    ? streamSaver.writer.close()
-                    : streamSaver.writer.write(res.value).then(pump)
-                );
-            streamSaver.pump();
           })
+            .then((response) => {
+              return response.blob();
+            })
+            .then((blob) => {
+              // Create a link element that is used to download the picture
+              const a = window.document.createElement("a");
+              a.download = `tuloste-${timestamp}.png`;
+              a.href = window.URL.createObjectURL(blob);
+
+              window.document.body.appendChild(a);
+              a.click();
+              window.document.body.removeChild(a);
+            })
+            .catch((err) => console.error(err))
         );
       });
 

@@ -37,7 +37,6 @@
     "react-tabs": "^3.2.3",
     "redux": "^4.0.1",
     "serve": "^11.0.2",
-    "streamsaver": "^2.0.6",
     "url-join": "^4.0.0"
   },
   "scripts": {
