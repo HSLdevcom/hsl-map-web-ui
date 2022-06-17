@@ -259,14 +259,13 @@ class MapLeaflet extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // All layers except the base layer are removed when the component is updated
+    // All layers except the base layer and mapillary features are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) {
         if (
           layer.options.type !== "mapillaryGeoJsonLayer" &&
           layer.options.type !== "mapillaryImageMarker" &&
-          layer.options.type !== "mapillaryHighlightMarker" &&
-          !layer._layers
+          layer.options.type !== "mapillaryHighlightMarker"
         ) {
           this.map.removeLayer(layer);
         }
