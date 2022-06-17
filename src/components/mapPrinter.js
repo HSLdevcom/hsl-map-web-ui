@@ -3,7 +3,6 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import styles from "./mapPrinter.module.css";
 import { generateStyle } from "hsl-map-style";
-import streamSaver from "streamsaver";
 import dayjs from "dayjs";
 import classNames from "classnames";
 
@@ -85,9 +84,6 @@ class MapPrinter extends React.Component {
       printModeOn: false,
       fetchingPrints: false,
     };
-    this.map = props.map;
-    this.printDocumentMarkerGroup = props.documentMarkerGroup;
-    this.selectedRoutes = props.selectedRoutes;
     this.printToolBar = this.addPrintToolbox();
     this.printButton = null;
 
@@ -96,7 +92,7 @@ class MapPrinter extends React.Component {
 
   addMapPrinter() {
     const editableLayers = new L.FeatureGroup();
-    this.map.addLayer(editableLayers);
+    this.props.map.addLayer(editableLayers);
 
     const options = {
       position: "topleft",
@@ -123,7 +119,7 @@ class MapPrinter extends React.Component {
         return container;
       },
     });
-    this.map.addControl(new PrintToggleButton());
+    this.props.map.addControl(new PrintToggleButton());
   }
 
   addPrintToolbox() {
@@ -176,17 +172,17 @@ class MapPrinter extends React.Component {
   togglePrintMode() {
     const nextState = !this.state.printModeOn;
     if (nextState) {
-      this.map.addControl(this.printToolBar);
+      this.props.map.addControl(this.printToolBar);
     } else {
       this.clearMarkers();
-      this.map.removeControl(this.printToolBar);
+      this.props.map.removeControl(this.printToolBar);
     }
     this.setState({ printModeOn: nextState });
     this.updateButtonState();
   }
 
   addDocumentOutline(document) {
-    const mapCenterLatLng = this.map.getCenter();
+    const mapCenterLatLng = this.props.map.getCenter();
     this.drawDocumentMarker(document, mapCenterLatLng);
     this.updateButtonState();
   }
@@ -204,8 +200,8 @@ class MapPrinter extends React.Component {
       draggable: true,
       documentProps: document,
     });
-    this.printDocumentMarkerGroup.addLayer(printMarker);
-    printMarker.addTo(this.map);
+    this.props.documentMarkerGroup.addLayer(printMarker);
+    printMarker.addTo(this.props.map);
   };
 
   updateButtonState = () => {
@@ -216,7 +212,7 @@ class MapPrinter extends React.Component {
         L.DomUtil.addClass(this.printButton, styles.disabled);
       } else {
         this.printButton.innerText = "TULOSTA KUVAT";
-        if (this.printDocumentMarkerGroup.getLayers().length > 0) {
+        if (this.props.documentMarkerGroup.getLayers().length > 0) {
           this.printButton.disabled = false;
           L.DomUtil.removeClass(this.printButton, styles.disabled);
         } else {
@@ -228,7 +224,7 @@ class MapPrinter extends React.Component {
   };
 
   clearMarkers = () => {
-    this.printDocumentMarkerGroup.clearLayers();
+    this.props.documentMarkerGroup.clearLayers();
     this.updateButtonState();
   };
 
@@ -253,17 +249,17 @@ class MapPrinter extends React.Component {
       filterDate ? filterDate.dateBegin : new Date()
     );
 
-    if (this.printDocumentMarkerGroup.getLayers().length > 0) {
+    if (this.props.documentMarkerGroup.getLayers().length > 0) {
       const fetchJobs = [];
 
-      this.printDocumentMarkerGroup.getLayers().forEach((document) => {
+      this.props.documentMarkerGroup.getLayers().forEach((document) => {
         const latLng = document.getLatLng();
         const documentProps = document.options.documentProps;
         const options = {
           center: [latLng.lng, latLng.lat],
           width: documentProps.size[0] * 2.95,
           height: documentProps.size[1] * 2.95,
-          zoom: this.map.getZoom() - 1,
+          zoom: this.props.map.getZoom() - 1,
           scale: 4.166666666666667,
           pitch: 0,
           bearing: 0,
