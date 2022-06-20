@@ -37,6 +37,12 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
     timeIcon = timeIcon2;
   }
 
+  const firstStop = first(stops);
+  const lastStop = last(stops);
+  if (firstStop.platform) {
+    stops.unshift(firstStop);
+  }
+
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
@@ -44,15 +50,21 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
     } else if (stop.timingStopType > 0) {
       icon = mapIcon(timeIcon);
     } else {
-      icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
+      icon = stopIcon({
+        centeredStop: stop.isCenteredStop && styles.centeredStop,
+        color: stop.color,
+        platform: stop.platform,
+      });
     }
+
     const marker = L.marker([stop.lat, stop.lon], { icon });
-    marker.bindTooltip(`${stop.shortId} ${stop.nameFi}`, { direction: "top" });
+    const tooltipContent = `${stop.shortId} ${stop.nameFi}${
+      stop.platform ? `, lait. ${stop.platform}` : ""
+    }`;
+    marker.bindTooltip(tooltipContent, { direction: "top" });
     marker.addTo(map);
   });
 
-  const firstStop = first(stops);
-  const lastStop = last(stops);
   const firstStopMarkerLatLng = L.marker([firstStop.lat, firstStop.lon]).getLatLng();
   const lastStopMarkerLatLng = L.marker([lastStop.lat, lastStop.lon]).getLatLng();
   const closeByRestrooms = [];
