@@ -23,6 +23,7 @@ import restroomIcon from "../icons/restroom-solid.svg";
 import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
 import { isMobile } from "../utils/browser";
+import MapPrinter from "./mapPrinter";
 
 const MAX_DISTANCE_TO_RESTROOM = 500;
 
@@ -223,6 +224,12 @@ const updateFilterLayer = (isFullScreen, isRouteFilterExpanded, mapillaryLocatio
   }
 };
 
+const addPrintToolBox = (map, documentMarkerGroup) => {
+  if (!map.hasLayer(documentMarkerGroup)) {
+    map.addLayer(documentMarkerGroup);
+  }
+};
+
 class MapLeaflet extends React.Component {
   constructor(props) {
     super(props);
@@ -235,6 +242,7 @@ class MapLeaflet extends React.Component {
     };
 
     this.map = null;
+    this.documentMarkerGroup = new L.LayerGroup();
     this.locationFound = false; // Class variable, because this doesn't affect the rendering.
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
@@ -251,14 +259,13 @@ class MapLeaflet extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // All layers except the base layer are removed when the component is updated
+    // All layers except the base layer and mapillary features are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) {
         if (
           layer.options.type !== "mapillaryGeoJsonLayer" &&
           layer.options.type !== "mapillaryImageMarker" &&
-          layer.options.type !== "mapillaryHighlightMarker" &&
-          !layer._layers
+          layer.options.type !== "mapillaryHighlightMarker"
         ) {
           this.map.removeLayer(layer);
         }
@@ -305,6 +312,7 @@ class MapLeaflet extends React.Component {
       this.state.mapillaryLocation
     );
     this.map.invalidateSize();
+    this.documentMarkerGroup.setZIndex(9999); //Always bring the document markers to top, so they don't go out of sight after updates.
   }
 
   bindEvents = () => {
@@ -411,6 +419,7 @@ class MapLeaflet extends React.Component {
       center: [60.170988, 24.940842],
       zoom: 13,
       layers: [digitransitTileLayer], // Digitransit layer as default
+      drawControl: true,
     });
 
     const baseMaps = {
@@ -428,6 +437,11 @@ class MapLeaflet extends React.Component {
     }
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
+
+    if (!isMobile) {
+      this.documentMarkerGroup.addTo(this.map);
+    }
+
     addRouteFilterLayer(this.map);
   }
 
@@ -455,6 +469,7 @@ class MapLeaflet extends React.Component {
         );
 
       addGeometryLayer(selectedGeometries, this.map);
+      addPrintToolBox(this.map, this.documentMarkerGroup);
     }
   }
 
@@ -580,6 +595,14 @@ class MapLeaflet extends React.Component {
             [styles.printableMap]: this.props.showPrintLayout,
           })}
         />
+        {this.map && !isMobile && (
+          <MapPrinter
+            map={this.map}
+            documentMarkerGroup={this.documentMarkerGroup}
+            selectedRoutes={this.props.selectedRoutes}
+            routes={this.props.routes}
+          />
+        )}
         {this.state.mapillaryLocation && (
           <MapillaryViewer
             onCloseViewer={this.resetMapillaryLocation}
