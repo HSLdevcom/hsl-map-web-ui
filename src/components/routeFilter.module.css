@@ -1,13 +1,12 @@
 .root {
   flex: 0 0 100%;
-  width: calc(100vw - 20px);
   max-width: 360px;
   box-sizing: border-box;
 }
 
 .filterContainerFullScreen {
   background-color: rgba(255, 255, 255, 0.7);
-  padding: var(--contentContainerPadding);
+  padding: 10px 20px 10px 20px;
 }
 
 .filterContainerHideFilter {
@@ -15,7 +14,7 @@
 }
 
 .filterContainerHideFilter > button {
-  padding: 2px 6px 3px 20px;
+  padding: 10px 20px 10px 20px;
   overflow: hidden;
 }
 

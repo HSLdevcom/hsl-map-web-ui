@@ -10,6 +10,8 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import Home from "./home";
 import MapContainer from "./mapContainer";
+import ServerMessage from "./serverMessage";
+import ErrorPage from "./errorPage";
 import style from "./app.module.css";
 import LineStore from "../stores/lineStore";
 
@@ -23,16 +25,41 @@ const stores = {
   lineStore: LineStore,
 };
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error) {
+    console.error(error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <ErrorPage />;
+    }
+    return this.props.children;
+  }
+}
+
 const App = () => (
   <div className={style.root}>
+    <ServerMessage />
     <Provider {...stores}>
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
           <MuiThemeProvider>
-            <Router basename={rootPath}>
-              <Route component={Home} path="/" exact />
-              <Route path={"/map"} component={MapContainer} />
-            </Router>
+            <ErrorBoundary>
+              <Router basename={rootPath}>
+                <Route component={Home} path="/" exact />
+                <Route path={"/map"} component={MapContainer} />
+              </Router>
+            </ErrorBoundary>
           </MuiThemeProvider>
         </ApolloHooksProvider>
       </ApolloProvider>
