@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import BusIcon from "../icons/icon-bus-station.js";
 import TramIcon from "../icons/icon-tram.js";
+import TrunkIcon from "../icons/icon-trunk-station.js";
 import styles from "./lineIcon.module.css";
 
 const LineIcon = ({
@@ -10,10 +11,13 @@ const LineIcon = ({
   lineNameFi,
   iconSize,
   additionalStyle,
+  trunkRoute,
 }) => (
   <div style={additionalStyle}>
     <span className={styles.lineIconWrapper}>
-      {transportType === "tram" ? (
+      {trunkRoute ? (
+        <TrunkIcon height={iconSize} />
+      ) : transportType === "tram" ? (
         <TramIcon height={iconSize} />
       ) : (
         <BusIcon height={iconSize} />
@@ -22,6 +26,7 @@ const LineIcon = ({
         className={classNames(styles.lineNumber, {
           [styles.tram]: transportType === "tram",
           [styles.bus]: transportType !== "tram",
+          [styles.trunk]: trunkRoute,
         })}>
         {shortName}
       </span>

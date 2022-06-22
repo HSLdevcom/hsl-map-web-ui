@@ -54,6 +54,7 @@ const AllLinesQuery = gql`
         nameFi
         dateBegin
         dateEnd
+        trunkRoute
         routes {
           totalCount
         }
