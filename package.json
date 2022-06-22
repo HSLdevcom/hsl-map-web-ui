@@ -44,8 +44,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettier": "prettier \"src/**/*.{css,js}\" --write",
-    "production": "forever start -c \"yarn run serve -s -l 3000\" build && forever logs -f 0"
+    "prettier": "prettier \"src/**/*.{css,js}\" --write"
   },
   "browserslist": {
     "production": [
