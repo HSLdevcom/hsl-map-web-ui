@@ -1,7 +1,7 @@
 :root {
   --fontFamily: "Gotham Rounded SSm A", "Gotham Rounded SSm B", sans-serif;
 
-  --contentContainerPadding: 20px 20px 20px 20px;
+  --contentContainerPadding: 20px 15px 20px 15px;
   --contentElementPadding: 10px 10px 10px 10px;
   --contentWrapperMargin: 0px 0px 15px 0px;
   --mainTextSize: 16px;

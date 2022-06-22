@@ -2,6 +2,8 @@ FROM node:16-alpine
 
 ENV WORK /opt/driver-instructions
 
+RUN apk add git
+
 # Create app directory
 RUN mkdir -p ${WORK}
 WORKDIR ${WORK}

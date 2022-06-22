@@ -2,7 +2,6 @@ import React from "react";
 import Header from "./header";
 import Sidebar from "./sidebar";
 import MapLeaflet from "./mapLeaflet";
-import classnames from "classnames";
 import styles from "./map.module.css";
 import { isMobile } from "../utils/browser";
 
@@ -131,6 +130,7 @@ class Map extends React.Component {
         lineNumber: props.lineNumber,
         lineNameFi: props.nameFi,
         routes: routes,
+        trunkRoute: props.trunkRoute,
         notes: props.notes,
       };
     });
@@ -173,6 +173,9 @@ class Map extends React.Component {
                   onAddLines={this.props.onAddLines}
                   isMobile={this.state.isMobile}
                   setDrawerHeight={this.setDrawerHeight}
+                  alerts={this.props.mapProps.alerts}
+                  getAlerts={this.props.mapProps.getAlerts}
+                  isLoading={this.props.mapProps.isLoading}
                 />
               </div>
             </div>
@@ -192,6 +195,9 @@ class Map extends React.Component {
             onAddLines={this.props.onAddLines}
             togglePrintLayout={this.togglePrintLayout}
             showPrintLayout={this.state.showPrintLayout}
+            alerts={this.props.mapProps.alerts}
+            getAlerts={this.props.mapProps.getAlerts}
+            isLoading={this.props.mapProps.isLoading}
           />
         )}
         {this.state.isMobile ? (

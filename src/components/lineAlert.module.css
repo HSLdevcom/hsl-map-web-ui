@@ -1,0 +1,16 @@
+.outline {
+    padding: 1rem 0 1rem 0;
+    border-bottom: 1px solid lightgray;
+}
+
+.dateText {
+    font-size: .8rem;
+    font-weight: 700;
+}
+
+.link {
+    font-size: .8rem;
+    word-wrap: break-word;
+    cursor: pointer;
+    color: var(--busBlue);
+}

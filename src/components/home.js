@@ -32,6 +32,7 @@ class Home extends React.Component {
             className={classnames(styles.lineNumber, {
               [styles.tram]: type === "tram",
               [styles.bus]: type !== "tram",
+              [styles.trunk]: line.trunkRoute,
             })}>
             {line.lineNumber}
           </div>

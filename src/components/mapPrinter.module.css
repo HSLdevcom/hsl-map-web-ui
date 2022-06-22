@@ -1,0 +1,72 @@
+.printToolContainer {
+    width: 200px;
+    height: 220px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    justify-items: center;
+    align-items: center;
+}
+
+.documentButtonContainer {
+    width: 200px;
+    height: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .printToolButton {
+    width: 45%;
+    height: 2rem;
+    margin: .2rem;
+    border-radius: 6px;
+  }
+  
+  .printButtonHighlight {
+    background-color: var(--busBlue);
+  }
+  
+  .printButtonHighlight:hover {
+    background-color: var(--busBlue);
+  }
+  
+  .printIcon {
+    border: 2px solid lightskyblue;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.1);
+  }
+
+  .clearMarkersButton {
+    background-color: darkred;
+    color: white;
+    border-radius: 6px;
+    width: 90%;
+    height: 2rem;
+    margin: 3% 5% 3% 5%;
+    box-shadow: none;
+  }
+
+  .printPagesButton {
+    background-color: var(--busBlue);
+    color: white;
+    border-radius: 6px;
+    width: 90%;
+    height: 2rem;
+    margin: 3% 5% 3% 5%;
+  }
+
+  .dummyElement {
+      height: 0;
+      width: 0;
+      display: contents;
+  }
+
+  .disabled {
+        border: 1px solid #999999;
+        background-color: darkgrey;
+        color: #fff;
+        padding: 10px;
+        cursor: not-allowed;
+    }

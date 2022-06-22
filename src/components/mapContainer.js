@@ -5,6 +5,7 @@ import qs from "qs";
 import sortBy from "lodash/sortBy";
 import uniq from "lodash/uniq";
 import Map from "./map";
+import dayjs from "dayjs";
 
 const parseLineNumber = (lineId) =>
   // Remove 1st number, which represents the city
@@ -28,17 +29,31 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
     nameFi
     dateBegin
     dateEnd
+    trunkRoute
     routes {
       nodes {
         routeId
         direction
         dateBegin
         dateEnd
+        mode
+        nameFi
+        line {
+          nodes {
+            trunkRoute
+            lineIdParsed
+          }
+        }
         routeSegments {
           nodes {
             stopIndex
             timingStopType
             duration
+            line {
+              nodes {
+                trunkRoute
+              }
+            }
             stop: stopByStopId {
               stopId
               lat
@@ -46,6 +61,7 @@ const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Da
               shortId
               nameFi
               nameSe
+              platform
             }
           }
         }
@@ -92,7 +108,7 @@ class MapContainer extends Component {
     const params = this.getQueryParamValues(this.props.location.search);
     const lines = await this.getLines(params);
     const restrooms = await this.getRestrooms();
-    this.setState({ lines, restrooms });
+    this.setState({ lines, restrooms, alerts: [], isLoading: false });
   }
 
   queryPromise = async (params) => {
@@ -113,6 +129,7 @@ class MapContainer extends Component {
     const lines = await Promise.all(
       paramsArray.map((params) => this.queryPromise(params))
     );
+    console.log(lines);
     return lines;
   };
 
@@ -166,6 +183,35 @@ class MapContainer extends Component {
     return lines;
   };
 
+  getAlertQueryParams = (params) => {
+    let query = "";
+    params.map((lineData, index) => {
+      return index === 0
+        ? (query += `${lineData.id}[date]=${lineData.date}`)
+        : (query += `&${lineData.id}[date]=${lineData.date}`);
+    });
+    return query;
+  };
+
+  getAlerts = async (params) => {
+    this.setState({ isLoading: true });
+    const linesArray = params.map((line) => {
+      return { id: line.lineId, date: dayjs(new Date()).format("YYYY-MM-DDTHH:MM") };
+    });
+    const alertQueryParams = this.getAlertQueryParams(linesArray);
+    try {
+      const lineAlertsArray = await fetch(
+        `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
+      ).then((res) => res.json());
+      const alerts = await Promise.all(lineAlertsArray);
+      this.setState({ isLoading: false });
+      return alerts || [];
+    } catch (e) {
+      this.setState({ isLoading: false });
+      return [];
+    }
+  };
+
   setUrl = (selectedLines) => {
     let params = "?";
     selectedLines.forEach((selectedLine, index) => {
@@ -195,15 +241,17 @@ class MapContainer extends Component {
     this.props.history.push(`/map/${params}`);
 
     const lines = await this.getLines(existingParams);
-    this.setState({ lines });
+    const alerts = await this.getAlerts(existingParams);
+    this.setState({ lines, alerts });
   };
 
   render() {
     if (!this.state || !this.state.lines) {
       return null;
     }
+
     const mapProps = this.state.lines.map((lineData) => {
-      const line = lineData.data.line;
+      const { line } = lineData.data;
       const lineKey = `${line.lineId}${line.dateBegin}${line.dateEnd}`;
       return {
         lineId: line.lineId,
@@ -212,6 +260,7 @@ class MapContainer extends Component {
         transportType: getTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
+        trunkRoute: line.trunkRoute === "1",
         notes: uniq(
           line.notes.nodes
             .filter((note) => note.noteType.includes("N"))
@@ -222,17 +271,33 @@ class MapContainer extends Component {
         ),
       };
     });
-    mapProps.removeSelectedLine = (line) => {
+
+    mapProps.removeSelectedLine = async (line) => {
       const lineKey = `${line.lineId}${line.lineNameFi}`;
       const currentLines = this.state.lines;
       const newLines = currentLines.filter((currentLine) => {
         const currentLineKey = `${currentLine.data.line.lineId}${currentLine.data.line.nameFi}`;
         if (currentLineKey !== lineKey) return currentLine;
       });
+      const mappedLineData = newLines.map((line) => {
+        return { lineId: line.data.line.lineId };
+      });
+      const newAlerts = await this.getAlerts(mappedLineData);
       this.setUrl(newLines);
-      this.setState({ lines: newLines });
+      this.setState({ lines: newLines, alerts: newAlerts });
     };
+
+    mapProps.getAlerts = async () => {
+      const mappedLineData = this.state.lines.map((line) => {
+        return { lineId: line.data.line.lineId };
+      });
+      const newAlerts = await this.getAlerts(mappedLineData);
+      this.setState({ alerts: newAlerts });
+    };
+
     mapProps.restrooms = this.state.restrooms;
+    mapProps.alerts = this.state.alerts;
+    mapProps.isLoading = this.state.isLoading;
     return <Map onAddLines={this.addLines} mapProps={mapProps} />;
   }
 }
