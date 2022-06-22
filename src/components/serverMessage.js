@@ -1,5 +1,5 @@
 import React from "react";
-import moment from "moment";
+import dayjs from "dayjs";
 import styles from "./serverMessage.module.css";
 import Info from "../icons/Info";
 
@@ -28,7 +28,7 @@ class ServerMessage extends React.Component {
     if (!this.state || !this.state.message || this.state.message.text === "") {
       return null;
     }
-    const date = moment(this.state.message.created_at).format("D.M.YYYY");
+    const date = dayjs(this.state.message.created_at).format("D.M.YYYY");
     return (
       <div className={styles.bannerContainer}>
         <Info height={"14px"} color={"#999a9a"} />

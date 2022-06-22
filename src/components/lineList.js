@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
 import CircularProgress from "material-ui/CircularProgress";
 import gql from "graphql-tag";
-import moment from "moment";
+import dayjs from "dayjs";
 import { Query } from "react-apollo";
 import { get, groupBy, orderBy } from "lodash";
 import Line from "./line";
@@ -149,8 +149,8 @@ const LineList = inject("lineStore")(
               );
             }
             const lines = get(data, "allLines.nodes", []).filter((line) => {
-              const now = moment();
-              const dateEnd = moment(line.dateEnd, "YYYY-MM-DD");
+              const now = dayjs();
+              const dateEnd = dayjs(line.dateEnd, "YYYY-MM-DD");
               return !dateEnd.isBefore(now);
             });
             const groupedLines = groupBy(lines, "lineId");
@@ -158,7 +158,7 @@ const LineList = inject("lineStore")(
             const linesFilteredByDate = groupedLinesKeys.map((key) => {
               const lineGroupSortedByDate = orderBy(
                 groupedLines[key],
-                (line) => moment(line.dateBegin, "YYYY-MM-DD"),
+                (line) => dayjs(line.dateBegin, "YYYY-MM-DD"),
                 ["asc"]
               );
               return lineGroupSortedByDate[0];
