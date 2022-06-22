@@ -50,7 +50,6 @@ class Sidebar extends React.Component {
 
   render() {
     const selectedLines = this.props.lineStore.getSelectedLines;
-    const sliderBackgroundColor = this.props.showPrintLayout ? "#006db6" : "#d3d3d3";
     const headerIcon = (
       <div>
         {this.state.showAddLines ? (

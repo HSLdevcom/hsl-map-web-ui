@@ -7,7 +7,6 @@ export default function Icon({ height, color }) {
       id="Layer_1"
       x="0px"
       y="0px"
-      viewBox="0 0 16 16"
       enableBackground="new 0 0 16 16"
       viewBox="0 0 35 35"
       preserveAspectRatio="xMidYMid meet"

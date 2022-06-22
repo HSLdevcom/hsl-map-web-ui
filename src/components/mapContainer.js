@@ -276,7 +276,7 @@ class MapContainer extends Component {
       const currentLines = this.state.lines;
       const newLines = currentLines.filter((currentLine) => {
         const currentLineKey = `${currentLine.data.line.lineId}${currentLine.data.line.nameFi}`;
-        if (currentLineKey !== lineKey) return currentLine;
+        return currentLineKey !== lineKey;
       });
       const mappedLineData = newLines.map((line) => {
         return { lineId: line.data.line.lineId };
