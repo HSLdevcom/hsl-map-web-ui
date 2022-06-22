@@ -129,7 +129,6 @@ class MapContainer extends Component {
     const lines = await Promise.all(
       paramsArray.map((params) => this.queryPromise(params))
     );
-    console.log(lines);
     return lines;
   };
 
@@ -201,7 +200,7 @@ class MapContainer extends Component {
     const alertQueryParams = this.getAlertQueryParams(linesArray);
     try {
       const lineAlertsArray = await fetch(
-        `${process.env.REACT_APP_TRANSITLOG_PROXY_URL}/alerts?${alertQueryParams}`
+        `${process.env.REACT_APP_SERVER_URL}/alerts?${alertQueryParams}`
       ).then((res) => res.json());
       const alerts = await Promise.all(lineAlertsArray);
       this.setState({ isLoading: false });
