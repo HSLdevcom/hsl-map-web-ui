@@ -17,15 +17,15 @@ const LineIcon = ({
     <span className={styles.lineIconWrapper}>
       {trunkRoute ? (
         <TrunkIcon height={iconSize} />
-      ) : transportType === "tram" ? (
+      ) : transportType === "TRAM" ? (
         <TramIcon height={iconSize} />
       ) : (
         <BusIcon height={iconSize} />
       )}
       <span
         className={classNames(styles.lineNumber, {
-          [styles.tram]: transportType === "tram",
-          [styles.bus]: transportType !== "tram",
+          [styles.tram]: transportType === "TRAM",
+          [styles.bus]: transportType !== "TRAM",
           [styles.trunk]: trunkRoute,
         })}>
         {shortName}
