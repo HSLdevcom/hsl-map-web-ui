@@ -57,6 +57,9 @@ const allLinesQuery = gql`
         lineIdParsed
         routes {
           totalCount
+          nodes {
+            mode
+          }
         }
       }
     }
