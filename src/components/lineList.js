@@ -202,7 +202,7 @@ const LineList = inject("lineStore")(
                     lineId={line.lineId}
                     longName={line.nameFi}
                     shortName={line.lineNumber}
-                    transportType={line.transportType}
+                    transportType={line.routes.nodes[0].mode}
                     dateBegin={line.dateBegin}
                     dateEnd={line.dateEnd}
                     trunkRoute={line.trunkRoute === "1"}
