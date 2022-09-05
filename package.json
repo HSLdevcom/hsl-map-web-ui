@@ -15,6 +15,7 @@
     "graphql-tag": "^2.10.1",
     "hsl-map-style": "https://github.com/HSLdevcom/hsl-map-style",
     "leaflet": "^1.6.0",
+    "leaflet-path-drag": "^1.8.0-beta.3",
     "lodash": "^4.17.11",
     "mapillary-js": "^4.0.0",
     "material-ui": "^0.20.2",
@@ -56,6 +57,10 @@
     "eslint-config-prettier": "^5.0.0",
     "eslint-config-react-app": "^6",
     "eslint-plugin-prettier": "^3.1.0",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "react-error-overlay": "^6.0.9"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   }
 }

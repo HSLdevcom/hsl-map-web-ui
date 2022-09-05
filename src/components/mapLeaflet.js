@@ -123,6 +123,12 @@ const addGeometryLayer = (geometries, map) => {
   });
 };
 
+const addDocumentMarkerGroupLayer = (map, documentMarkerGroup) => {
+  if (!map.hasLayer(documentMarkerGroup)) {
+    map.addLayer(documentMarkerGroup);
+  }
+};
+
 const addControlButton = (map, toggleFullscreen, resetMapillaryLocation) => {
   const FullScreenControl = L.Control.extend({
     options: {
@@ -196,6 +202,29 @@ const addMapillaryButton = (map, initMapillaryLayer) => {
   map.addControl(new MapillaryControl());
 };
 
+const addPrintButton = (map, togglePrint) => {
+  const PrintControl = L.Control.extend({
+    options: {
+      position: "topleft",
+    },
+    onAdd: () => {
+      const icon = L.DomUtil.create("div");
+      const container = L.DomUtil.create("button", "leaflet-bar leaflet-control");
+      icon.innerHTML = "🖨️";
+      icon.height = "11";
+      icon.width = "11";
+      container.className = styles.controlButton;
+      container.appendChild(icon);
+      container.onclick = () => {
+        togglePrint();
+      };
+      L.DomEvent.disableClickPropagation(container);
+      return container;
+    },
+  });
+  map.addControl(new PrintControl());
+};
+
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
     options: {
@@ -236,12 +265,6 @@ const updateFilterLayer = (isFullScreen, isRouteFilterExpanded, mapillaryLocatio
   }
 };
 
-const addPrintToolBox = (map, documentMarkerGroup) => {
-  if (!map.hasLayer(documentMarkerGroup)) {
-    map.addLayer(documentMarkerGroup);
-  }
-};
-
 class MapLeaflet extends React.Component {
   constructor(props) {
     super(props);
@@ -251,6 +274,7 @@ class MapLeaflet extends React.Component {
       showMapillaryLayer: !isMobile,
       mapillaryLocation: null,
       mapillaryImageLocation: null,
+      togglePrint: false,
     };
 
     this.map = null;
@@ -259,6 +283,7 @@ class MapLeaflet extends React.Component {
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
     this.toggleLocation = this.toggleLocation.bind(this);
+    this.togglePrint = this.togglePrint.bind(this);
     this.initMapillaryLayer = this.initMapillaryLayer.bind(this);
     this.bindEvents = this.bindEvents.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -399,6 +424,11 @@ class MapLeaflet extends React.Component {
     return nextLocationOn;
   }
 
+  togglePrint() {
+    const togglePrint = this.state.togglePrint;
+    this.setState({ togglePrint: !togglePrint });
+  }
+
   initializeMap() {
     const digitransitTileLayer = L.tileLayer(
       "https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}{retina}.png",
@@ -449,6 +479,7 @@ class MapLeaflet extends React.Component {
     }
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
+    addPrintButton(this.map, this.togglePrint);
 
     if (!isMobile) {
       this.documentMarkerGroup.addTo(this.map);
@@ -481,7 +512,7 @@ class MapLeaflet extends React.Component {
         );
 
       addGeometryLayer(selectedGeometries, this.map);
-      addPrintToolBox(this.map, this.documentMarkerGroup);
+      addDocumentMarkerGroupLayer(this.map, this.documentMarkerGroup);
     }
   }
 
@@ -604,10 +635,9 @@ class MapLeaflet extends React.Component {
           id="map-leaflet"
           className={classNames(styles.root, {
             [styles.fullScreen]: this.props.isFullScreen,
-            [styles.printableMap]: this.props.showPrintLayout,
           })}
         />
-        {this.map && !isMobile && (
+        {this.map && !isMobile && this.state.togglePrint && (
           <MapPrinter
             map={this.map}
             documentMarkerGroup={this.documentMarkerGroup}
