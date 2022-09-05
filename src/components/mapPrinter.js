@@ -268,6 +268,7 @@ class MapPrinter extends React.Component {
         <div className={styles.divider} />
         <div>
           <div className={styles.printTitle}>Mittakaava</div>
+          <span className={styles.mapScaleText}>1:</span>
           <input
             id="mapScale"
             className={styles.printInput}

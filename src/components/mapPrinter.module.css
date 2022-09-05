@@ -24,6 +24,12 @@
   font-size: 0.9rem;
 }
 
+.mapScaleText {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: white;
+}
+
 .divider {
   border-bottom: 2px #999999 solid;
   padding-bottom: 5px;
