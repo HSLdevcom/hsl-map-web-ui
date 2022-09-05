@@ -193,21 +193,18 @@ class MapPrinter extends React.Component {
     };
 
     try {
-      const response = await fetch(
-        "https://dev.kartat.hsl.fi/map-generator/generateImage",
-        {
-          method: "POST",
-          mode: "cors",
-          body: JSON.stringify({
-            options,
-            style,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-            "Accept-Encoding": "gzip, deflate, br",
-          },
-        }
-      );
+      const response = await fetch(process.env.REACT_APP_MAP_GENERATOR_URL, {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify({
+          options,
+          style,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Encoding": "gzip, deflate, br",
+        },
+      });
 
       const blob = await response.blob();
       const a = window.document.createElement("a");
