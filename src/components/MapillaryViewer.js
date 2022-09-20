@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { Viewer } from "mapillary-js";
 import { FiXCircle } from "react-icons/fi";
-import { observer } from "mobx-react-lite";
+import { observer } from "mobx-react";
 import { getClosestMapillaryImage } from "../utils/mapUtils";
 import styles from "./mapillaryViewer.module.css";
 

@@ -1,0 +1,22 @@
+.bannerContainer {
+  background: #333;
+  font-size: 0.875rem;
+  display: flex;
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  flex: 1 0 auto;
+  padding: 0.25rem 0.875rem;
+  margin-left: auto;
+}
+
+.bannerText {
+  display: flex;
+  color: white;
+  flex: 1 0 auto;
+  padding: 0rem 0.75rem;
+}
+
+.date {
+  color: #dddddc;
+  font-size: 0.75rem;
+}

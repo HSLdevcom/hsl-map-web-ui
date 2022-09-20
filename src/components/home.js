@@ -25,13 +25,15 @@ class Home extends React.Component {
 
   lineNumbers = (selectedLines) => {
     return selectedLines.map((line, index) => {
-      const type = line.transportType;
+      const type =
+        line.routes.nodes.length > 0 ? line.routes.nodes[0].mode : line.transportType;
       return (
         <div key={index} className={styles.row}>
           <div
             className={classnames(styles.lineNumber, {
-              [styles.tram]: type === "tram",
-              [styles.bus]: type !== "tram",
+              [styles.tram]: type === "TRAM",
+              [styles.bus]: type !== "TRAM",
+              [styles.trunk]: line.trunkRoute === "1",
             })}>
             {line.lineNumber}
           </div>

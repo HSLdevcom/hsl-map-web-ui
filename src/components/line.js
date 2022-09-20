@@ -2,12 +2,13 @@ import React from "react";
 import LineIcon from "./lineIcon";
 import PropTypes from "prop-types";
 
-const Line = ({ longName, shortName, transportType }) => (
+const Line = ({ longName, shortName, transportType, trunkRoute }) => (
   <div>
     <LineIcon
       transportType={transportType}
       shortName={shortName}
       lineNameFi={longName}
+      trunkRoute={trunkRoute}
       iconSize="24"
     />
   </div>

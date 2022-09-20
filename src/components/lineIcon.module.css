@@ -26,3 +26,7 @@
 .tram {
   color: var(--tramGreen);
 }
+
+.trunk {
+  color: #ff6319;
+}

@@ -23,6 +23,7 @@ import restroomIcon from "../icons/restroom-solid.svg";
 import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
 import { isMobile } from "../utils/browser";
+import MapPrinter from "./mapPrinter";
 
 const MAX_DISTANCE_TO_RESTROOM = 500;
 
@@ -36,6 +37,12 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
     timeIcon = timeIcon2;
   }
 
+  const firstStop = first(stops);
+  const lastStop = last(stops);
+  if (firstStop.platform) {
+    stops.unshift(firstStop);
+  }
+
   stops.forEach((stop, index) => {
     let icon;
     if (index === 0) {
@@ -43,15 +50,21 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
     } else if (stop.timingStopType > 0) {
       icon = mapIcon(timeIcon);
     } else {
-      icon = stopIcon(stop.isCenteredStop && styles.centeredStop, stop.color);
+      icon = stopIcon({
+        centeredStop: stop.isCenteredStop && styles.centeredStop,
+        color: stop.color,
+        platform: stop.platform,
+      });
     }
+
     const marker = L.marker([stop.lat, stop.lon], { icon });
-    marker.bindTooltip(`${stop.shortId} ${stop.nameFi}`, { direction: "top" });
+    const tooltipContent = `${stop.shortId} ${stop.nameFi}${
+      stop.platform ? `, lait. ${stop.platform}` : ""
+    }`;
+    marker.bindTooltip(tooltipContent, { direction: "top" });
     marker.addTo(map);
   });
 
-  const firstStop = first(stops);
-  const lastStop = last(stops);
   const firstStopMarkerLatLng = L.marker([firstStop.lat, firstStop.lon]).getLatLng();
   const lastStopMarkerLatLng = L.marker([lastStop.lat, lastStop.lon]).getLatLng();
   const closeByRestrooms = [];
@@ -108,6 +121,12 @@ const addGeometryLayer = (geometries, map) => {
       },
     }).addTo(map);
   });
+};
+
+const addDocumentMarkerGroupLayer = (map, documentMarkerGroup) => {
+  if (!map.hasLayer(documentMarkerGroup)) {
+    map.addLayer(documentMarkerGroup);
+  }
 };
 
 const addControlButton = (map, toggleFullscreen, resetMapillaryLocation) => {
@@ -183,6 +202,29 @@ const addMapillaryButton = (map, initMapillaryLayer) => {
   map.addControl(new MapillaryControl());
 };
 
+const addPrintButton = (map, togglePrint) => {
+  const PrintControl = L.Control.extend({
+    options: {
+      position: "topleft",
+    },
+    onAdd: () => {
+      const icon = L.DomUtil.create("div");
+      const container = L.DomUtil.create("button", "leaflet-bar leaflet-control");
+      icon.innerHTML = "🖨️";
+      icon.height = "11";
+      icon.width = "11";
+      container.className = styles.controlButton;
+      container.appendChild(icon);
+      container.onclick = () => {
+        togglePrint();
+      };
+      L.DomEvent.disableClickPropagation(container);
+      return container;
+    },
+  });
+  map.addControl(new PrintControl());
+};
+
 const addRouteFilterLayer = (map) => {
   const RouteFilterControl = L.Control.extend({
     options: {
@@ -232,13 +274,16 @@ class MapLeaflet extends React.Component {
       showMapillaryLayer: !isMobile,
       mapillaryLocation: null,
       mapillaryImageLocation: null,
+      togglePrint: false,
     };
 
     this.map = null;
+    this.documentMarkerGroup = new L.LayerGroup();
     this.locationFound = false; // Class variable, because this doesn't affect the rendering.
     this.initializeMap = this.initializeMap.bind(this);
     this.addLayersToMap = this.addLayersToMap.bind(this);
     this.toggleLocation = this.toggleLocation.bind(this);
+    this.togglePrint = this.togglePrint.bind(this);
     this.initMapillaryLayer = this.initMapillaryLayer.bind(this);
     this.bindEvents = this.bindEvents.bind(this);
     this.onClick = this.onClick.bind(this);
@@ -251,14 +296,13 @@ class MapLeaflet extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // All layers except the base layer are removed when the component is updated
+    // All layers except the base layer and mapillary features are removed when the component is updated
     this.map.eachLayer((layer) => {
       if (!layer.options.baseLayer) {
         if (
           layer.options.type !== "mapillaryGeoJsonLayer" &&
           layer.options.type !== "mapillaryImageMarker" &&
-          layer.options.type !== "mapillaryHighlightMarker" &&
-          !layer._layers
+          layer.options.type !== "mapillaryHighlightMarker"
         ) {
           this.map.removeLayer(layer);
         }
@@ -305,6 +349,7 @@ class MapLeaflet extends React.Component {
       this.state.mapillaryLocation
     );
     this.map.invalidateSize();
+    this.documentMarkerGroup.setZIndex(9999); //Always bring the document markers to top, so they don't go out of sight after updates.
   }
 
   bindEvents = () => {
@@ -379,17 +424,21 @@ class MapLeaflet extends React.Component {
     return nextLocationOn;
   }
 
+  togglePrint() {
+    const togglePrint = this.state.togglePrint;
+    this.setState({ togglePrint: !togglePrint });
+  }
+
   initializeMap() {
     const digitransitTileLayer = L.tileLayer(
       "https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}{retina}.png",
       {
-        maxZoom: 18,
+        maxZoom: 19,
         tileSize: 512,
         zoomOffset: -1,
         attribution:
-          'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-          '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-          'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          'Map data: <a href="https://openmaptiles.org/">&copy; OpenMapTiles</a> ' +
+          '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
         retina: L.Browser.retina ? "@2x" : "", // Use @2x tiles for retina displays
         baseLayer: true,
       }
@@ -398,17 +447,21 @@ class MapLeaflet extends React.Component {
     const aerialTileLayer = L.tileLayer(
       "https://ortophotos.blob.core.windows.net/hsy-map/hsy_tiles2/{z}/{x}/{y}.jpg",
       {
-        maxZoom: 18,
+        maxZoom: 19,
         tileSize: 256,
-        attribution: 'Imagery &copy; <a href="https://www.hsy.fi/">HSY</a>',
+        attribution:
+          'Imagery: <a href="https://www.hsy.fi/">&copy; HSY 2021</a> ' +
+          '<a href="https://www.maanmittauslaitos.fi/avoindata-lisenssi-cc40">&copy; Maamittauslaitos 2021</a>',
         detectRetina: true, // @2x tiles not available, use detectRetina -feature
+        baseLayer: true,
       }
     );
 
     this.map = L.map("map-leaflet", {
       center: [60.170988, 24.940842],
       zoom: 13,
-      layers: [digitransitTileLayer, aerialTileLayer],
+      layers: [digitransitTileLayer], // Digitransit layer as default
+      drawControl: true,
     });
 
     const baseMaps = {
@@ -426,6 +479,12 @@ class MapLeaflet extends React.Component {
     }
     addLocationButton(this.map, this.toggleLocation);
     addMapillaryButton(this.map, this.initMapillaryLayer);
+    addPrintButton(this.map, this.togglePrint);
+
+    if (!isMobile) {
+      this.documentMarkerGroup.addTo(this.map);
+    }
+
     addRouteFilterLayer(this.map);
   }
 
@@ -453,6 +512,7 @@ class MapLeaflet extends React.Component {
         );
 
       addGeometryLayer(selectedGeometries, this.map);
+      addDocumentMarkerGroupLayer(this.map, this.documentMarkerGroup);
     }
   }
 
@@ -575,9 +635,16 @@ class MapLeaflet extends React.Component {
           id="map-leaflet"
           className={classNames(styles.root, {
             [styles.fullScreen]: this.props.isFullScreen,
-            [styles.printableMap]: this.props.showPrintLayout,
           })}
         />
+        {this.map && !isMobile && this.state.togglePrint && (
+          <MapPrinter
+            map={this.map}
+            documentMarkerGroup={this.documentMarkerGroup}
+            selectedRoutes={this.props.selectedRoutes}
+            routes={this.props.routes}
+          />
+        )}
         {this.state.mapillaryLocation && (
           <MapillaryViewer
             onCloseViewer={this.resetMapillaryLocation}
