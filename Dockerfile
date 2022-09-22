@@ -18,6 +18,10 @@ COPY . ${WORK}
 ARG BUILD_ENV=prod
 COPY .env.${BUILD_ENV} ${WORK}/.env.production
 
+# Apikey for Digitransit maps
+ARG DIGITRANSIT_APIKEY
+ENV REACT_APP_DIGITRANSIT_APIKEY=${DIGITRANSIT_APIKEY}
+
 RUN yarn build
 
 # The actual image comes here

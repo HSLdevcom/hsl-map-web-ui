@@ -430,8 +430,12 @@ class MapLeaflet extends React.Component {
   }
 
   initializeMap() {
+    const apikey = process.env.REACT_APP_DIGITRANSIT_APIKEY
+      ? `?digitransit-subscription-key=${process.env.REACT_APP_DIGITRANSIT_APIKEY}`
+      : "";
+
     const digitransitTileLayer = L.tileLayer(
-      "https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}{retina}.png",
+      `${process.env.REACT_APP_DIGITRANSIT_URL}/map/v2/hsl-map/{z}/{x}/{y}{retina}.png${apikey}`,
       {
         maxZoom: 19,
         tileSize: 512,

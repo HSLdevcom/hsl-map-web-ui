@@ -6901,7 +6901,7 @@ hpack.js@^2.1.6:
 
 "hsl-map-style@https://github.com/HSLdevcom/hsl-map-style":
   version "1.0.0"
-  resolved "https://github.com/HSLdevcom/hsl-map-style#56a86abaaf3bf72413b491ffa51cabb1aabb927b"
+  resolved "https://github.com/HSLdevcom/hsl-map-style#b054723f9afb31b8acc1398808628194ddcfd832"
   dependencies:
     lodash "^4.17.4"
 
