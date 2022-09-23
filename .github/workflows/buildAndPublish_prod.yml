@@ -40,6 +40,7 @@ jobs:
           tags: ${{ format('hsldevcom/hsl-map-web-ui:prod-{0}-{1}', steps.timestamp.outputs.timestamp, steps.commit_hash.outputs.hash) }}
           build-args: |
             BUILD_ENV=prod
+            DIGITRANSIT_APIKEY=${{ secrets.KARTAT_DIGITRANSITAPIKEY_PROD }}
 
       - name: Build and push
         uses: docker/build-push-action@v2
