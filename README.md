@@ -18,7 +18,7 @@ $ cd hsl-map-web-ui && yarn install
 ### Digitransit apikey
 
 Create your own apikey for Digitransit (https://portal-dev-api.digitransit.fi)
-Copy .env.local to .env and place your apikey to `REACT_APP_DIGITRANSIT_APIKEY` variable.
+Copy .env to .env.local and place your apikey to `REACT_APP_DIGITRANSIT_APIKEY` variable.
 
 ## Run
 
