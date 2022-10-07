@@ -50,3 +50,4 @@ jobs:
           tags: hsldevcom/hsl-map-web-ui:stage
           build-args: |
             BUILD_ENV=stage
+            DIGITRANSIT_APIKEY=${{ secrets.KARTAT_DIGITRANSITAPIKEY_PROD }}

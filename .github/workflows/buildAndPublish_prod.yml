@@ -50,3 +50,4 @@ jobs:
           tags: hsldevcom/hsl-map-web-ui:prod
           build-args: |
             BUILD_ENV=prod
+            DIGITRANSIT_APIKEY=${{ secrets.KARTAT_DIGITRANSITAPIKEY_PROD }}
