@@ -163,6 +163,7 @@ class Sidebar extends React.Component {
                           showFilter={this.props.showFilter}
                           toggleFilter={this.props.toggleFilter}
                           setMapCenter={this.props.setMapCenter}
+                          trunkRoute={line.trunkRoute}
                         />
                       </div>
                       <div className={styles.removeButtonContainer}>

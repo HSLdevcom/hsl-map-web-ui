@@ -40,11 +40,12 @@ const RouteFilter = (props) => (
             key={`routeFilterDateGroup${dateIndex}`}
             className={classNames(hasSelectedRoutes === undefined ? styles.noPrint : "")}>
             <LineIcon
-              transportType={routeDate[0].mode.toLowerCase()}
+              transportType={routeDate[0].mode}
               shortName={routeDate[0].line.nodes[0].lineIdParsed}
               lineNameFi={routeDate[0].nameFi}
               iconSize="24"
               additionalStyle={{ marginBottom: "15px" }}
+              trunkRoute={props.trunkRoute}
             />
             <p className={styles.dateLabel}>
               {parseDate(routeDate[0].dateBegin)} - {parseDate(routeDate[0].dateEnd)}
