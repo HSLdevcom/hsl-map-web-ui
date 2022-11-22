@@ -40,6 +40,7 @@ jobs:
           tags: ${{ format('hsldevcom/hsl-map-web-ui:dev-{0}-{1}', steps.timestamp.outputs.timestamp, steps.commit_hash.outputs.hash) }}
           build-args: |
             BUILD_ENV=dev
+            DIGITRANSIT_APIKEY=${{ secrets.KARTAT_DIGITRANSITAPIKEY_DEV }}
 
       - name: Build and push
         uses: docker/build-push-action@v3
@@ -49,3 +50,4 @@ jobs:
           tags: hsldevcom/hsl-map-web-ui:dev
           build-args: |
             BUILD_ENV=dev
+            DIGITRANSIT_APIKEY=${{ secrets.KARTAT_DIGITRANSITAPIKEY_DEV }}

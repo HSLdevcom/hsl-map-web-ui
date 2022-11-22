@@ -34,7 +34,17 @@ const DOCUMENT_SIZES = {
 const getHSLStyle = (selectedRoutes, date) => {
   const printRoutes = selectedRoutes.length > 0 ? true : false;
   return generateStyle({
-    sourcesUrl: "https://cdn.digitransit.fi/",
+    sourcesUrl: process.env.REACT_APP_DIGITRANSIT_URL,
+    // Add parameter if apikey was given
+    ...(process.env.REACT_APP_DIGITRANSIT_URL && {
+      queryParams: [
+        {
+          url: process.env.REACT_APP_DIGITRANSIT_URL,
+          name: "digitransit-subscription-key",
+          value: process.env.REACT_APP_DIGITRANSIT_APIKEY,
+        },
+      ],
+    }),
     components: {
       base: { enabled: true },
       municipal_borders: { enabled: false },
