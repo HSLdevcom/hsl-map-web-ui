@@ -58,6 +58,7 @@ const App = () => (
               <Router basename={rootPath}>
                 <Route component={Home} path="/" exact />
                 <Route path={"/map"} component={MapContainer} />
+                <Route path={"/health"} component={() => <h1>OK</h1>} />
               </Router>
             </ErrorBoundary>
           </MuiThemeProvider>
