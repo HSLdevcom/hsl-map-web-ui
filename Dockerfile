@@ -34,10 +34,10 @@ ENV WORK /opt/driver-instructions
 RUN mkdir -p ${WORK}
 WORKDIR ${WORK}
 
-# Install serve and forever
-RUN yarn global add serve@^13.0.2 forever@^4.0.3
+# Install serve
+RUN yarn global add serve@^14.2.0
 
 COPY --from=builder /opt/driver-instructions/build build/
 
-CMD forever start -c "serve -s -l 3000" build/ && forever logs -f 0
+CMD ["serve", "-s", "-l 3000", "build/"]
 
