@@ -39,5 +39,5 @@ RUN yarn global add serve@^14.2.0
 
 COPY --from=builder /opt/driver-instructions/build build/
 
-CMD ["serve", "-s", "-l 3000", "build/"]
+CMD ["serve", "-s", "-l" "3000", "build/"]
 
