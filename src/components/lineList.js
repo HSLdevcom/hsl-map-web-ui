@@ -12,7 +12,9 @@ import styles from "./lineList.module.css";
 const transportTypeOrder = ["tram", "bus"];
 
 const removeTrainsFilter = (line) => line.lineId.substring(0, 1) !== "3";
-const removeFerryFilter = (line) => line.lineId.substring(0, 4) !== "1019";
+const removeFerryFilter = (line) => {
+  return line.routes.nodes[0].type !== "07";
+};
 
 const setTransportTypeMapper = (line) => {
   if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
@@ -59,6 +61,7 @@ const allLinesQuery = gql`
           totalCount
           nodes {
             mode
+            type
           }
         }
       }
@@ -169,7 +172,6 @@ const LineList = inject("lineStore")(
             const queries = query.toLowerCase().split(",");
             return linesFilteredByDate
               .filter((node) => node.routes.totalCount !== 0)
-              .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
               .filter((line) => isIgnoredLine(line))
               .map(setTransportTypeMapper)
