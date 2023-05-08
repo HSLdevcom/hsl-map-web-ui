@@ -172,6 +172,7 @@ const LineList = inject("lineStore")(
             const queries = query.toLowerCase().split(",");
             return linesFilteredByDate
               .filter((node) => node.routes.totalCount !== 0)
+              .filter(removeTrainsFilter)
               .filter(removeFerryFilter)
               .filter((line) => isIgnoredLine(line))
               .map(setTransportTypeMapper)
