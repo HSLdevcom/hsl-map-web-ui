@@ -9,7 +9,6 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.13.7",
     "@turf/turf": "^6.5.0",
-    "apollo-fetch": "^0.7.0",
     "classnames": "^2.2.6",
     "dayjs": "^1.10.7",
     "graphql": "^16.7.1",
@@ -22,12 +21,12 @@
     "mobx-react": "^7.6.0",
     "prop-types": "^15.7.2",
     "qs": "^6.9.4",
-    "react": "^17",
-    "react-dom": "^17",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-icons": "^4.1.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "5.0.1",
-    "react-tabs": "^3.2.3"
+    "react-tabs": "^6.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -53,7 +52,7 @@
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2"
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0"
   }
 }

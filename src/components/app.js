@@ -50,7 +50,10 @@ const App = () => (
         <ErrorBoundary>
           <Router basename={rootPath}>
             <Route component={Home} path="/" exact />
-            <Route path={"/map"} component={MapContainer} />
+            <Route
+              path={"/map"}
+              render={(props) => <MapContainer {...props} apolloClient={client} />}
+            />
           </Router>
         </ErrorBoundary>
       </ApolloProvider>

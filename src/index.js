@@ -1,9 +1,10 @@
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import App from "./components/app";
 import "./styles/base.css";
 
-const root = document.body.appendChild(document.createElement("div"));
+const container = document.getElementById("root");
+const root = createRoot(container);
 
-render(<App />, root);
+root.render(<App />);
