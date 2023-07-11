@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
 import CircularProgress from "material-ui/CircularProgress";
-import gql from "graphql-tag";
 import dayjs from "dayjs";
-import { Query } from "react-apollo";
+import { useQuery, gql } from "@apollo/client";
 import { get, groupBy, orderBy } from "lodash";
 import Line from "./line";
 import LineSearch from "./lineSearch";
@@ -73,6 +72,9 @@ const LineList = inject("lineStore")(
   observer((props) => {
     const [query, setQuery] = useState("");
     const [selectedLines, setSelectedLines] = useState([]);
+
+    const { loading, error, data } = useQuery(allLinesQuery);
+
     const updateQuery = useCallback((e) => {
       setQuery(e.target.value);
     }, []);
@@ -130,6 +132,67 @@ const LineList = inject("lineStore")(
       return !ignoredLineKeys.includes(lineKey);
     };
 
+    const getLineObjects = () => {
+      const lines = get(data, "allLines.nodes", []).filter((line) => {
+        const now = dayjs();
+        const dateEnd = dayjs(line.dateEnd, "YYYY-MM-DD");
+        return !dateEnd.isBefore(now);
+      });
+      const groupedLines = groupBy(lines, "lineId");
+      const groupedLinesKeys = Object.keys(groupedLines);
+      const linesFilteredByDate = groupedLinesKeys.map((key) => {
+        const lineGroupSortedByDate = orderBy(
+          groupedLines[key],
+          (line) => dayjs(line.dateBegin, "YYYY-MM-DD"),
+          ["asc"]
+        );
+        return lineGroupSortedByDate[0];
+      });
+      const queries = query.toLowerCase().split(",");
+      return linesFilteredByDate
+        .filter((node) => node.routes.totalCount !== 0)
+        .filter(removeTrainsFilter)
+        .filter(removeFerryFilter)
+        .filter((line) => isIgnoredLine(line))
+        .map(setTransportTypeMapper)
+        .map(lineNumberMapper)
+        .sort(linesSorter)
+        .filter((value) => {
+          if (value.lineId) {
+            return (
+              value.lineNumber.startsWith(query) ||
+              value.nameFi.toLowerCase().includes(query.toLowerCase()) ||
+              isSelected(value) ||
+              queries.includes(value.lineNumber)
+            );
+          }
+          return false;
+        })
+        .map((line, index) => (
+          <div
+            className={
+              isSelected(line)
+                ? styles.divContainerSelected
+                : props.isMobile
+                ? styles.divContainerMobile
+                : styles.divContainer
+            }
+            key={index}
+            onClick={() => handleClick(line)}>
+            <Line
+              key={`${line.lineId}_${line.dateBegin}_${line.dateEnd}`}
+              lineId={line.lineId}
+              longName={line.nameFi}
+              shortName={line.lineNumber}
+              transportType={line.routes.nodes[0].mode}
+              dateBegin={line.dateBegin}
+              dateEnd={line.dateEnd}
+              trunkRoute={line.trunkRoute === "1"}
+            />
+          </div>
+        ));
+    };
+
     return (
       <div>
         {!props.hideTitle && (
@@ -139,81 +202,13 @@ const LineList = inject("lineStore")(
         )}
 
         <LineSearch query={query} onChange={updateQuery} />
-        <Query query={allLinesQuery}>
-          {({ data }) => {
-            if (!data.allLines) {
-              return (
-                <div
-                  className={`${
-                    props.frontpage ? styles.frontpageLoading : styles.loading
-                  }`}>
-                  <CircularProgress
-                    size={200}
-                    style={{ display: "block", margin: "auto" }}
-                  />
-                </div>
-              );
-            }
-            const lines = get(data, "allLines.nodes", []).filter((line) => {
-              const now = dayjs();
-              const dateEnd = dayjs(line.dateEnd, "YYYY-MM-DD");
-              return !dateEnd.isBefore(now);
-            });
-            const groupedLines = groupBy(lines, "lineId");
-            const groupedLinesKeys = Object.keys(groupedLines);
-            const linesFilteredByDate = groupedLinesKeys.map((key) => {
-              const lineGroupSortedByDate = orderBy(
-                groupedLines[key],
-                (line) => dayjs(line.dateBegin, "YYYY-MM-DD"),
-                ["asc"]
-              );
-              return lineGroupSortedByDate[0];
-            });
-            const queries = query.toLowerCase().split(",");
-            return linesFilteredByDate
-              .filter((node) => node.routes.totalCount !== 0)
-              .filter(removeTrainsFilter)
-              .filter(removeFerryFilter)
-              .filter((line) => isIgnoredLine(line))
-              .map(setTransportTypeMapper)
-              .map(lineNumberMapper)
-              .sort(linesSorter)
-              .filter((value) => {
-                if (value.lineId) {
-                  return (
-                    value.lineNumber.startsWith(query) ||
-                    value.nameFi.toLowerCase().includes(query.toLowerCase()) ||
-                    isSelected(value) ||
-                    queries.includes(value.lineNumber)
-                  );
-                }
-                return false;
-              })
-              .map((line, index) => (
-                <div
-                  className={
-                    isSelected(line)
-                      ? styles.divContainerSelected
-                      : props.isMobile
-                      ? styles.divContainerMobile
-                      : styles.divContainer
-                  }
-                  key={index}
-                  onClick={() => handleClick(line)}>
-                  <Line
-                    key={`${line.lineId}_${line.dateBegin}_${line.dateEnd}`}
-                    lineId={line.lineId}
-                    longName={line.nameFi}
-                    shortName={line.lineNumber}
-                    transportType={line.routes.nodes[0].mode}
-                    dateBegin={line.dateBegin}
-                    dateEnd={line.dateEnd}
-                    trunkRoute={line.trunkRoute === "1"}
-                  />
-                </div>
-              ));
-          }}
-        </Query>
+        {loading && (
+          <div
+            className={`${props.frontpage ? styles.frontpageLoading : styles.loading}`}>
+            <CircularProgress size={200} style={{ display: "block", margin: "auto" }} />
+          </div>
+        )}
+        {data && getLineObjects()}
       </div>
     );
   })

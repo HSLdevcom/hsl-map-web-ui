@@ -1,11 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "mobx-react";
-import { ApolloProvider } from "react-apollo";
-import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
-import { ApolloClient } from "apollo-client";
-import { HttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import Home from "./home";
@@ -52,16 +48,14 @@ const App = () => (
     <ServerMessage />
     <Provider {...stores}>
       <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client}>
-          <MuiThemeProvider>
-            <ErrorBoundary>
-              <Router basename={rootPath}>
-                <Route component={Home} path="/" exact />
-                <Route path={"/map"} component={MapContainer} />
-              </Router>
-            </ErrorBoundary>
-          </MuiThemeProvider>
-        </ApolloHooksProvider>
+        <MuiThemeProvider>
+          <ErrorBoundary>
+            <Router basename={rootPath}>
+              <Route component={Home} path="/" exact />
+              <Route path={"/map"} component={MapContainer} />
+            </Router>
+          </ErrorBoundary>
+        </MuiThemeProvider>
       </ApolloProvider>
     </Provider>
   </div>
