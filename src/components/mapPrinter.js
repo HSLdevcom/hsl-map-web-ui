@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import { first } from "lodash";
-import CircularProgress from "material-ui/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import "leaflet-path-drag";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";

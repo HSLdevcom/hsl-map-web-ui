@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { inject, observer } from "mobx-react";
-import CircularProgress from "material-ui/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import dayjs from "dayjs";
 import { useQuery, gql } from "@apollo/client";
 import { get, groupBy, orderBy } from "lodash";
@@ -205,7 +205,7 @@ const LineList = inject("lineStore")(
         {loading && (
           <div
             className={`${props.frontpage ? styles.frontpageLoading : styles.loading}`}>
-            <CircularProgress size={200} style={{ display: "block", margin: "auto" }} />
+            <CircularProgress size={200} thickness={1} style={{ display: "block", margin: "auto" }} />
           </div>
         )}
         {data && getLineObjects()}

@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Provider } from "mobx-react";
 import { ApolloProvider, ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 import Home from "./home";
 import MapContainer from "./mapContainer";
@@ -48,14 +47,12 @@ const App = () => (
     <ServerMessage />
     <Provider {...stores}>
       <ApolloProvider client={client}>
-        <MuiThemeProvider>
-          <ErrorBoundary>
-            <Router basename={rootPath}>
-              <Route component={Home} path="/" exact />
-              <Route path={"/map"} component={MapContainer} />
-            </Router>
-          </ErrorBoundary>
-        </MuiThemeProvider>
+        <ErrorBoundary>
+          <Router basename={rootPath}>
+            <Route component={Home} path="/" exact />
+            <Route path={"/map"} component={MapContainer} />
+          </Router>
+        </ErrorBoundary>
       </ApolloProvider>
     </Provider>
   </div>
