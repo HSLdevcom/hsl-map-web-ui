@@ -10,6 +10,7 @@ import Notes from "./notes";
 import styles from "./sidebar.module.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import LineAlertList from "./lineAlertList";
+import { runInAction } from "mobx";
 
 class Sidebar extends React.Component {
   constructor() {
@@ -26,7 +27,10 @@ class Sidebar extends React.Component {
   addLines = (selectedLines) => {
     this.setState({ showAddLines: false });
     this.props.onAddLines(selectedLines);
-    this.props.lineStore.setSelectedLines([]);
+
+    runInAction(() => {
+      this.props.lineStore.setSelectedLines([]);
+    });
   };
 
   getSelectedLineShortIds = (selectedLines) => {
