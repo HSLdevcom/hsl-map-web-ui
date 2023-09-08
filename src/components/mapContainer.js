@@ -7,17 +7,7 @@ import uniq from "lodash/uniq";
 import Map from "./map";
 import dayjs from "dayjs";
 
-const parseLineNumber = (lineId) =>
-  // Remove 1st number, which represents the city
-  // Remove all zeros from the beginning
-  lineId.substring(1).replace(/^0+/, "");
-
-const getTransportType = (line) => {
-  if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
-    return "tram";
-  }
-  return "bus";
-};
+import { parseLineNumber, parseTransportType } from "../utils/lineDataUtils";
 
 const lineQuery = gql`
   query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Date!) {
@@ -249,7 +239,7 @@ class MapContainer extends Component {
         lineId: line.lineId,
         nameFi: line.nameFi,
         lineKey: lineKey,
-        transportType: getTransportType(line),
+        transportType: parseTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
         trunkRoute: line.trunkRoute === "1",

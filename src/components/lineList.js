@@ -8,44 +8,26 @@ import { get, groupBy, orderBy } from "lodash";
 import Line from "./line";
 import LineSearch from "./lineSearch";
 import styles from "./lineList.module.css";
-
-const transportTypeOrder = ["tram", "bus"];
+import {
+  parseLineNumber,
+  parseTransportType,
+  compareLineNameOrder,
+} from "../utils/lineDataUtils";
 
 const removeTrainsFilter = (line) => line.lineId.substring(0, 1) !== "3";
 const removeFerryFilter = (line) => {
   return line.routes.nodes[0].type !== "07";
 };
 
-const setTransportTypeMapper = (line) => {
-  if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
-    return { ...line, transportType: "tram" };
-  }
-  return { ...line, transportType: "bus" };
-};
-
-const parseLineNumber = (lineId) =>
-  // Remove 1st number, which represents the city
-  // Remove all zeros from the beginning
-  lineId.substring(1).replace(/^0+/, "");
+const setTransportTypeMapper = (line) => ({
+  ...line,
+  transportType: parseTransportType(line),
+});
 
 const lineNumberMapper = (line) => ({
   ...line,
   lineNumber: parseLineNumber(line.lineId),
 });
-
-const linesSorter = (a, b) => {
-  if (a.transportType !== b.transportType) {
-    return transportTypeOrder.indexOf(a.transportType) >
-      transportTypeOrder.indexOf(b.transportType)
-      ? 1
-      : -1;
-  } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
-    return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
-  } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
-    return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
-  }
-  return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
-};
 
 const allLinesQuery = gql`
   query AllLinesQuery {
@@ -156,7 +138,7 @@ const LineList = (props) => {
       .filter((line) => isIgnoredLine(line))
       .map(setTransportTypeMapper)
       .map(lineNumberMapper)
-      .sort(linesSorter)
+      .sort(compareLineNameOrder)
       .filter((value) => {
         if (value.lineId) {
           return (
@@ -184,7 +166,7 @@ const LineList = (props) => {
             lineId={line.lineId}
             longName={line.nameFi}
             shortName={line.lineNumber}
-            transportType={line.routes.nodes[0].mode}
+            transportType={line.transportType}
             dateBegin={line.dateBegin}
             dateEnd={line.dateEnd}
             trunkRoute={line.trunkRoute === "1"}
