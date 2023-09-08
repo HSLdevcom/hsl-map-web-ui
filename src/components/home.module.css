@@ -70,15 +70,19 @@
 }
 
 .bus {
-  color: rgb(0, 122, 201);
+  color: var(--busBlue)
 }
 
 .tram {
-  color: rgb(0, 152, 95);
+  color: var(--tramGreen)
+}
+
+.lrail {
+  color: var(--lrailAzure)
 }
 
 .trunk {
-  color: #ff6319;
+  color: var(--trunkOrange)
 }
 
 .row {
