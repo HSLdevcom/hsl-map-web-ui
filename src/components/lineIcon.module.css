@@ -27,6 +27,10 @@
   color: var(--tramGreen);
 }
 
+.lrail {
+  color: var(--lrailAzure);
+}
+
 .trunk {
-  color: #ff6319;
+  color: var(--trunkOrange);
 }

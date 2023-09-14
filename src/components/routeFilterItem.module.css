@@ -54,14 +54,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-input:checked + .bus {
-  background-color: var(--busBlue);
-}
-
-input:checked + .tram {
-  background-color: var(--tramGreen);
-}
-
 .stopListButtonWrapper {
   padding-left: 20px;
 }

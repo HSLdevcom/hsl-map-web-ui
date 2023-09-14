@@ -1,16 +1,16 @@
 import React from "react";
-import { FiXCircle } from "react-icons/fi";
+import { FiXCircle, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { inject, observer } from "mobx-react";
 import classnames from "classnames";
 import RouteFilter from "./routeFilter";
 import LineList from "./lineList";
-import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import Header from "./header";
 import Notes from "./notes";
 import styles from "./sidebar.module.css";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import LineAlertList from "./lineAlertList";
 import { runInAction } from "mobx";
+import { compareLineNameOrder } from "../utils/lineDataUtils";
 
 class Sidebar extends React.Component {
   constructor() {
@@ -63,20 +63,7 @@ class Sidebar extends React.Component {
         )}
       </div>
     );
-    const sortedLines = this.props.lines.sort((a, b) => {
-      const transportTypeOrder = ["tram", "bus"];
-      if (a.transportType !== b.transportType) {
-        return transportTypeOrder.indexOf(a.transportType) >
-          transportTypeOrder.indexOf(b.transportType)
-          ? 1
-          : -1;
-      } else if (a.lineId.substring(1, 4) !== b.lineId.substring(1, 4)) {
-        return a.lineId.substring(1, 4) > b.lineId.substring(1, 4) ? 1 : -1;
-      } else if (a.lineId.substring(0, 1) !== b.lineId.substring(0, 1)) {
-        return a.lineId.substring(0, 1) > b.lineId.substring(0, 1) ? 1 : -1;
-      }
-      return a.lineId.substring(4, 6) > b.lineId.substring(4, 6) ? 1 : -1;
-    });
+    const sortedLines = this.props.lines.sort(compareLineNameOrder);
     const isMobile = this.props.isMobile;
     const mappedAlerts = this.props.alerts.map(({ lineId, alerts }) => {
       return {
