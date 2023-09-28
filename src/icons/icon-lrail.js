@@ -8,7 +8,7 @@ export default function LRailIcon({ height }) {
       <defs></defs>
       <g id="pikaratikka">
         <path
-          fill="#00b2a9"
+          fill="#0098A1"
           d="M25,0H175a25,25,0,0,1,25,25V175a25,25,0,0,1-25,25H25A25,25,0,0,1,0,175V25A25,25,0,0,1,25,0Z"
         />
         <path
