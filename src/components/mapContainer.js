@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { createApolloFetch } from "apollo-fetch";
+import { gql } from "@apollo/client";
 import { inject, observer } from "mobx-react";
 import qs from "qs";
 import sortBy from "lodash/sortBy";
@@ -7,84 +7,76 @@ import uniq from "lodash/uniq";
 import Map from "./map";
 import dayjs from "dayjs";
 
-const parseLineNumber = (lineId) =>
-  // Remove 1st number, which represents the city
-  // Remove all zeros from the beginning
-  lineId.substring(1).replace(/^0+/, "");
+import { parseLineNumber, parseTransportType } from "../utils/lineDataUtils";
 
-const getTransportType = (line) => {
-  if (line.lineId.substring(0, 4) >= 1001 && line.lineId.substring(0, 4) <= 1010) {
-    return "tram";
-  }
-  return "bus";
-};
-
-const lineQuery = `query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Date!) {
-  line: lineByLineIdAndDateBeginAndDateEnd(
-    lineId: $id
-    dateBegin: $dateBegin
-    dateEnd: $dateEnd
-  ) {
-    lineId
-    nameFi
-    dateBegin
-    dateEnd
-    trunkRoute
-    routes {
-      nodes {
-        routeId
-        direction
-        dateBegin
-        dateEnd
-        mode
-        nameFi
-        line {
-          nodes {
-            trunkRoute
-            lineIdParsed
+const lineQuery = gql`
+  query lineQuery($id: String!, $dateBegin: Date!, $dateEnd: Date!) {
+    line: lineByLineIdAndDateBeginAndDateEnd(
+      lineId: $id
+      dateBegin: $dateBegin
+      dateEnd: $dateEnd
+    ) {
+      lineId
+      nameFi
+      dateBegin
+      dateEnd
+      trunkRoute
+      routes {
+        nodes {
+          routeId
+          direction
+          dateBegin
+          dateEnd
+          mode
+          nameFi
+          line {
+            nodes {
+              trunkRoute
+              lineIdParsed
+            }
           }
-        }
-        routeSegments {
-          nodes {
-            stopIndex
-            timingStopType
-            duration
-            line {
-              nodes {
-                trunkRoute
+          routeSegments {
+            nodes {
+              stopIndex
+              timingStopType
+              duration
+              line {
+                nodes {
+                  trunkRoute
+                }
+              }
+              stop: stopByStopId {
+                stopId
+                lat
+                lon
+                shortId
+                nameFi
+                nameSe
+                platform
               }
             }
-            stop: stopByStopId {
-              stopId
-              lat
-              lon
-              shortId
-              nameFi
-              nameSe
-              platform
+          }
+          geometries {
+            nodes {
+              geometry
+              dateBegin
+              dateEnd
             }
           }
         }
-        geometries {
-          nodes {
-            geometry
-            dateBegin
-            dateEnd
-          }
+      }
+      notes {
+        nodes {
+          noteType
+          noteText
+          dateEnd
         }
       }
     }
-    notes {
-      nodes {
-        noteType
-        noteText
-        dateEnd
-      }
-    }
   }
-}`;
+`;
 
-const restroomQuery = `
+const restroomQuery = gql`
   query AllRestrooms {
     allRestrooms {
       edges {
@@ -111,32 +103,23 @@ class MapContainer extends Component {
     this.setState({ lines, restrooms, alerts: [], isLoading: false });
   }
 
-  queryPromise = async (params) => {
-    const fetch = createApolloFetch({
-      uri: process.env.REACT_APP_GRAPHQL_URL,
-    });
-
-    return await fetch({
-      query: lineQuery,
-      variables: params,
-    });
-  };
-
   getLines = async (params) => {
     const paramsArray = params.map((line) => {
       return { id: line.lineId, dateBegin: line.dateBegin, dateEnd: line.dateEnd };
     });
     const lines = await Promise.all(
-      paramsArray.map((params) => this.queryPromise(params))
+      paramsArray.map((params) =>
+        this.props.apolloClient.query({
+          query: lineQuery,
+          variables: params,
+        })
+      )
     );
     return lines;
   };
 
   getRestrooms = async (params) => {
-    const fetch = createApolloFetch({
-      uri: process.env.REACT_APP_GRAPHQL_URL,
-    });
-    const restrooms = await fetch({
+    const restrooms = await this.props.apolloClient.query({
       query: restroomQuery,
     });
 
@@ -256,7 +239,7 @@ class MapContainer extends Component {
         lineId: line.lineId,
         nameFi: line.nameFi,
         lineKey: lineKey,
-        transportType: getTransportType(line),
+        transportType: parseTransportType(line),
         lineNumber: parseLineNumber(line.lineId),
         lineRoutes: sortBy(line.routes.nodes, "dateBegin"),
         trunkRoute: line.trunkRoute === "1",

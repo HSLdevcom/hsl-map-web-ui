@@ -1,4 +1,4 @@
-FROM node:16-alpine as builder
+FROM node:18-alpine as builder
 
 ENV WORK /opt/driver-instructions
 
@@ -26,7 +26,7 @@ RUN yarn build
 
 # The actual image comes here
 
-FROM node:16-alpine as server
+FROM node:18-alpine as server
 
 ENV WORK /opt/driver-instructions
 
