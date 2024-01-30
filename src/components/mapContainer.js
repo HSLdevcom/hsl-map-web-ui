@@ -86,7 +86,6 @@ const restroomQuery = gql`
           type
           lat
           lon
-          point
           dateImported
           mode
         }
