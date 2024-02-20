@@ -555,7 +555,7 @@ class MapLeaflet extends React.Component {
     } else if (!latlng) {
       this.removeMarker();
     }
-    this.setState({ mapillaryImageLocation: { lat: latlng.lat, lng: latlng.lng } }); // Corrected to use lng instead of lon
+    this.setState({ mapillaryImageLocation: { lat: latlng.lat, lng: latlng.lng } });
   }
 
   onHover = (e) => {
