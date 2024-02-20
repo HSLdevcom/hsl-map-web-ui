@@ -20,6 +20,7 @@ import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import restroomIcon from "../icons/restroom-solid.svg";
+import { mapillaryImageMargerIcon } from '../icons/mapillaryImageMargerIcon.js';
 import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
 import { isMobile } from "../utils/browser";
@@ -83,11 +84,11 @@ const addMarkersToLayer = (stops, direction, map, restrooms) => {
   }
   closeByRestrooms.forEach((closeByRestroom) => {
     let icon = mapIcon(restroomIcon);
-    const markerr = L.marker([closeByRestroom.lat, closeByRestroom.lon], { icon });
-    markerr.bindTooltip(`${closeByRestroom.nameFi}, ${closeByRestroom.addressFi}`, {
+    const marker = L.marker([closeByRestroom.lat, closeByRestroom.lon], { icon });
+    marker.bindTooltip(`${closeByRestroom.nameFi}, ${closeByRestroom.addressFi}`, {
       direction: "top",
     });
-    markerr.addTo(map);
+    marker.addTo(map);
   });
 };
 
@@ -296,18 +297,6 @@ class MapLeaflet extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // All layers except the base layer and mapillary features are removed when the component is updated
-    this.map.eachLayer((layer) => {
-      if (!layer.options.baseLayer) {
-        if (
-          layer.options.type !== "mapillaryGeoJsonLayer" &&
-          layer.options.type !== "mapillaryImageMarker" &&
-          layer.options.type !== "mapillaryHighlightMarker"
-        ) {
-          this.map.removeLayer(layer);
-        }
-      }
-    });
     // Leaflet map is updated once geometry and stop data has been fetched
     // The view (bounding box) is set only the first time the route stops are recieved
     if (
@@ -468,6 +457,12 @@ class MapLeaflet extends React.Component {
       drawControl: true,
     });
 
+    if (this.map) {
+      this.map.createPane('imageMarkerPane');
+      this.map.getPane('imageMarkerPane').style.zIndex = 650; 
+      this.map.getPane('imageMarkerPane').style.pointerEvents = 'none';
+    }
+
     const baseMaps = {
       Aerial: aerialTileLayer,
       Digitransit: digitransitTileLayer,
@@ -524,44 +519,43 @@ class MapLeaflet extends React.Component {
     if (!this.state.showMapillaryLayer) {
       return;
     }
-    for (const key in e.target._layers) {
-      const layer = e.target._layers[key];
-      if (layer) {
-        if (layer.options.type === "mapillaryHighlightMarker") {
-          this.setState({ mapillaryLocation: layer._latlng });
-        }
+    e.target.eachLayer(layer => {
+      if (layer.options && layer.options.type === "mapillaryHighlightMarker") {
+        const latLng = layer.getLatLng();
+        this.setState({ mapillaryLocation: latLng });
       }
-    }
+    });
   }
 
-  setMapillaryLocation(position, playService) {
-    if (!this.state.mapillaryLocation) {
-      if (playService) {
-        playService.stop();
-      }
-      return;
+
+  
+  setMapillaryLocation({latlng, computedCompassAngle = 0}) {
+    function createRotatedIcon(computedCompassAngle) {
+      const svgIconHtml = mapillaryImageMargerIcon(computedCompassAngle);
+
+      const svgIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: svgIconHtml,
+        iconSize: [15, 15],
+        iconAnchor: [7.5, 7.5]
+      });
+    
+      return svgIcon;
     }
     if (this.imageMarker) {
       this.imageMarker.remove();
-      this.imageMarker = null;
     }
-    if (this.map && position) {
-      const marker = this.createMarker({
-        position: position,
-        opacity: 1,
-        type: "mapillaryImageMarker",
-        color: "red",
-      });
-      if (!this.imageMarker) {
-        this.imageMarker = marker;
-        this.imageMarker.addTo(this.map);
-      } else {
-        this.imageMarker.setLatLng(position);
-      }
-    } else if (!position) {
+  
+    if (this.map && latlng) {
+      const marker = L.marker(latlng, {
+        icon: createRotatedIcon(computedCompassAngle)
+      }).addTo(this.map);
+  
+      this.imageMarker = marker;
+    } else if (!latlng) {
       this.removeMarker();
     }
-    this.setState({ mapillaryImageLocation: { lat: position.lat, lng: position.lon } });
+    this.setState({ mapillaryImageLocation: { lat: latlng.lat, lng: latlng.lng } }); // Corrected to use lng instead of lon
   }
 
   onHover = (e) => {
@@ -597,6 +591,7 @@ class MapLeaflet extends React.Component {
       radius: 4,
       color: options.color,
       opacity: options.opacity,
+      pane: 'imageMarkerPane',
     });
   };
 

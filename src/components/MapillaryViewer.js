@@ -44,9 +44,10 @@ const MapillaryViewer = observer(
 
       window.addEventListener("resize", currentResizeListener);
       resizeListener.current = currentResizeListener;
-
       currentMly.setFilter(["==", "organizationKey", "227572519135262"]);
-      currentMly.on("image", (evt) => onNavigation(evt.image.lngLat));
+      currentMly.on("image", (evt) => {
+        onNavigation({latlng: evt.image.lngLat, computedCompassAngle: evt.image.computedCompassAngle})
+      });
       mly.current = currentMly;
     }, [mly.current, resizeListener.current]);
 
@@ -61,8 +62,8 @@ const MapillaryViewer = observer(
             if (closest && closest.id) {
               mly.current
                 .moveTo(closest.id)
-                .then((node) => {
-                  onNavigation(node.lngLat);
+                .then((image) => {
+                  onNavigation({latlng: image.lngLat, computedCompassAngle: image.computedCompassAngle});
                 })
                 .catch((error) => console.warn(error));
               setError(null);
