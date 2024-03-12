@@ -6,7 +6,7 @@ import { getClosestMapillaryImage } from "../utils/mapUtils";
 import styles from "./mapillaryViewer.module.css";
 
 const MapillaryViewer = observer(
-  ({ location, elementId, onNavigation, className, onCloseViewer }) => {
+  ({ location, elementId, onNavigation, className, onCloseViewer, selectedRoutes }) => {
     const [error, setError] = useState(null);
     const mly = useRef(null);
     const resizeListener = useRef(null);
@@ -58,6 +58,7 @@ const MapillaryViewer = observer(
             const closest = await getClosestMapillaryImage({
               lat: location.lat,
               lng: location.lng,
+              selectedRoutes
             });
             if (closest && closest.id) {
               mly.current
@@ -71,6 +72,7 @@ const MapillaryViewer = observer(
               setError("Katukuvia ei löytynyt.");
             }
           } catch (e) {
+            console.log(e)
             setError("Katunäkymän haku epäonnistui.");
           }
         }

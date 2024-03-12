@@ -623,8 +623,10 @@ class MapLeaflet extends React.Component {
     });
     this.setState({ mapillaryLocation: null });
   };
-
   render() {
+    const selectedRouteObjects = this.props.routes.filter(route => 
+      this.props.selectedRoutes.includes(route.id)
+    );
     return (
       <div
         className={classNames(styles.container, {
@@ -650,6 +652,7 @@ class MapLeaflet extends React.Component {
             elementId="mly"
             onNavigation={this.setMapillaryLocation}
             location={this.state.mapillaryLocation}
+            selectedRoutes={selectedRouteObjects}
           />
         )}
       </div>
