@@ -24,7 +24,7 @@
 .textTitle {
   font-size: var(--mainTextSize);
   font-weight: 600;
-  width: 68px;
+  width: 100px;
   flex-wrap: wrap;
 }
 

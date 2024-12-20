@@ -6439,8 +6439,8 @@ hpack.js@^2.1.6:
     wbuf "^1.1.0"
 
 "hsl-map-style@https://github.com/HSLdevcom/hsl-map-style":
-  version "1.1.2"
-  resolved "https://github.com/HSLdevcom/hsl-map-style#207a8de2664c9a50b5a5f886d30f5b1628f995c7"
+  version "1.2.0"
+  resolved "https://github.com/HSLdevcom/hsl-map-style#68b1642ce364ebcea115bc3f20465d3c2ee83c0d"
   dependencies:
     lodash "^4.17.4"
 
