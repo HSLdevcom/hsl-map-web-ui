@@ -20,11 +20,12 @@ import locationIconOffline from "../icons/icon-location-offline.svg";
 import fullScreenEnterIcon from "../icons/icon-fullscreen-enter.svg";
 import fullScreenExitIcon from "../icons/icon-fullscreen-exit.svg";
 import restroomIcon from "../icons/restroom-solid.svg";
-import { mapillaryImageMargerIcon } from '../icons/mapillaryImageMargerIcon.js';
+import { mapillaryImageMargerIcon } from "../icons/mapillaryImageMargerIcon.js";
 import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
 import { isMobile } from "../utils/browser";
 import MapPrinter from "./mapPrinter";
+import { generateStyle } from "hsl-map-style";
 
 const MAX_DISTANCE_TO_RESTROOM = 500;
 
@@ -424,7 +425,7 @@ class MapLeaflet extends React.Component {
       : "";
 
     const digitransitTileLayer = L.tileLayer(
-      `${process.env.REACT_APP_DIGITRANSIT_URL}/map/v2/hsl-map/{z}/{x}/{y}{retina}.png${apikey}`,
+      `${process.env.REACT_APP_DIGITRANSIT_URL}/map/v3/hsl-map/{z}/{x}/{y}{retina}.png${apikey}`,
       {
         maxZoom: 19,
         tileSize: 512,
@@ -458,9 +459,9 @@ class MapLeaflet extends React.Component {
     });
 
     if (this.map) {
-      this.map.createPane('imageMarkerPane');
-      this.map.getPane('imageMarkerPane').style.zIndex = 650; 
-      this.map.getPane('imageMarkerPane').style.pointerEvents = 'none';
+      this.map.createPane("imageMarkerPane");
+      this.map.getPane("imageMarkerPane").style.zIndex = 650;
+      this.map.getPane("imageMarkerPane").style.pointerEvents = "none";
     }
 
     const baseMaps = {
@@ -519,7 +520,7 @@ class MapLeaflet extends React.Component {
     if (!this.state.showMapillaryLayer) {
       return;
     }
-    e.target.eachLayer(layer => {
+    e.target.eachLayer((layer) => {
       if (layer.options && layer.options.type === "mapillaryHighlightMarker") {
         const latLng = layer.getLatLng();
         this.setState({ mapillaryLocation: latLng });
@@ -527,30 +528,28 @@ class MapLeaflet extends React.Component {
     });
   }
 
-
-  
-  setMapillaryLocation({latlng, computedCompassAngle = 0}) {
+  setMapillaryLocation({ latlng, computedCompassAngle = 0 }) {
     function createRotatedIcon(computedCompassAngle) {
       const svgIconHtml = mapillaryImageMargerIcon(computedCompassAngle);
 
       const svgIcon = L.divIcon({
-        className: 'custom-div-icon',
+        className: "custom-div-icon",
         html: svgIconHtml,
         iconSize: [15, 15],
-        iconAnchor: [7.5, 7.5]
+        iconAnchor: [7.5, 7.5],
       });
-    
+
       return svgIcon;
     }
     if (this.imageMarker) {
       this.imageMarker.remove();
     }
-  
+
     if (this.map && latlng) {
       const marker = L.marker(latlng, {
-        icon: createRotatedIcon(computedCompassAngle)
+        icon: createRotatedIcon(computedCompassAngle),
       }).addTo(this.map);
-  
+
       this.imageMarker = marker;
     } else if (!latlng) {
       this.removeMarker();
@@ -591,7 +590,7 @@ class MapLeaflet extends React.Component {
       radius: 4,
       color: options.color,
       opacity: options.opacity,
-      pane: 'imageMarkerPane',
+      pane: "imageMarkerPane",
     });
   };
 
@@ -624,7 +623,7 @@ class MapLeaflet extends React.Component {
     this.setState({ mapillaryLocation: null });
   };
   render() {
-    const selectedRouteObjects = this.props.routes.filter(route => 
+    const selectedRouteObjects = this.props.routes.filter((route) =>
       this.props.selectedRoutes.includes(route.id)
     );
     return (
