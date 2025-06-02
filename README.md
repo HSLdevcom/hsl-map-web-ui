@@ -51,4 +51,4 @@ $ docker run -d -p 0.0.0.0:3000:3000 hsl-map-web-ui
 Note! Package.json defines the app will be run under `/kuljettaja` -path. To test your build on `localhost:3000`, change homepage to `/` and env as `REACT_APP_ROOT_PATH=/`
 
 ## License
-MIT © [HSL](https://github.com/HSLdevcom)
+AGPL-3.0-only © [HSL](https://github.com/HSLdevcom)
