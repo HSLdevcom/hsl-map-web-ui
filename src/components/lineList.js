@@ -62,11 +62,10 @@ const LineList = (props) => {
   }, []);
 
   const getLineKey = (line) => `${line.lineId}${line.dateBegin}${line.dateEnd}`;
-  const extractNumbers = (lineId) => lineId.match(/(\d+)/)[0];
 
   const sortAndsetSelectedLinestoStore = (lines) => {
     const lineObjects = lines.map((line) => {
-      const lineNumber = extractNumbers(line.lineNumber);
+      const lineNumber = line.lineNumber;
       return { line, lineNumber };
     });
     const sortedLineObjects = lineObjects.sort((a, b) => a.lineNumber - b.lineNumber);
