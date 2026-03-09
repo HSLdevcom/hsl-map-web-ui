@@ -25,7 +25,6 @@ import styles from "./mapLeaflet.module.css";
 import MapillaryViewer from "./MapillaryViewer.js";
 import { isMobile } from "../utils/browser";
 import MapPrinter from "./mapPrinter";
-import { generateStyle } from "hsl-map-style";
 
 const MAX_DISTANCE_TO_RESTROOM = 500;
 

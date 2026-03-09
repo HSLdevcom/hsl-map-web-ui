@@ -46,10 +46,13 @@ const MapillaryViewer = observer(
       resizeListener.current = currentResizeListener;
       currentMly.setFilter(["==", "organizationKey", "227572519135262"]);
       currentMly.on("image", (evt) => {
-        onNavigation({latlng: evt.image.lngLat, computedCompassAngle: evt.image.computedCompassAngle})
+        onNavigation({
+          latlng: evt.image.lngLat,
+          computedCompassAngle: evt.image.computedCompassAngle,
+        });
       });
       mly.current = currentMly;
-    }, [mly.current, resizeListener.current]);
+    }, [createResizeListener, elementId, onNavigation]);
 
     const showLocation = useCallback(
       async (location) => {
@@ -58,13 +61,16 @@ const MapillaryViewer = observer(
             const closest = await getClosestMapillaryImage({
               lat: location.lat,
               lng: location.lng,
-              selectedRoutes
+              selectedRoutes,
             });
             if (closest && closest.id) {
               mly.current
                 .moveTo(closest.id)
                 .then((image) => {
-                  onNavigation({latlng: image.lngLat, computedCompassAngle: image.computedCompassAngle});
+                  onNavigation({
+                    latlng: image.lngLat,
+                    computedCompassAngle: image.computedCompassAngle,
+                  });
                 })
                 .catch((error) => console.warn(error));
               setError(null);
@@ -72,12 +78,12 @@ const MapillaryViewer = observer(
               setError("Katukuvia ei löytynyt.");
             }
           } catch (e) {
-            console.log(e)
+            console.log(e);
             setError("Katunäkymän haku epäonnistui.");
           }
         }
       },
-      [mly.current, mly.current && mly.current.isNavigable]
+      [onNavigation, selectedRoutes]
     );
 
     // Clean up separately from other effects
@@ -90,7 +96,7 @@ const MapillaryViewer = observer(
         mly.current = null;
         window.removeEventListener("resize", resizeListener.current);
       };
-    }, []);
+    }, [initMapillary]);
 
     const locationEquals = (location, prevLocation) => {
       if (!prevLocation) {
@@ -107,7 +113,7 @@ const MapillaryViewer = observer(
         showLocation(location);
         prevLocation.current = location;
       }
-    }, [location, prevLocation.current, showLocation]);
+    }, [location, showLocation]);
     return (
       <div className={styles.viewerWrapper}>
         {error && <div className={styles.errorMessage}>{error}</div>}
