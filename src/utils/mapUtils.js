@@ -20,7 +20,6 @@ const fetchRetry = async (url, delay, tries, fetchOptions = {}) => {
   return res;
 };
 
-
 const bearingToCompassAngle = (bearing) => {
   const compassAngle = (bearing + 360) % 360;
   return compassAngle;
@@ -38,7 +37,6 @@ export async function getCompassAngle({ closestCoordinate, nextCoordinate }) {
 }
 
 export async function getClosestMapillaryImage({ lat, lng, selectedRoutes }) {
-
   const p = turf.point([lng, lat]);
   const buffer = turf.buffer(p, 0.05, { units: "kilometers" });
   const bbox = turf.bbox(buffer);
@@ -47,26 +45,30 @@ export async function getClosestMapillaryImage({ lat, lng, selectedRoutes }) {
 
   selectedRoutes.forEach((route) => {
     route.geometries.nodes[0].geometry.coordinates.forEach((coord) => {
-        pointsWithGeometry.push({
-          point: turf.point(coord),
-          geometry: route.geometries.nodes[0].geometry.coordinates,
-        });
+      pointsWithGeometry.push({
+        point: turf.point(coord),
+        geometry: route.geometries.nodes[0].geometry.coordinates,
+      });
     });
   });
 
-  const pointsCollection = turf.featureCollection(pointsWithGeometry.map(pg => pg.point));
+  const pointsCollection = turf.featureCollection(
+    pointsWithGeometry.map((pg) => pg.point)
+  );
 
   const nearest = turf.nearestPoint(p, pointsCollection);
 
-  const nearestGeometry = pointsWithGeometry.find(pg => 
-    pg.point.geometry.coordinates[0] === nearest.geometry.coordinates[0] &&
-    pg.point.geometry.coordinates[1] === nearest.geometry.coordinates[1]
+  const nearestGeometry = pointsWithGeometry.find(
+    (pg) =>
+      pg.point.geometry.coordinates[0] === nearest.geometry.coordinates[0] &&
+      pg.point.geometry.coordinates[1] === nearest.geometry.coordinates[1]
   ).geometry;
 
   let nextCoordinate;
-  const nearestCoordIndex = nearestGeometry.findIndex(coord =>
-    coord[0] === nearest.geometry.coordinates[0] &&
-    coord[1] === nearest.geometry.coordinates[1]
+  const nearestCoordIndex = nearestGeometry.findIndex(
+    (coord) =>
+      coord[0] === nearest.geometry.coordinates[0] &&
+      coord[1] === nearest.geometry.coordinates[1]
   );
 
   if (nearestCoordIndex >= 0 && nearestCoordIndex < nearestGeometry.length - 5) {
@@ -75,7 +77,10 @@ export async function getClosestMapillaryImage({ lat, lng, selectedRoutes }) {
     nextCoordinate = nearest.geometry.coordinates;
   }
 
-  const closestCoordinateCompassAngle = await getCompassAngle({closestCoordinate: nearest.geometry.coordinates, nextCoordinate})
+  const closestCoordinateCompassAngle = await getCompassAngle({
+    closestCoordinate: nearest.geometry.coordinates,
+    nextCoordinate,
+  });
   const url = `https://graph.mapillary.com/images?fields=id,geometry,compass_angle,detection&bbox=${bbox}&limit=100`;
   const delay = 500;
   const tries = 3;
@@ -113,9 +118,14 @@ export async function getClosestMapillaryImage({ lat, lng, selectedRoutes }) {
       Math.abs(lat - coordinates[1]),
       Math.abs(lng - coordinates[0])
     );
-    const angleDifference = Math.abs(feature.compass_angle - closestCoordinateCompassAngle);
+    const angleDifference = Math.abs(
+      feature.compass_angle - closestCoordinateCompassAngle
+    );
     const angleOffBy = Math.min(angleDifference, 360 - angleDifference);
-    if ((!closest || distance < closest.distance) && angleOffBy <= IMAGE_COMPASS_ANGLE_THRESHOLD) {
+    if (
+      (!closest || distance < closest.distance) &&
+      angleOffBy <= IMAGE_COMPASS_ANGLE_THRESHOLD
+    ) {
       closest = feature;
       closest.distance = distance;
     }

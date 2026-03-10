@@ -55,7 +55,7 @@ const LineList = (props) => {
   const [query, setQuery] = useState("");
   const [selectedLines, setSelectedLines] = useState([]);
 
-  const { loading, error, data } = useQuery(allLinesQuery);
+  const { loading, data } = useQuery(allLinesQuery);
 
   const updateQuery = useCallback((e) => {
     setQuery(e.target.value);
