@@ -70,19 +70,19 @@
 }
 
 .bus {
-  color: var(--busBlue)
+  color: var(--busBlue);
 }
 
 .tram {
-  color: var(--tramGreen)
+  color: var(--tramGreen);
 }
 
 .lrail {
-  color: var(--lrailAzure)
+  color: var(--lrailAzure);
 }
 
 .trunk {
-  color: var(--trunkOrange)
+  color: var(--trunkOrange);
 }
 
 .row {
