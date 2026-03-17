@@ -1,6 +1,6 @@
 {
   "name": "hsl-driver-instructions",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "private": true,
   "homepage": "/kuljettaja",
   "dependencies": {
@@ -38,7 +38,8 @@
     "nth-check": "^2.0.1",
     "rollup": "^2.80.0",
     "underscore": "^1.13.8",
-    "jsonpath": "npm:jsonpath-plus@^10.0.0"
+    "jsonpath": "npm:jsonpath-plus@^10.0.0",
+    "flatted": "^3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
